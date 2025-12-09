@@ -34,3 +34,20 @@ README_SUPABASE.md
 *_SETUP.md
 CORRECAO_*.md
 IMPLEMENTACAO_*.md
+
+# Documentação interna e PRDs (não publicar)
+docs/
+files/
+files2/
+BLOG-SETUP.md
+EXECUTAR-AGORA.md
+CHECKLIST*.md
+PRD*.md
+*.md.bak
+
+# Migrations SQL (estrutura do banco - sensível)
+supabase/migrations/
+
+# Supabase config local
+supabase/.temp/
+supabase/config.toml
