@@ -3,12 +3,12 @@
 export const termsContent = {
   'pt-BR': {
     acceptance: {
-      p1: 'Bem-vindo à ISACAR. Estes Termos de Serviço ("Termos") regem seu acesso e uso da plataforma, site e serviços da ISACAR (coletivamente, o "Serviço"). Ao acessar ou usar o Serviço, você concorda em estar vinculado a estes Termos.',
+      p1: 'Bem-vindo à Revenify. Estes Termos de Serviço ("Termos") regem seu acesso e uso da plataforma, site e serviços da Revenify (coletivamente, o "Serviço"). Ao acessar ou usar o Serviço, você concorda em estar vinculado a estes Termos.',
       p2: 'Se você estiver usando o Serviço em nome de uma organização, você declara e garante que tem autoridade para vincular essa organização a estes Termos, e seu acordo com estes Termos será tratado como o acordo da organização.',
       p3: 'Se você não concordar com estes Termos, não deverá acessar ou usar o Serviço.'
     },
     description: {
-      intro: 'A ISACAR fornece uma plataforma baseada em nuvem para gerenciamento de projetos, colaboração em equipe e produtividade. Nosso Serviço inclui, mas não se limita a:',
+      intro: 'A Revenify fornece uma plataforma baseada em nuvem para gerenciamento de projetos, colaboração em equipe e produtividade. Nosso Serviço inclui, mas não se limita a:',
       features: [
         'Ferramentas de gerenciamento de projetos e tarefas',
         'Edição e compartilhamento colaborativo de documentos',
@@ -22,7 +22,7 @@ export const termsContent = {
     },
     contact: {
       intro: 'Se você tiver dúvidas, preocupações ou solicitações sobre estes Termos, entre em contato conosco:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Suporte',
       website: 'Website'
@@ -30,12 +30,12 @@ export const termsContent = {
   },
   'en': {
     acceptance: {
-      p1: 'Welcome to ISACAR. These Terms of Service ("Terms") govern your access to and use of the ISACAR platform, website, and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by these Terms.',
+      p1: 'Welcome to Revenify. These Terms of Service ("Terms") govern your access to and use of the Revenify platform, website, and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by these Terms.',
       p2: 'If you are using the Service on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms, and your agreement to these Terms will be treated as the agreement of the organization.',
       p3: 'If you do not agree to these Terms, you must not access or use the Service.'
     },
     description: {
-      intro: 'ISACAR provides a cloud-based platform for project management, team collaboration, and productivity. Our Service includes, but is not limited to:',
+      intro: 'Revenify provides a cloud-based platform for project management, team collaboration, and productivity. Our Service includes, but is not limited to:',
       features: [
         'Project and task management tools',
         'Collaborative document editing and sharing',
@@ -49,7 +49,7 @@ export const termsContent = {
     },
     contact: {
       intro: 'If you have any questions, concerns, or requests regarding these Terms, please contact us:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Support',
       website: 'Website'
@@ -57,12 +57,12 @@ export const termsContent = {
   },
   'es': {
     acceptance: {
-      p1: 'Bienvenido a ISACAR. Estos Términos de Servicio ("Términos") rigen su acceso y uso de la plataforma, sitio web y servicios de ISACAR (colectivamente, el "Servicio"). Al acceder o usar el Servicio, usted acepta estar sujeto a estos Términos.',
+      p1: 'Bienvenido a Revenify. Estos Términos de Servicio ("Términos") rigen su acceso y uso de la plataforma, sitio web y servicios de Revenify (colectivamente, el "Servicio"). Al acceder o usar el Servicio, usted acepta estar sujeto a estos Términos.',
       p2: 'Si está utilizando el Servicio en nombre de una organización, declara y garantiza que tiene autoridad para vincular a esa organización con estos Términos, y su aceptación de estos Términos se tratará como el acuerdo de la organización.',
       p3: 'Si no está de acuerdo con estos Términos, no debe acceder ni utilizar el Servicio.'
     },
     description: {
-      intro: 'ISACAR proporciona una plataforma basada en la nube para la gestión de proyectos, colaboración en equipo y productividad. Nuestro Servicio incluye, pero no se limita a:',
+      intro: 'Revenify proporciona una plataforma basada en la nube para la gestión de proyectos, colaboración en equipo y productividad. Nuestro Servicio incluye, pero no se limita a:',
       features: [
         'Herramientas de gestión de proyectos y tareas',
         'Edición y compartición colaborativa de documentos',
@@ -76,7 +76,7 @@ export const termsContent = {
     },
     contact: {
       intro: 'Si tiene preguntas, inquietudes o solicitudes sobre estos Términos, contáctenos:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Soporte',
       website: 'Sitio web'
@@ -87,8 +87,8 @@ export const termsContent = {
 export const privacyContent = {
   'pt-BR': {
     introduction: {
-      p1: 'Bem-vindo à ISACAR ("nós", "nosso" ou "nos"). Estamos comprometidos em proteger suas informações pessoais e seu direito à privacidade. Esta Política de Privacidade explica como coletamos, usamos, divulgamos e protegemos suas informações quando você usa nossa plataforma e serviços.',
-      p2: 'Ao usar a ISACAR, você concorda com a coleta e uso de informações de acordo com esta política. Se você não concordar com nossas políticas e práticas, por favor não use nossos serviços.'
+      p1: 'Bem-vindo à Revenify ("nós", "nosso" ou "nos"). Estamos comprometidos em proteger suas informações pessoais e seu direito à privacidade. Esta Política de Privacidade explica como coletamos, usamos, divulgamos e protegemos suas informações quando você usa nossa plataforma e serviços.',
+      p2: 'Ao usar a Revenify, você concorda com a coleta e uso de informações de acordo com esta política. Se você não concordar com nossas políticas e práticas, por favor não use nossos serviços.'
     },
     informationWeCollect: {
       intro: 'Coletamos informações que você fornece voluntariamente ao usar nossos serviços:',
@@ -135,7 +135,7 @@ export const privacyContent = {
     },
     contact: {
       intro: 'Se você tiver dúvidas, preocupações ou solicitações sobre esta Política de Privacidade ou nossas práticas de dados, entre em contato conosco:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Suporte',
       website: 'Website'
@@ -143,8 +143,8 @@ export const privacyContent = {
   },
   'en': {
     introduction: {
-      p1: 'Welcome to ISACAR ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform and services.',
-      p2: 'By using ISACAR, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.'
+      p1: 'Welcome to Revenify ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform and services.',
+      p2: 'By using Revenify, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.'
     },
     informationWeCollect: {
       intro: 'We collect information that you voluntarily provide when using our services:',
@@ -191,7 +191,7 @@ export const privacyContent = {
     },
     contact: {
       intro: 'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Support',
       website: 'Website'
@@ -199,8 +199,8 @@ export const privacyContent = {
   },
   'es': {
     introduction: {
-      p1: 'Bienvenido a ISACAR ("nosotros", "nuestro" o "nos"). Estamos comprometidos a proteger su información personal y su derecho a la privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y protegemos su información cuando utiliza nuestra plataforma y servicios.',
-      p2: 'Al usar ISACAR, usted acepta la recopilación y el uso de información de acuerdo con esta política. Si no está de acuerdo con nuestras políticas y prácticas, por favor no utilice nuestros servicios.'
+      p1: 'Bienvenido a Revenify ("nosotros", "nuestro" o "nos"). Estamos comprometidos a proteger su información personal y su derecho a la privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y protegemos su información cuando utiliza nuestra plataforma y servicios.',
+      p2: 'Al usar Revenify, usted acepta la recopilación y el uso de información de acuerdo con esta política. Si no está de acuerdo con nuestras políticas y prácticas, por favor no utilice nuestros servicios.'
     },
     informationWeCollect: {
       intro: 'Recopilamos información que usted proporciona voluntariamente al usar nuestros servicios:',
@@ -247,7 +247,7 @@ export const privacyContent = {
     },
     contact: {
       intro: 'Si tiene alguna pregunta, inquietud o solicitud sobre esta Política de Privacidad o nuestras prácticas de datos, contáctenos:',
-      company: 'ISACAR Technologies',
+      company: 'Revenify Technologies',
       email: 'Email',
       support: 'Soporte',
       website: 'Sitio web'

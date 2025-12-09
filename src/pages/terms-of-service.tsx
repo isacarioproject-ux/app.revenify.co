@@ -146,14 +146,14 @@ export default function TermsOfServicePage() {
             <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">5.1 Our Rights</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
               The Service, including all content, features, functionality, software, text, graphics, logos, and design, 
-              is owned by ISACAR and is protected by copyright, trademark, patent, trade secret, and other intellectual 
+              is owned by Revenify and is protected by copyright, trademark, patent, trade secret, and other intellectual 
               property laws. You may not copy, modify, distribute, sell, or lease any part of the Service without our 
               express written permission.
             </p>
 
             <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">5.2 Trademarks</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              "ISACAR" and associated logos are trademarks of ISACAR Technologies. You may not use our trademarks 
+              "Revenify" and associated logos are trademarks of Revenify Technologies. You may not use our trademarks 
               without our prior written consent.
             </p>
 
@@ -175,7 +175,7 @@ export default function TermsOfServicePage() {
               ("User Content"). We do not claim ownership of your User Content.
             </p>
 
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">6.2 License to ISACAR</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">6.2 License to Revenify</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
               By uploading User Content, you grant us a worldwide, non-exclusive, royalty-free license to use, 
               reproduce, store, modify, and display your User Content solely for the purpose of providing and 
@@ -250,7 +250,7 @@ export default function TermsOfServicePage() {
           <section id="limitation-liability" className="mb-12 scroll-mt-24">
             <h2 className="text-2xl font-semibold text-foreground mb-4">{t('terms.section8')}</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, ISACAR AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS 
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, Revenify AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS 
               SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, 
               INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, USE, OR GOODWILL, ARISING OUT OF OR RELATED TO 
               YOUR USE OF THE SERVICE.
@@ -313,7 +313,7 @@ export default function TermsOfServicePage() {
               Upon termination, you will lose access to your account and all associated data.
             </p>
 
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">11.2 Termination by ISACAR</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">11.2 Termination by Revenify</h3>
             <p className="text-muted-foreground leading-relaxed mb-3">
               We may suspend or terminate your account and access to the Service at our sole discretion, without 
               notice, for any reason, including:
@@ -363,7 +363,7 @@ export default function TermsOfServicePage() {
             
             <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">13.1 Entire Agreement</h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              These Terms, together with our Privacy Policy, constitute the entire agreement between you and ISACAR 
+              These Terms, together with our Privacy Policy, constitute the entire agreement between you and Revenify 
               regarding the Service and supersede all prior agreements and understandings.
             </p>
 

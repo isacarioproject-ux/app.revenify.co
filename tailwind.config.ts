@@ -64,6 +64,14 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			chart: {
+  				1: '#3b82f6',
+  				2: '#8b5cf6',
+  				3: '#ec4899',
+  				4: '#f59e0b',
+  				5: '#10b981',
+  				6: '#06b6d4'
   			}
   		},
   		borderRadius: {
@@ -105,32 +113,11 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
-  			},
-  			shine: {
-  				'0%': {
-  					'background-position': '0% 0%'
-  				},
-  				'50%': {
-  					'background-position': '100% 100%'
-  				},
-  				to: {
-  					'background-position': '0% 0%'
-  				}
-  			},
-  			shimmer: {
-  				'0%': {
-  					'background-position': '-200% 0'
-  				},
-  				'100%': {
-  					'background-position': '200% 0'
-  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out',
-  			shine: 'shine var(--duration) infinite linear',
-  			shimmer: 'shimmer 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },

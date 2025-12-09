@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Redirecionar para onboarding se necessário e BLOQUEAR acesso até completar
+  // Redirecionar para onboarding se necessário
   useEffect(() => {
     console.log('🔄 AuthContext: useEffect onboarding check', { 
       hasUser: !!user, 
@@ -90,53 +90,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    const checkOnboarding = async () => {
-      try {
-        console.log('🔍 Verificando onboarding para:', user.id)
-        
-        // Verificar se usuário completou onboarding
-        const { data: analytics, error } = await supabase
-          .from('onboarding_analytics')
-          .select('completed, skipped')
-          .eq('user_id', user.id)
-          .maybeSingle()
+    // Verificar onboarding via localStorage (simples e funcional)
+    const onboardingKey = `onboarding_completed_${user.id}`
+    const onboardingCompleted = localStorage.getItem(onboardingKey) === 'true'
+    
+    console.log('📊 Onboarding status:', { onboardingCompleted, userId: user.id })
 
-        console.log('📊 Analytics resultado:', { analytics, error })
-
-        // Se não existe registro OU não completou = precisa fazer onboarding
-        const needsOnboarding = !analytics || (!analytics.completed && !analytics.skipped)
-
-        if (needsOnboarding) {
-          console.log('🚫 ONBOARDING NECESSÁRIO - Bloqueando acesso ao dashboard')
-          console.log('📊 Motivo:', !analytics ? 'Sem registro' : 'Não completou')
-          if (location.pathname !== '/onboarding') {
-            console.log('🎯 Redirecionando para /onboarding...')
-            navigate('/onboarding', { replace: true })
-          }
-        } else {
-          console.log('✅ Onboarding completo, acesso liberado')
-          // Se está na raiz ou onboarding já completo, ir para dashboard
-          if (location.pathname === '/' || location.pathname === '/onboarding') {
-            console.log('🎯 Redirecionando para /dashboard...')
-            navigate('/dashboard', { replace: true })
-          }
-        }
-      } catch (error) {
-        console.error('❌ Erro ao verificar onboarding:', error)
-        // Em caso de erro, redirecionar para onboarding por segurança
-        console.log('⚠️ Erro ao verificar onboarding, redirecionando para onboarding')
-        if (location.pathname !== '/onboarding') {
-          navigate('/onboarding', { replace: true })
-        }
-      }
+    if (!onboardingCompleted && location.pathname !== '/onboarding') {
+      console.log('🎯 Redirecionando para /onboarding...')
+      navigate('/onboarding', { replace: true })
+    } else if (onboardingCompleted && location.pathname === '/onboarding') {
+      console.log('🎯 Onboarding já completo, redirecionando para /dashboard...')
+      navigate('/dashboard', { replace: true })
     }
-
-    // Pequeno delay para garantir que a sessão está estável
-    const timer = setTimeout(() => {
-      checkOnboarding()
-    }, 500)
-
-    return () => clearTimeout(timer)
   }, [user, loading, location.pathname, navigate])
 
   return (

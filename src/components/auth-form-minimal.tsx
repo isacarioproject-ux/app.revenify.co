@@ -301,9 +301,8 @@ export function AuthFormMinimal({
           <div className="flex items-center justify-between mb-3">
             <div className="flex-1" />
             <div className="flex items-center gap-2">
-              <img src="/pwa-512x512.png" alt="ISACAR" className="h-8 w-8" />
               <h1 className="text-2xl font-serif font-bold text-foreground">
-                Isacar.dev
+                Revenify.co
               </h1>
             </div>
             <div className="flex-1 flex justify-end">

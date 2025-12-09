@@ -37,7 +37,20 @@ export function useI18n() {
     setLocaleState(newLocale)
   }, [])
 
+  // Alias for changeLocale - used in preferences page
+  const setLanguage = useCallback((lang: string) => {
+    const localeMap: Record<string, Locale> = {
+      'pt': 'pt-BR',
+      'pt-BR': 'pt-BR',
+      'en': 'en',
+      'es': 'es'
+    }
+    const newLocale = localeMap[lang] || 'en'
+    i18n.setLocale(newLocale, true)
+    setLocaleState(newLocale)
+  }, [])
+
   const t = (key: string, params?: Record<string, any>) => i18n.translate(key, params)
 
-  return { t, locale, changeLocale, loading }
+  return { t, locale, changeLocale, setLanguage, loading }
 }

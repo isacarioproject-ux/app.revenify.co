@@ -1,318 +1,276 @@
-import { useState, useEffect } from 'react'
-import { useAuth } from '@/contexts/auth-context'
-import { useWorkspace } from '@/contexts/workspace-context'
-import { supabase } from '@/lib/supabase'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useI18n } from '@/hooks/use-i18n'
+import { DashboardLayout } from '@/components/dashboard-layout'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Plus, FolderKanban, Search, MoreVertical, Trash2, CheckSquare, FileText } from 'lucide-react'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Plus, Copy, Check, Globe, Key, Trash2, ExternalLink } from 'lucide-react'
+import { useProjects } from '@/hooks/use-projects'
 import { toast } from 'sonner'
-
-interface Project {
-  id: string
-  name: string
-  description: string | null
-  workspace_id: string | null
-  user_id: string
-  status: string
-  created_at: string
-  updated_at: string
-  taskCount?: number
-  financeCount?: number
-}
+import { cn } from '@/lib/utils'
+import { HeaderSkeleton, ButtonSkeleton, ListSkeleton } from '@/components/page-skeleton'
 
 export default function ProjectsPage() {
-  const { user } = useAuth()
-  const { currentWorkspace } = useWorkspace()
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [showCreateDialog, setShowCreateDialog] = useState(false)
-  const [newProjectName, setNewProjectName] = useState('')
-  const [newProjectDescription, setNewProjectDescription] = useState('')
-  const [creating, setCreating] = useState(false)
+  const navigate = useNavigate()
+  const { t } = useI18n()
+  const { projects, loading, selectedProject, setSelectedProject, addProject, removeProject } = useProjects()
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [newProject, setNewProject] = useState({ name: '', domain: '' })
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
 
-  // Determinar workspace ID (null para modo Pessoal)
-  const workspaceId = currentWorkspace?.id || null
-
-  // Carregar projetos
-  const loadProjects = async () => {
-    if (!user) return
-    
-    setLoading(true)
-    try {
-      let query = supabase
-        .from('projects')
-        .select('*')
-        .eq('user_id', user.id);
-
-      // Filtrar por workspace
-      if (workspaceId === null) {
-        query = query.is('workspace_id', null);  // Modo Pessoal
-      } else {
-        query = query.eq('workspace_id', workspaceId);  // Workspace específico
-      }
-
-      const { data, error } = await query.order('created_at', { ascending: false });
-
-      if (error) throw error
-      
-      // Buscar contadores para cada projeto
-      const projectsWithCounts = await Promise.all(
-        (data || []).map(async (project) => {
-          // Contar documentos de projeto (tarefas)
-          const { count: taskCount } = await supabase
-            .from('project_documents')
-            .select('id', { count: 'exact', head: true })
-            .eq('project_id', project.id)
-          
-          // Contar documentos financeiros
-          const { count: financeCount } = await supabase
-            .from('finance_documents')
-            .select('id', { count: 'exact', head: true })
-            .eq('project_id', project.id)
-          
-          return {
-            ...project,
-            taskCount: taskCount || 0,
-            financeCount: financeCount || 0,
-          }
-        })
-      )
-      
-      console.log('🔢 Projetos (página) com contadores:', projectsWithCounts)
-      setProjects(projectsWithCounts)
-    } catch (error: any) {
-      console.error('❌ Erro ao carregar projetos (página):', error)
-      toast.error('Erro ao carregar projetos')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    loadProjects()
-  }, [user, workspaceId])
-
-  // Criar novo projeto
   const handleCreateProject = async () => {
-    if (!newProjectName.trim()) {
-      toast.error('Digite um nome para o projeto')
+    if (!newProject.name || !newProject.domain) {
+      toast.error(t('projects.fillAllFields'))
       return
     }
 
-    if (!user) return
-
-    setCreating(true)
     try {
-      const { error } = await supabase
-        .from('projects')
-        .insert({
-          name: newProjectName.trim(),
-          description: newProjectDescription.trim() || null,
-          workspace_id: workspaceId,  // null para Pessoal, UUID para workspace
-          user_id: user.id,
-          status: 'active'
-        })
-
-      if (error) throw error
-
-      toast.success('Projeto criado com sucesso!')
-      setNewProjectName('')
-      setNewProjectDescription('')
-      setShowCreateDialog(false)
-      loadProjects()
-    } catch (error: any) {
-      console.error('Erro ao criar projeto:', error)
-      toast.error('Erro ao criar projeto')
-    } finally {
-      setCreating(false)
+      await addProject(newProject)
+      setCreateDialogOpen(false)
+      setNewProject({ name: '', domain: '' })
+    } catch (err) {
+      // Error handled in hook
     }
   }
 
-  // Filtrar projetos pela busca
-  const filteredProjects = projects.filter(project =>
-    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (project.description || '').toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const handleCopyKey = async (key: string) => {
+    await navigator.clipboard.writeText(key)
+    setCopiedKey(key)
+    toast.success(t('projects.keyCopied'))
+    setTimeout(() => setCopiedKey(null), 2000)
+  }
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (confirm(t('projects.confirmDelete'))) {
+      await removeProject(projectId)
+    }
+  }
+
+  const pixelCode = (projectKey: string) => `<script>
+  window.revenify = { projectKey: '${projectKey}' };
+</script>
+<script src="https://cdn.revenify.co/pixel.js" async></script>`
+
+  // Loading State
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="w-full p-4 md:p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <HeaderSkeleton />
+            <ButtonSkeleton />
+          </div>
+          <ListSkeleton items={3} />
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   return (
-    <div className="container mx-auto p-6 px-4 md:px-16">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Projetos</h1>
-          <p className="text-sm text-muted-foreground">
-            {workspaceId ? `Workspace: ${currentWorkspace?.name}` : 'Modo Pessoal'}
-          </p>
-        </div>
-        <Button onClick={() => setShowCreateDialog(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Projeto
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div className="mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar projetos..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {/* Create Dialog */}
-      {showCreateDialog && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Novo Projeto</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Nome do Projeto</label>
-              <Input
-                placeholder="Ex: Lançamento Produto 2025"
-                value={newProjectName}
-                onChange={(e) => setNewProjectName(e.target.value)}
-                disabled={creating}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Descrição</label>
-              <Textarea
-                placeholder="Descreva o objetivo e escopo do projeto..."
-                value={newProjectDescription}
-                onChange={(e) => setNewProjectDescription(e.target.value)}
-                disabled={creating}
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button onClick={handleCreateProject} disabled={creating}>
-                {creating ? 'Criando...' : 'Criar Projeto'}
+    <DashboardLayout>
+      <div className="w-full p-4 md:p-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">{t('projects.title')}</h1>
+            <p className="text-muted-foreground">{t('projects.subtitle')}</p>
+          </div>
+          <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                {t('projects.newProject')}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowCreateDialog(false)
-                  setNewProjectName('')
-                  setNewProjectDescription('')
-                }}
-                disabled={creating}
-              >
-                Cancelar
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Projects List */}
-      {loading ? (
-        <div className="text-center py-12 text-muted-foreground">
-          Carregando projetos...
-        </div>
-      ) : filteredProjects.length === 0 ? (
-        <div className="text-center py-12">
-          <FolderKanban className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">
-            {searchTerm ? 'Nenhum projeto encontrado' : 'Nenhum projeto criado ainda'}
-          </p>
-          {!searchTerm && (
-            <Button onClick={() => setShowCreateDialog(true)} className="mt-4">
-              <Plus className="h-4 w-4 mr-2" />
-              Criar Primeiro Projeto
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProjects.map((project) => (
-            <Card key={project.id} className="group relative hover:shadow-lg transition-shadow">
-              {/* Menu 3 pontinhos */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                  >
-                    <MoreVertical className="h-3.5 w-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    className="text-destructive"
-                    onClick={async () => {
-                      if (confirm(`Tem certeza que deseja excluir o projeto "${project.name}"?`)) {
-                        try {
-                          const { error } = await supabase
-                            .from('projects')
-                            .delete()
-                            .eq('id', project.id)
-                          
-                          if (error) throw error
-                          toast.success('Projeto excluído com sucesso')
-                          loadProjects()
-                        } catch (error: any) {
-                          console.error('Erro ao excluir projeto:', error)
-                          toast.error('Erro ao excluir projeto')
-                        }
-                      }
-                    }}
-                  >
-                    <Trash2 className="mr-2 h-3.5 w-3.5" />
-                    Excluir projeto
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">{project.name}</CardTitle>
-                  <Badge variant={project.status === 'active' ? 'default' : 'secondary'}>
-                    {project.status}
-                  </Badge>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{t('projects.createNew')}</DialogTitle>
+                <DialogDescription>
+                  {t('projects.createNewDesc')}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">{t('projects.projectName')}</Label>
+                  <Input
+                    id="name"
+                    placeholder={t('projects.projectNamePlaceholder')}
+                    value={newProject.name}
+                    onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                  />
                 </div>
-              </CardHeader>
-              <CardContent>
-                {project.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
-                    {project.description}
+                <div className="space-y-2">
+                  <Label htmlFor="domain">{t('projects.domain')}</Label>
+                  <Input
+                    id="domain"
+                    placeholder="meusite.com.br"
+                    value={newProject.domain}
+                    onChange={(e) => setNewProject({ ...newProject, domain: e.target.value })}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t('projects.domainHint')}
                   </p>
-                )}
-                
-                {/* Contadores */}
-                <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-                  <span className="flex items-center gap-1">
-                    <CheckSquare className="h-3 w-3" />
-                    {project.taskCount || 0} {project.taskCount === 1 ? 'tarefa' : 'tarefas'}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <FileText className="h-3 w-3" />
-                    {project.financeCount || 0} docs
-                  </span>
                 </div>
-                
-                <div className="text-xs text-muted-foreground">
-                  Criado em {new Date(project.created_at).toLocaleDateString('pt-BR')}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+                  {t('common.cancel')}
+                </Button>
+                <Button onClick={handleCreateProject}>
+                  {t('projects.createProject')}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
-      )}
-    </div>
+
+        {/* Projects Grid */}
+        {loading ? (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader>
+                  <div className="h-6 w-32 bg-muted rounded" />
+                  <div className="h-4 w-48 bg-muted rounded" />
+                </CardHeader>
+                <CardContent>
+                  <div className="h-20 bg-muted rounded" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : projects.length === 0 ? (
+          <Card className="text-center py-12">
+            <CardContent>
+              <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">{t('projects.noProjects')}</h3>
+              <p className="text-muted-foreground mb-4">
+                {t('projects.noProjectsDesc')}
+              </p>
+              <Button onClick={() => setCreateDialogOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                {t('projects.createProject')}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => (
+              <Card 
+                key={project.id}
+                className={cn(
+                  'cursor-pointer transition-all hover:shadow-md',
+                  selectedProject?.id === project.id && 'ring-2 ring-primary'
+                )}
+                onClick={() => setSelectedProject(project)}
+              >
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <CardTitle className="flex items-center gap-2">
+                        {project.name}
+                        <Badge variant={project.is_active ? 'default' : 'secondary'}>
+                          {project.is_active ? t('projects.active') : t('projects.inactive')}
+                        </Badge>
+                      </CardTitle>
+                      <CardDescription className="flex items-center gap-1 mt-1">
+                        <Globe className="h-3 w-3" />
+                        {project.domain}
+                      </CardDescription>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate(`/projects/${project.id}`)
+                        }}
+                      >
+                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteProject(project.id)
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Project Key */}
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Key className="h-3 w-3" />
+                      Project Key
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        readOnly
+                        value={project.project_key}
+                        className="font-mono text-xs"
+                      />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCopyKey(project.project_key)
+                        }}
+                      >
+                        {copiedKey === project.project_key ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Pixel Code */}
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">{t('projects.pixelCode')}</Label>
+                    <div className="relative">
+                      <pre className="bg-neutral-900 text-neutral-100 p-3 rounded-lg overflow-x-auto text-xs">
+                        <code>{pixelCode(project.project_key)}</code>
+                      </pre>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="absolute top-2 right-2"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigator.clipboard.writeText(pixelCode(project.project_key))
+                          toast.success(t('projects.codeCopied'))
+                        }}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    </DashboardLayout>
   )
 }

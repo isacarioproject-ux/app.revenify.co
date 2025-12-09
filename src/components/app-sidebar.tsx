@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Logo } from '@/components/logo'
-import { WorkspaceSwitcher } from '@/components/workspace-switcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Sidebar,
@@ -23,31 +22,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-// Ícones Lucide React
 import {
   Home,
-  BarChart3,
   User,
+  Users,
   Bell,
   Palette,
   CreditCard,
   LogOut,
   ChevronUp,
-  CheckSquare,
-  Wallet,
-  Building2,
-  Plug,
   FolderKanban,
-  PieChart,
-  Activity,
+  Settings,
+  Link2,
+  BarChart3,
+  Plug,
+  Route,
+  FileText,
+  Radio,
+  PenSquare,
 } from 'lucide-react'
-
-// Email autorizado para ver analytics de onboarding
-const ADMIN_EMAIL = 'isacar.io.project@gmail.com'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
+import { useProjects } from '@/hooks/use-projects'
+import { UsageWidget } from '@/components/usage-widget'
 
 export function AppSidebar() {
   const { t } = useI18n()
@@ -55,6 +54,7 @@ export function AppSidebar() {
   const navigate = useNavigate()
   const { isMobile } = useSidebar()
   const [user, setUser] = useState<SupabaseUser | null>(null)
+  const { selectedProject } = useProjects()
 
   const menuItems = [
     {
@@ -63,45 +63,41 @@ export function AppSidebar() {
       href: '/dashboard',
     },
     {
-      title: t('nav.myWork'),
-      icon: CheckSquare,
-      href: '/meu-trabalho',
-    },
-    {
-      title: t('nav.myProjects'),
+      title: t('nav.projects'),
       icon: FolderKanban,
-      href: '/meus-projetos',
+      href: '/projects',
     },
     {
-      title: t('nav.myFinance'),
-      icon: Wallet,
-      href: '/minha-financa',
-    },
-    {
-      title: t('nav.manager'),
-      icon: PieChart,
-      href: '/meu-gerenciador',
-    },
-    {
-      title: t('nav.integrations'),
-      icon: Plug,
-      href: '/settings/integrations',
+      title: t('nav.sources'),
+      icon: Radio,
+      href: '/sources',
     },
     {
       title: t('nav.analytics'),
       icon: BarChart3,
-      href: '/analytics/google',
+      href: '/analytics',
+    },
+    {
+      title: t('nav.leads'),
+      icon: Users,
+      href: '/leads',
+    },
+    {
+      title: t('nav.journey'),
+      icon: Route,
+      href: '/journey',
+    },
+    {
+      title: t('nav.templates'),
+      icon: FileText,
+      href: '/templates',
+    },
+    {
+      title: t('nav.shortLinks'),
+      icon: Link2,
+      href: '/short-links',
     },
   ]
-
-  // Itens de menu admin (apenas para email autorizado)
-  const adminMenuItems = user?.email === ADMIN_EMAIL ? [
-    {
-      title: 'Onboarding Analytics',
-      icon: Activity,
-      href: '/admin/onboarding-analytics',
-    },
-  ] : []
 
   useEffect(() => {
     // Carregar usuário inicial
@@ -166,17 +162,15 @@ export function AppSidebar() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          {/* Sidebar Aberta: Logo + WorkspaceSwitcher + Toggle */}
+          {/* Sidebar Aberta: Logo + Toggle */}
           <motion.div 
             className="group-data-[collapsible=icon]:hidden w-full flex items-center gap-1.5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.2 }}
           >
-            <Logo size="lg" showText={false} className="shrink-0" />
-            <div className="flex-1 min-w-0 overflow-hidden">
-              <WorkspaceSwitcher />
-            </div>
+            <Logo className="shrink-0 h-6" />
+            <div className="flex-1" />
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -256,68 +250,18 @@ export function AppSidebar() {
               )
             })}
             
-            {/* Admin Menu Items - Apenas para email autorizado */}
-            {adminMenuItems.length > 0 && (
-              <>
-                <div className="my-2 px-2">
-                  <div className="h-px bg-border/50" />
-                </div>
-                {adminMenuItems.map((item, index) => {
-                  const Icon = item.icon
-                  const isActive = location.pathname === item.href
-
-                  return (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ 
-                        delay: (menuItems.length + index) * 0.1, 
-                        duration: 0.3, 
-                        ease: "easeOut" 
-                      }}
-                    >
-                      <SidebarMenuItem>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={isActive}
-                          tooltip={item.title}
-                          className="group transition-all duration-200 hover:bg-sidebar-accent/50"
-                        >
-                          <Link to={item.href} className="gap-3 flex items-center">
-                            <motion.div
-                              whileHover={{ scale: 1.1, rotate: 5 }}
-                              whileTap={{ scale: 0.95 }}
-                              transition={{ duration: 0.2 }}
-                              className={`transition-colors duration-200 ${
-                                isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
-                              }`}
-                            >
-                              <Icon className="h-4 w-4" />
-                            </motion.div>
-                            <motion.span
-                              initial={{ opacity: 0.8 }}
-                              whileHover={{ opacity: 1 }}
-                              transition={{ duration: 0.2 }}
-                              className={`transition-colors duration-200 ${
-                                isActive ? 'text-sidebar-accent-foreground font-medium' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground'
-                              }`}
-                            >
-                              {item.title}
-                            </motion.span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    </motion.div>
-                  )
-                })}
-              </>
-            )}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="gap-2">
+        {/* Usage Widget - No Footer (esconde quando sidebar colapsado) */}
+        {selectedProject && (
+          <div className="px-2 group-data-[collapsible=icon]:hidden">
+            <UsageWidget projectId={selectedProject.id} compact />
+          </div>
+        )}
+        
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -413,6 +357,20 @@ export function AppSidebar() {
                   <CreditCard className="mr-2 h-4 w-4" />
                   {t('settings.billing')}
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/settings/integrations')}>
+                  <Plug className="mr-2 h-4 w-4" />
+                  {t('settings.integrations')}
+                </DropdownMenuItem>
+                {/* Blog - apenas para admin */}
+                {user?.email === 'revenify.co@gmail.com' && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/blog/create')}>
+                      <PenSquare className="mr-2 h-4 w-4" />
+                      Blog Admin
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-destructive">
                   <LogOut className="mr-2 h-4 w-4" />

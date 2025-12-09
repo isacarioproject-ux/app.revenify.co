@@ -62,27 +62,27 @@ export function LegalFooter() {
   const socialLinks = [
     {
       icon: <TwitterIcon className="size-4" />,
-      link: 'https://twitter.com/isacar',
+      link: 'https://twitter.com/revenifyco',
     },
     {
       icon: <GithubIcon className="size-4" />,
-      link: 'https://github.com/isacarioproject-ux',
+      link: 'https://github.com/revenify',
     },
     {
       icon: <LinkedinIcon className="size-4" />,
-      link: 'https://linkedin.com/company/isacar',
+      link: 'https://linkedin.com/company/revenify',
     },
     {
       icon: <YoutubeIcon className="size-4" />,
-      link: 'https://youtube.com/@isacar',
+      link: 'https://youtube.com/@revenify',
     },
     {
       icon: <FacebookIcon className="size-4" />,
-      link: 'https://facebook.com/isacar',
+      link: 'https://facebook.com/revenify',
     },
     {
       icon: <InstagramIcon className="size-4" />,
-      link: 'https://instagram.com/isacar',
+      link: 'https://instagram.com/revenify.co',
     },
   ]
 
@@ -94,7 +94,7 @@ export function LegalFooter() {
           <div className="col-span-6 flex flex-col gap-5 md:col-span-4">
             <Link to="/auth" className="w-max">
               <span className="text-2xl font-serif font-bold tracking-tight text-foreground">
-                Isacar.dev
+                Revenify.co
               </span>
             </Link>
             <p className="text-muted-foreground max-w-sm font-mono text-sm text-balance">
@@ -158,7 +158,7 @@ export function LegalFooter() {
         <div className="bg-border absolute inset-x-0 h-px w-full" />
         <div className="flex max-w-4xl flex-col justify-between gap-2 pt-2 pb-5">
           <p className="text-muted-foreground text-center font-thin text-sm">
-            © {year} Isacar.dev. {t('legal.footer.rights')}
+            &copy; {year} Revenify.co. {t('legal.footer.rights')}
           </p>
         </div>
       </div>

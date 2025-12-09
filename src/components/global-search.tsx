@@ -1,35 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { 
   Search, 
-  Home, 
-  FolderKanban, 
-  FileText, 
+  Code2,
   Users, 
   BarChart3,
-  Mail,
-  Settings,
-  ArrowRight,
-  TrendingUp,
+  Link2,
   User,
   Bell,
   Palette,
   CreditCard,
   LayoutDashboard,
-  Wallet,
-  CheckSquare,
-  Clock,
   Plug,
-  FileSpreadsheet,
-  Calculator
+  FileText,
+  Route,
+  Sparkles,
+  FolderKanban,
 } from 'lucide-react'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { cn } from '@/lib/utils'
@@ -37,8 +30,8 @@ import { useI18n } from '@/hooks/use-i18n'
 
 interface SearchResult {
   id: string
-  title: string
-  description?: string
+  titleKey: string
+  descriptionKey: string
   type: 'page' | 'project' | 'document' | 'team' | 'card'
   path: string
   icon: any
@@ -51,42 +44,46 @@ interface GlobalSearchProps {
 }
 
 export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
-  const { t } = useI18n()
   const navigate = useNavigate()
+  const { t } = useI18n()
   
-  const pages: SearchResult[] = [
+  const pages: SearchResult[] = useMemo(() => [
     // Páginas principais
-    { id: '1', title: t('nav.dashboard'), type: 'page', path: '/dashboard', icon: LayoutDashboard, shortcut: 'D' },
-    { id: '2', title: 'Meu Trabalho', description: 'Tarefas e lembretes', type: 'page', path: '/meu-trabalho', icon: CheckSquare, shortcut: 'T' },
-    { id: '3', title: 'Minha Finança', description: 'Gestão financeira', type: 'page', path: '/minha-financa', icon: Wallet, shortcut: 'F' },
-    { id: '4', title: 'Meu Gerenciador', description: 'Gerenciador de orçamento', type: 'page', path: '/meu-gerenciador', icon: Calculator, shortcut: 'G' },
-    { id: '5', title: 'Gestor de Projetos', description: 'Gerenciar projetos', type: 'page', path: '/gestor-projetos', icon: FolderKanban, shortcut: 'P' },
-    { id: '6', title: 'Analytics', description: 'Métricas Google', type: 'page', path: '/analytics/google', icon: BarChart3, shortcut: 'A' },
+    { id: '1', titleKey: 'search.dashboard', descriptionKey: 'search.dashboardDesc', type: 'page', path: '/dashboard', icon: LayoutDashboard, shortcut: 'D' },
+    { id: '2', titleKey: 'search.projects', descriptionKey: 'search.projectsDesc', type: 'page', path: '/projects', icon: FolderKanban, shortcut: 'P' },
+    { id: '3', titleKey: 'search.sources', descriptionKey: 'search.sourcesDesc', type: 'page', path: '/sources', icon: Code2, shortcut: 'S' },
+    { id: '4', titleKey: 'search.analytics', descriptionKey: 'search.analyticsDesc', type: 'page', path: '/analytics', icon: BarChart3, shortcut: 'A' },
+    { id: '5', titleKey: 'search.leads', descriptionKey: 'search.leadsDesc', type: 'page', path: '/leads', icon: Users, shortcut: 'L' },
+    { id: '6', titleKey: 'search.shortLinks', descriptionKey: 'search.shortLinksDesc', type: 'page', path: '/short-links', icon: Link2, shortcut: 'K' },
+    { id: '7', titleKey: 'search.templates', descriptionKey: 'search.templatesDesc', type: 'page', path: '/templates', icon: FileText, shortcut: 'T' },
+    { id: '8', titleKey: 'search.customerJourney', descriptionKey: 'search.customerJourneyDesc', type: 'page', path: '/customer-journey', icon: Route, shortcut: 'J' },
     
     // Settings
-    { id: '10', title: t('settings.profile'), type: 'page', path: '/settings/profile', icon: User },
-    { id: '11', title: t('settings.notifications'), type: 'page', path: '/settings/notifications', icon: Bell },
-    { id: '12', title: t('settings.preferences'), type: 'page', path: '/settings/preferences', icon: Palette },
-    { id: '13', title: t('settings.billing'), description: 'Planos e faturamento', type: 'page', path: '/settings/billing', icon: CreditCard },
-    { id: '14', title: 'Integrações', description: 'Google e APIs', type: 'page', path: '/settings/integrations', icon: Plug },
-  ]
+    { id: '10', titleKey: 'search.profile', descriptionKey: 'search.profileDesc', type: 'page', path: '/settings/profile', icon: User },
+    { id: '11', titleKey: 'search.notifications', descriptionKey: 'search.notificationsDesc', type: 'page', path: '/settings/notifications', icon: Bell },
+    { id: '12', titleKey: 'search.preferences', descriptionKey: 'search.preferencesDesc', type: 'page', path: '/settings/preferences', icon: Palette },
+    { id: '13', titleKey: 'search.billing', descriptionKey: 'search.billingDesc', type: 'page', path: '/settings/billing', icon: CreditCard },
+    { id: '14', titleKey: 'search.integrations', descriptionKey: 'search.integrationsDesc', type: 'page', path: '/settings/integrations', icon: Plug },
+    { id: '15', titleKey: 'search.pricing', descriptionKey: 'search.pricingDesc', type: 'page', path: '/pricing', icon: Sparkles },
+  ], [])
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   useEffect(() => {
     if (!query) {
-      setResults(pages.slice(0, 5))
+      setResults(pages.slice(0, 6))
       return
     }
 
     const filtered = pages.filter(
       (item) =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description?.toLowerCase().includes(query.toLowerCase())
+        t(item.titleKey).toLowerCase().includes(query.toLowerCase()) ||
+        t(item.descriptionKey).toLowerCase().includes(query.toLowerCase())
     )
     setResults(filtered)
     setSelectedIndex(0)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
   useEffect(() => {
@@ -118,7 +115,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl p-0">
         <VisuallyHidden>
-          <DialogTitle>{t('search.title')}</DialogTitle>
+          <DialogTitle>Buscar</DialogTitle>
         </VisuallyHidden>
         
         <div className="flex items-center border-b px-3">
@@ -164,12 +161,10 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
                     >
                       <Icon className="h-4 w-4 shrink-0 opacity-70" />
                       <div className="flex-1">
-                        <div className="font-medium">{result.title}</div>
-                        {result.description && (
-                          <div className="text-xs text-muted-foreground">
-                            {result.description}
-                          </div>
-                        )}
+                        <div className="font-medium">{t(result.titleKey)}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {t(result.descriptionKey)}
+                        </div>
                       </div>
                       <div className="flex items-center gap-1">
                         {result.shortcut && (
@@ -191,8 +186,8 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
 
         <div className="border-t px-3 py-2 text-xs text-muted-foreground">
           <div className="flex items-center justify-between">
-            <span>Use ↑↓ para navegar</span>
-            <span>↵ para selecionar</span>
+            <span>{t('search.navigateHint')}</span>
+            <span>{t('search.selectHint')}</span>
           </div>
         </div>
       </DialogContent>

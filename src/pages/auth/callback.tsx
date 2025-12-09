@@ -7,29 +7,57 @@ import { motion } from 'framer-motion'
 export default function AuthCallback() {
   const navigate = useNavigate()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [message, setMessage] = useState('Autenticando com Google...')
+  const [message, setMessage] = useState('Autenticando...')
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        console.log('🔍 [AuthCallback] Processando callback do Google...')
-        console.log('🔍 [AuthCallback] URL atual:', window.location.href)
-        console.log('🔍 [AuthCallback] Hash:', window.location.hash)
-        console.log('🔍 [AuthCallback] Search:', window.location.search)
+        console.log('🔍 [AuthCallback] Processando callback...')
+        console.log('🔍 [AuthCallback] URL:', window.location.href)
         
-        // Processar hash fragment (OAuth flow)
+        // Verificar tokens na URL (hash ou search params)
         const hashParams = new URLSearchParams(window.location.hash.substring(1))
-        const accessToken = hashParams.get('access_token')
-        const refreshToken = hashParams.get('refresh_token')
+        const searchParams = new URLSearchParams(window.location.search)
         
-        console.log('🔍 [AuthCallback] Access token presente:', !!accessToken)
-        console.log('🔍 [AuthCallback] Refresh token presente:', !!refreshToken)
+        // Verificar se há erro na URL (OTP expirado, etc)
+        const errorCode = hashParams.get('error') || searchParams.get('error')
+        const errorDescription = hashParams.get('error_description') || searchParams.get('error_description')
+        
+        if (errorCode) {
+          console.error('❌ [AuthCallback] Erro na URL:', errorCode, errorDescription)
+          
+          let userMessage = 'Erro ao autenticar. Tente novamente.'
+          
+          if (errorCode === 'access_denied') {
+            if (errorDescription?.includes('expired')) {
+              userMessage = 'Link expirado. Solicite um novo link de acesso.'
+            } else if (errorDescription?.includes('invalid')) {
+              userMessage = 'Link inválido. Solicite um novo link de acesso.'
+            }
+          }
+          
+          setStatus('error')
+          setMessage(userMessage)
+          
+          setTimeout(() => {
+            navigate('/auth', { replace: true })
+          }, 3000)
+          return
+        }
+        
+        const accessToken = hashParams.get('access_token') || searchParams.get('access_token')
+        const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token')
+        const tokenType = hashParams.get('type') || searchParams.get('type')
+        
+        console.log('🔍 [AuthCallback] Token type:', tokenType)
+        console.log('🔍 [AuthCallback] Access token:', !!accessToken)
+        console.log('🔍 [AuthCallback] Refresh token:', !!refreshToken)
         
         let session = null
         let error = null
         
         if (accessToken && refreshToken) {
-          // Definir sessão a partir dos tokens do hash
+          // Definir sessão a partir dos tokens
           console.log('🔄 [AuthCallback] Definindo sessão a partir dos tokens...')
           const result = await supabase.auth.setSession({
             access_token: accessToken,
@@ -38,8 +66,8 @@ export default function AuthCallback() {
           session = result.data.session
           error = result.error
         } else {
-          // Tentar obter sessão existente
-          console.log('🔄 [AuthCallback] Tentando obter sessão existente...')
+          // Tentar obter sessão existente (pode ter sido setada pelo Supabase automaticamente)
+          console.log('🔄 [AuthCallback] Verificando sessão existente...')
           const result = await supabase.auth.getSession()
           session = result.data.session
           error = result.error

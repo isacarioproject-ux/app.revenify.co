@@ -145,7 +145,7 @@ export default function PrivacyPolicyPage() {
               <li>Secure password hashing using bcrypt</li>
               <li>Regular security audits and vulnerability assessments</li>
               <li>Access controls and authentication mechanisms</li>
-              <li>Secure cloud infrastructure with ISO 27001 certification</li>
+              <li>Secure cloud infrastructure with Revenify 27001 certification</li>
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
               However, no method of transmission over the internet is 100% secure. While we strive to protect 
@@ -165,7 +165,7 @@ export default function PrivacyPolicyPage() {
               ))}
             </ul>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              {content.yourRights.contact} <strong>isacar.dev@gmail.com</strong>
+              {content.yourRights.contact} <strong>contato@revenify.co</strong>
             </p>
           </section>
 
@@ -249,13 +249,13 @@ export default function PrivacyPolicyPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <p className="text-foreground font-semibold mb-2">{content.contact.company}</p>
               <p className="text-muted-foreground mb-1">
-                {content.contact.email}: <a href="mailto:isacar.dev@gmail.com" className="text-primary hover:underline">isacar.dev@gmail.com</a>
+                {content.contact.email}: <a href="mailto:contato@revenify.co" className="text-primary hover:underline">contato@revenify.co</a>
               </p>
               <p className="text-muted-foreground mb-1">
-                {content.contact.support}: <a href="mailto:isacar.dev@gmail.com" className="text-primary hover:underline">isacar.dev@gmail.com</a>
+                {content.contact.support}: <a href="mailto:contato@revenify.co" className="text-primary hover:underline">contato@revenify.co</a>
               </p>
               <p className="text-muted-foreground">
-                {content.contact.website}: <a href="https://isacar.dev" className="text-primary hover:underline">https://isacar.dev</a>
+                {content.contact.website}: <a href="https://revenify.co" className="text-primary hover:underline">https://revenify.co</a>
               </p>
             </div>
           </section>

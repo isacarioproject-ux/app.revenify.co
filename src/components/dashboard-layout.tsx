@@ -7,7 +7,7 @@ import { GlobalSearch } from '@/components/global-search'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { PWAInstallButton } from '@/components/pwa-install-button'
+import { AIChatWidget } from '@/components/ai-chat-widget'
 import { Search } from 'lucide-react'
 import { User } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
@@ -99,7 +99,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <span>⌘K</span>
                   </kbd>
                 </Button>
-                <PWAInstallButton />
                 <ThemeToggle />
                 <LanguageSwitcher />
               </div>
@@ -110,6 +109,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </main>
       </div>
+      {/* AI Chat Widget */}
+      <AIChatWidget />
     </SidebarProvider>
   )
 }

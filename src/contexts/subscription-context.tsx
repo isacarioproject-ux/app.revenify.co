@@ -1,33 +1,18 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/auth-context'
 import { toast } from 'sonner'
-
-export interface SubscriptionLimits {
-  projects_limit: number
-  whiteboards_per_project_limit: number
-  members_limit: number
-  invited_members_limit: number
-  storage_limit_gb: number
-}
-
-export interface SubscriptionUsage {
-  projects_used: number
-  whiteboards_used: number
-  members_used: number
-  storage_used_gb: number
-}
+import { PLANS, getPlanLimits } from '@/lib/stripe/plans'
 
 export interface Subscription {
   id: string
   user_id: string
-  plan_id: 'free' | 'pro' | 'business' | 'enterprise'
+  plan: 'free' | 'starter' | 'pro' | 'business'
   status: 'active' | 'canceled' | 'past_due' | 'trialing'
-  billing_period: 'monthly' | 'yearly'
-  amount: number
-  next_billing_date: string | null
-  limits: SubscriptionLimits
-  usage: SubscriptionUsage
+  max_monthly_events: number
+  current_monthly_events: number
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
   created_at: string
   updated_at: string
 }
@@ -37,25 +22,37 @@ interface SubscriptionContextType {
   loading: boolean
   error: Error | null
   canCreateProject: () => boolean
-  canCreateWhiteboard: (projectId: string) => Promise<boolean>
-  canInviteMember: () => boolean
-  checkStorageLimit: (sizeInBytes: number) => boolean
+  canTrackEvent: () => boolean
   refetch: () => Promise<void>
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined)
+
+// Subscription padrão para usuários sem subscription no banco
+const DEFAULT_SUBSCRIPTION: Omit<Subscription, 'id' | 'user_id' | 'created_at' | 'updated_at'> = {
+  plan: 'free',
+  status: 'active',
+  max_monthly_events: 1000,
+  current_monthly_events: 0,
+  stripe_customer_id: null,
+  stripe_subscription_id: null,
+}
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth()
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const hasLoadedOnce = useRef(false)
 
   const fetchSubscription = useCallback(async () => {
-    if (authLoading) return // Aguardar auth carregar
+    if (authLoading) return
     
     try {
-      setLoading(true)
+      // Só mostrar loading no primeiro carregamento
+      if (!hasLoadedOnce.current) {
+        setLoading(true)
+      }
       setError(null)
 
       if (!user) {
@@ -68,65 +65,26 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         .from('subscriptions')
         .select('*')
         .eq('user_id', user.id)
-        .eq('status', 'active')
         .maybeSingle()
 
       if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError
+        console.error('Erro ao buscar subscription:', fetchError)
+        // Não lançar erro, usar default
       }
 
-      // Se não tem subscription, criar uma FREE
-      if (!data) {
-        const { data: newSub, error: createError } = await supabase
-          .from('subscriptions')
-          .insert({
-            user_id: user.id,
-            plan_id: 'free',
-            projects_limit: 1,
-            whiteboards_per_project_limit: 3,
-            members_limit: 2,
-            invited_members_limit: 1,
-            storage_limit_gb: 1,
-          })
-          .select()
-          .single()
-
-        if (createError) throw createError
-
-        setSubscription({
-          ...newSub,
-          limits: {
-            projects_limit: newSub.projects_limit,
-            whiteboards_per_project_limit: newSub.whiteboards_per_project_limit,
-            members_limit: newSub.members_limit,
-            invited_members_limit: newSub.invited_members_limit,
-            storage_limit_gb: newSub.storage_limit_gb,
-          },
-          usage: {
-            projects_used: newSub.projects_used,
-            whiteboards_used: newSub.whiteboards_used,
-            members_used: newSub.members_used,
-            storage_used_gb: newSub.storage_used_gb,
-          },
-        })
+      if (data) {
+        setSubscription(data as Subscription)
       } else {
+        // Criar subscription default em memória (trigger no banco cria automaticamente)
         setSubscription({
-          ...data,
-          limits: {
-            projects_limit: data.projects_limit,
-            whiteboards_per_project_limit: data.whiteboards_per_project_limit,
-            members_limit: data.members_limit,
-            invited_members_limit: data.invited_members_limit,
-            storage_limit_gb: data.storage_limit_gb,
-          },
-          usage: {
-            projects_used: data.projects_used,
-            whiteboards_used: data.whiteboards_used,
-            members_used: data.members_used,
-            storage_used_gb: data.storage_used_gb,
-          },
+          id: 'temp',
+          user_id: user.id,
+          ...DEFAULT_SUBSCRIPTION,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
       }
+      hasLoadedOnce.current = true
     } catch (err) {
       console.error('Erro ao buscar subscription:', err)
       setError(err instanceof Error ? err : new Error('Erro ao buscar assinatura'))
@@ -140,83 +98,25 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [fetchSubscription])
 
   const canCreateProject = useCallback(() => {
-    if (!subscription) return false
+    if (!subscription) return true // Permitir se não carregou ainda
     
-    const limit = subscription.limits.projects_limit
-    const used = subscription.usage.projects_used
-
-    if (limit === -1) return true
-
-    if (used >= limit) {
-      toast.error('Limite de projetos atingido', {
-        description: `Você atingiu o limite de ${limit} projeto(s) do plano ${subscription.plan_id.toUpperCase()}. Faça upgrade para criar mais.`,
-      })
-      return false
-    }
-
+    const limits = getPlanLimits(subscription.plan)
+    if (limits.max_domains === -1) return true
+    
+    // TODO: Verificar quantidade atual de projetos
     return true
   }, [subscription])
 
-  const canCreateWhiteboard = useCallback(async (projectId: string) => {
-    if (!subscription) return false
-
-    const limit = subscription.limits.whiteboards_per_project_limit
-    if (limit === -1) return true
-
-    const { count, error } = await supabase
-      .from('whiteboards')
-      .select('*', { count: 'exact', head: true })
-      .eq('project_id', projectId)
-
-    if (error) {
-      console.error('Erro ao contar whiteboards:', error)
-      return false
-    }
-
-    if ((count || 0) >= limit) {
-      toast.error('Limite de whiteboards atingido', {
-        description: `Você atingiu o limite de ${limit} whiteboard(s) por projeto do plano ${subscription.plan_id.toUpperCase()}. Faça upgrade para criar mais.`,
+  const canTrackEvent = useCallback(() => {
+    if (!subscription) return true
+    
+    if (subscription.current_monthly_events >= subscription.max_monthly_events) {
+      toast.error('Limite de eventos atingido', {
+        description: `Você atingiu o limite de ${subscription.max_monthly_events.toLocaleString()} eventos do plano ${subscription.plan.toUpperCase()}. Faça upgrade para continuar rastreando.`,
       })
       return false
     }
-
-    return true
-  }, [subscription])
-
-  const canInviteMember = useCallback(() => {
-    if (!subscription) return false
-
-    const limit = subscription.limits.members_limit
-    const used = subscription.usage.members_used
-
-    if (limit === -1) return true
-
-    if (used >= limit) {
-      toast.error('Limite de membros atingido', {
-        description: `Você atingiu o limite de ${limit} membro(s) do plano ${subscription.plan_id.toUpperCase()}. Faça upgrade para adicionar mais.`,
-      })
-      return false
-    }
-
-    return true
-  }, [subscription])
-
-  const checkStorageLimit = useCallback((sizeInBytes: number) => {
-    if (!subscription) return false
-
-    const limit = subscription.limits.storage_limit_gb
-    const used = subscription.usage.storage_used_gb
-    const sizeInGB = sizeInBytes / (1024 * 1024 * 1024)
-
-    if (limit === -1) return true
-
-    if (used + sizeInGB > limit) {
-      toast.error('Limite de armazenamento atingido', {
-        description: `Você atingiu o limite de ${limit} GB do plano ${subscription.plan_id.toUpperCase()}. Faça upgrade para mais espaço.`,
-      })
-      return false
-    }
-
+    
     return true
   }, [subscription])
 
@@ -227,9 +127,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         loading,
         error,
         canCreateProject,
-        canCreateWhiteboard,
-        canInviteMember,
-        checkStorageLimit,
+        canTrackEvent,
         refetch: fetchSubscription,
       }}
     >
