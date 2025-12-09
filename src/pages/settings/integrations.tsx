@@ -531,19 +531,19 @@ export default function IntegrationsPage() {
                       <CreditCard className="h-6 w-6 text-[#635BFF]" />
                     </div>
                     <div>
-                      <CardTitle>Conectar Stripe</CardTitle>
-                      <CardDescription>Rastreie pagamentos e atribua receita às fontes</CardDescription>
+                      <CardTitle>{t('integrations.stripe.title')}</CardTitle>
+                      <CardDescription>{t('integrations.stripe.description')}</CardDescription>
                     </div>
                   </div>
                   {integration?.is_active ? (
                     <Badge className="bg-green-600 gap-1">
                       <CheckCircle2 className="h-3 w-3" />
-                      Conectado
+                      {t('integrations.stripe.connected')}
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="gap-1">
                       <XCircle className="h-3 w-3" />
-                      Desconectado
+                      {t('integrations.stripe.disconnected')}
                     </Badge>
                   )}
                 </div>
@@ -561,7 +561,7 @@ export default function IntegrationsPage() {
                         <code className="text-sm font-mono">{integration.stripe_account_id}</code>
                       </div>
                       <div className="p-3 rounded-lg bg-muted/50">
-                        <p className="text-xs text-muted-foreground mb-1">Conectado em</p>
+                        <p className="text-xs text-muted-foreground mb-1">{t('integrations.stripe.connectedAt')}</p>
                         <p className="text-sm font-medium">
                           {integration.stripe_connected_at 
                             ? new Date(integration.stripe_connected_at).toLocaleDateString('pt-BR')
@@ -574,11 +574,11 @@ export default function IntegrationsPage() {
                       <Button variant="outline" size="sm" asChild>
                         <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="h-4 w-4 mr-2" />
-                          Dashboard Stripe
+                          {t('integrations.stripe.dashboard')}
                         </a>
                       </Button>
                       <Button variant="ghost" size="sm" onClick={handleDisconnectStripe}>
-                        Desconectar
+                        {t('integrations.stripe.disconnect')}
                       </Button>
                     </div>
                   </div>
@@ -586,9 +586,9 @@ export default function IntegrationsPage() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { icon: Zap, text: 'Atribuição automática de receita' },
-                        { icon: Zap, text: 'ROI por campanha em tempo real' },
-                        { icon: Zap, text: 'Multi-touch attribution' },
+                        { icon: Zap, text: t('integrations.stripe.feature1') },
+                        { icon: Zap, text: t('integrations.stripe.feature2') },
+                        { icon: Zap, text: t('integrations.stripe.feature3') },
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm p-2 rounded-lg bg-muted/30">
                           <item.icon className="h-4 w-4 text-primary shrink-0" />
@@ -602,9 +602,9 @@ export default function IntegrationsPage() {
                       className="bg-[#635BFF] hover:bg-[#5851DB] w-full sm:w-auto"
                     >
                       {connecting ? (
-                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Conectando...</>
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('integrations.stripe.connecting')}</>
                       ) : (
-                        <><CreditCard className="h-4 w-4 mr-2" />Conectar Stripe</>
+                        <><CreditCard className="h-4 w-4 mr-2" />{t('integrations.stripe.connect')}</>
                       )}
                     </Button>
                   </div>
@@ -615,14 +615,14 @@ export default function IntegrationsPage() {
             {/* Como funciona */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Como funciona</CardTitle>
+                <CardTitle className="text-base">{t('integrations.stripe.howItWorks')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex gap-4">
                   {[
-                    { num: '1', title: 'Conecte', desc: 'Autorize webhooks' },
-                    { num: '2', title: 'Instale o pixel', desc: 'Rastreie visitantes' },
-                    { num: '3', title: 'Veja receita', desc: 'Por fonte de tráfego' },
+                    { num: '1', title: t('integrations.stripe.step1'), desc: t('integrations.stripe.step1Desc') },
+                    { num: '2', title: t('integrations.stripe.step2'), desc: t('integrations.stripe.step2Desc') },
+                    { num: '3', title: t('integrations.stripe.step3'), desc: t('integrations.stripe.step3Desc') },
                   ].map((step) => (
                     <div key={step.num} className="flex-1 flex items-start gap-3">
                       <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium shrink-0">
@@ -649,12 +649,12 @@ export default function IntegrationsPage() {
                       <Key className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
-                      <CardTitle>Acesso à API</CardTitle>
-                      <CardDescription>Integre o Revenify programaticamente</CardDescription>
+                      <CardTitle>{t('integrations.api.title')}</CardTitle>
+                      <CardDescription>{t('integrations.api.description')}</CardDescription>
                     </div>
                   </div>
                   {hasApiAccess ? (
-                    <Badge className="bg-emerald-600">Disponível</Badge>
+                    <Badge className="bg-emerald-600">{t('common.available')}</Badge>
                   ) : (
                     <Badge variant="secondary" className="gap-1">
                       <Lock className="h-3 w-3" />
@@ -690,7 +690,7 @@ export default function IntegrationsPage() {
                           variant="outline"
                           onClick={() => {
                             navigator.clipboard.writeText(fullApiKey)
-                            toast.success('API Key copiada!')
+                            toast.success(t('integrations.api.keyCopied'))
                           }}
                         >
                           <Copy className="h-4 w-4" />
@@ -700,7 +700,7 @@ export default function IntegrationsPage() {
                     <div className="flex gap-2">
                       <Button variant="default" size="sm" onClick={() => setShowApiDocs(true)}>
                         <BookOpen className="h-4 w-4 mr-2" />
-                        Ver Documentação
+                        {t('integrations.api.viewDocs')}
                       </Button>
                     </div>
                   </>
@@ -708,10 +708,10 @@ export default function IntegrationsPage() {
                   <div className="text-center py-6">
                     <Lock className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
                     <p className="text-sm text-muted-foreground mb-4">
-                      Acesso à API disponível nos planos Pro e Business
+                      {t('integrations.api.proRequired')}
                     </p>
                     <Button size="sm" asChild>
-                      <a href="/pricing">Fazer Upgrade</a>
+                      <a href="/pricing">{t('integrations.api.upgrade')}</a>
                     </Button>
                   </div>
                 )}
@@ -729,23 +729,23 @@ export default function IntegrationsPage() {
                       <Webhook className="h-6 w-6 text-orange-600" />
                     </div>
                     <div>
-                      <CardTitle>Webhooks</CardTitle>
-                      <CardDescription>Receba eventos em tempo real</CardDescription>
+                      <CardTitle>{t('integrations.webhooks.title')}</CardTitle>
+                      <CardDescription>{t('integrations.webhooks.description')}</CardDescription>
                     </div>
                   </div>
                   {hasWebhooksAccess ? (
                     webhookStatus === 'success' ? (
                       <Badge className="bg-green-600 gap-1">
                         <CheckCircle2 className="h-3 w-3" />
-                        Funcionando
+                        {t('common.working')}
                       </Badge>
                     ) : webhookStatus === 'error' ? (
                       <Badge variant="destructive" className="gap-1">
                         <XCircle className="h-3 w-3" />
-                        Erro
+                        {t('common.error')}
                       </Badge>
                     ) : (
-                      <Badge className="bg-orange-600">Disponível</Badge>
+                      <Badge className="bg-orange-600">{t('common.available')}</Badge>
                     )
                   ) : (
                     <Badge variant="secondary" className="gap-1">
@@ -759,10 +759,10 @@ export default function IntegrationsPage() {
                 {hasWebhooksAccess ? (
                   <>
                     <div className="space-y-2">
-                      <Label>URL do Webhook</Label>
+                      <Label>{t('integrations.webhooks.url')}</Label>
                       <div className="flex gap-2">
                         <Input 
-                          placeholder="https://seu-site.com/webhook"
+                          placeholder={t('integrations.webhooks.urlPlaceholder')}
                           value={webhookUrl}
                           onChange={(e) => setWebhookUrl(e.target.value)}
                           className="flex-1"
@@ -772,7 +772,7 @@ export default function IntegrationsPage() {
                           onClick={saveWebhook}
                           disabled={!webhookUrl}
                         >
-                          Salvar
+                          {t('integrations.webhooks.save')}
                         </Button>
                       </div>
                     </div>
@@ -784,14 +784,14 @@ export default function IntegrationsPage() {
                         disabled={testingWebhook || !webhookUrl}
                       >
                         {testingWebhook ? (
-                          <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Testando...</>
+                          <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('integrations.webhooks.testing')}</>
                         ) : (
-                          <><Play className="h-4 w-4 mr-2" />Testar Webhook</>
+                          <><Play className="h-4 w-4 mr-2" />{t('integrations.webhooks.test')}</>
                         )}
                       </Button>
                     </div>
                     <div className="p-3 rounded-lg bg-muted/50">
-                      <p className="text-sm font-medium mb-2">Eventos disponíveis:</p>
+                      <p className="text-sm font-medium mb-2">{t('integrations.webhooks.events')}:</p>
                       <div className="grid grid-cols-2 gap-2">
                         {[
                           { event: 'event.created', desc: 'Novo evento' },
@@ -811,10 +811,10 @@ export default function IntegrationsPage() {
                   <div className="text-center py-6">
                     <Lock className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
                     <p className="text-sm text-muted-foreground mb-4">
-                      Webhooks disponíveis nos planos Pro e Business
+                      {t('integrations.api.proRequired')}
                     </p>
                     <Button size="sm" asChild>
-                      <a href="/pricing">Fazer Upgrade</a>
+                      <a href="/pricing">{t('integrations.api.upgrade')}</a>
                     </Button>
                   </div>
                 )}
