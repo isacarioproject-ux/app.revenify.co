@@ -117,6 +117,7 @@ const translations: Translations = {
   'onboarding.projectCreated': { 'pt-BR': 'Projeto "{name}" criado!', 'en': 'Project "{name}" created!', 'es': '¡Proyecto "{name}" creado!' },
   'onboarding.whereToAdd': { 'pt-BR': 'Onde adicionar?', 'en': 'Where to add?', 'es': '¿Dónde añadir?' },
   'onboarding.whereToAddDesc': { 'pt-BR': 'Cole este código antes da tag </head> em todas as páginas do seu site.', 'en': 'Paste this code before the closing </head> tag on all pages of your site.', 'es': 'Pega este código antes de la etiqueta </head> en todas las páginas de tu sitio.' },
+  'onboarding.stepOf': { 'pt-BR': 'Passo {current} de {total}', 'en': 'Step {current} of {total}', 'es': 'Paso {current} de {total}' },
   'onboarding.allSet': { 'pt-BR': 'Tudo pronto!', 'en': 'All set!', 'es': '¡Todo listo!' },
   'onboarding.readyToTrack': { 'pt-BR': 'Seu projeto está configurado e pronto para rastrear', 'en': 'Your project is configured and ready to track', 'es': 'Tu proyecto está configurado y listo para rastrear' },
   'onboarding.nextSteps': { 'pt-BR': 'Próximos passos:', 'en': 'Next steps:', 'es': 'Próximos pasos:' },
