@@ -251,15 +251,6 @@ export default function OnboardingPage() {
                 {...fadeInUp}
               >
                 <div className="text-center mb-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-600 text-sm font-medium mb-4"
-                  >
-                    <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center">1</span>
-                    {t('onboarding.stepOf', { current: '1', total: '2' })}
-                  </motion.div>
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.createProjectTitle')}</h1>
                   <p className="text-muted-foreground">
                     {t('onboarding.createProjectDesc')}
@@ -326,15 +317,6 @@ export default function OnboardingPage() {
                 {...fadeInUp}
               >
                 <div className="text-center mb-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 text-sm font-medium mb-4"
-                  >
-                    <span className="w-5 h-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center">2</span>
-                    {t('onboarding.stepOf', { current: '2', total: '2' })}
-                  </motion.div>
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.installPixelTitle')}</h1>
                   <p className="text-muted-foreground">
                     {t('onboarding.installPixelDesc')}
@@ -421,15 +403,9 @@ export default function OnboardingPage() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                  className="mx-auto mb-6 w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center"
+                  className="mx-auto mb-6"
                 >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
-                  >
-                    <CheckCircle2 className="h-10 w-10 text-emerald-500" />
-                  </motion.div>
+                  <CheckCircle2 className="h-16 w-16 text-emerald-500" />
                 </motion.div>
 
                 <motion.h1 
