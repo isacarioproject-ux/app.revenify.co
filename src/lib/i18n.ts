@@ -1342,15 +1342,6 @@ const translations: Translations = {
   'billing.makeDefault': { 'pt-BR': 'Definir como padrão', 'en': 'Make default', 'es': 'Definir como predeterminado' },
   'billing.pending': { 'pt-BR': 'Pendente', 'en': 'Pending', 'es': 'Pendiente' },
   'billing.failed': { 'pt-BR': 'Falhou', 'en': 'Failed', 'es': 'Fallido' },
-  
-  // Pricing
-  'pricing.monthly': { 'pt-BR': 'Mensal', 'en': 'Monthly', 'es': 'Mensual' },
-  'pricing.yearly': { 'pt-BR': 'Anual', 'en': 'Yearly', 'es': 'Anual' },
-  'pricing.month': { 'pt-BR': 'mês', 'en': 'month', 'es': 'mes' },
-  'pricing.year': { 'pt-BR': 'ano', 'en': 'year', 'es': 'año' },
-  'pricing.popular': { 'pt-BR': 'Popular', 'en': 'Popular', 'es': 'Popular' },
-  'pricing.custom': { 'pt-BR': 'Personalizado', 'en': 'Custom', 'es': 'Personalizado' },
-  'pricing.startFree': { 'pt-BR': 'Comece de graça: escolha um plano mais tarde', 'en': 'Start free: choose a plan later', 'es': 'Empieza gratis: elige un plan más tarde' },
 
   // ===== FINANCE =====
   'finance.title': { 'pt-BR': 'Finanças', 'en': 'Finance', 'es': 'Finanzas' },
