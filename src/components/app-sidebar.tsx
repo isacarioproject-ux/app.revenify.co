@@ -40,6 +40,7 @@ import {
   FileText,
   Radio,
   PenSquare,
+  Globe,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
@@ -360,6 +361,10 @@ export function AppSidebar() {
                 <DropdownMenuItem onClick={() => navigate('/settings/integrations')}>
                   <Plug className="mr-2 h-4 w-4" />
                   {t('settings.integrations')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/settings/custom-domain')}>
+                  <Globe className="mr-2 h-4 w-4" />
+                  {t('customDomain.title')}
                 </DropdownMenuItem>
                 {/* Blog - apenas para admin */}
                 {user?.email === 'revenify.co@gmail.com' && (
