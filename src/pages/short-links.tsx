@@ -28,6 +28,7 @@ import {
   Check,
   ExternalLink,
   MousePointerClick,
+  Download,
 } from 'lucide-react'
 import { useProjects } from '@/hooks/use-projects'
 import { useShortLinks, ShortLink } from '@/hooks/use-short-links'
@@ -73,6 +74,43 @@ export default function ShortLinksPage() {
   const openQRCode = (link: ShortLink) => {
     setSelectedLink(link)
     setQrDialogOpen(true)
+  }
+
+  const exportToCSV = () => {
+    if (shortLinks.length === 0) {
+      toast.error(t('shortLinks.noLinksToExport'))
+      return
+    }
+
+    const headers = ['Short Code', 'Short URL', 'Destination URL', 'Title', 'Clicks', 'Created At', 'UTM Source', 'UTM Medium', 'UTM Campaign']
+    const rows = shortLinks.map(link => [
+      link.short_code,
+      getShortLinkUrl(link.short_code),
+      link.destination_url,
+      link.title || '',
+      link.clicks_count.toString(),
+      format(new Date(link.created_at), 'yyyy-MM-dd HH:mm'),
+      link.utm_source || '',
+      link.utm_medium || '',
+      link.utm_campaign || '',
+    ])
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `short-links-${selectedProject?.name || 'export'}-${format(new Date(), 'yyyy-MM-dd')}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    toast.success(t('shortLinks.exportSuccess'))
   }
 
   // Loading State - só na primeira carga
@@ -185,6 +223,10 @@ export default function ShortLinksPage() {
                 ))}
               </SelectContent>
             </Select>
+            <Button variant="outline" onClick={exportToCSV} disabled={shortLinks.length === 0}>
+              <Download className="h-4 w-4 mr-2" />
+              {t('shortLinks.exportCsv')}
+            </Button>
             <Button onClick={() => setDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               {t('shortLinks.createLink')}
