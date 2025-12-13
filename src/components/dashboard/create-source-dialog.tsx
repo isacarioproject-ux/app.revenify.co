@@ -4,6 +4,8 @@ import { useI18n } from '@/hooks/use-i18n'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { InfoTooltipRich } from '@/components/ui/info-tooltip'
+import { TOOLTIPS } from '@/lib/tooltips'
 import {
   Dialog,
   DialogContent,
@@ -135,7 +137,10 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>{t('sources.utmSource')}</Label>
+              <div className="flex items-center gap-1.5">
+                <Label>{t('sources.utmSource')}</Label>
+                <InfoTooltipRich title={TOOLTIPS.utmSource.title} description={TOOLTIPS.utmSource.description} icon="help" />
+              </div>
               <Select
                 value={formData.utm_source}
                 onValueChange={(value) => setFormData({ ...formData, utm_source: value })}
@@ -154,7 +159,10 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
             </div>
 
             <div className="space-y-2">
-              <Label>{t('sources.utmMedium')}</Label>
+              <div className="flex items-center gap-1.5">
+                <Label>{t('sources.utmMedium')}</Label>
+                <InfoTooltipRich title={TOOLTIPS.utmMedium.title} description={TOOLTIPS.utmMedium.description} icon="help" />
+              </div>
               <Select
                 value={formData.utm_medium}
                 onValueChange={(value) => setFormData({ ...formData, utm_medium: value })}
@@ -174,7 +182,10 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="campaign">{t('sources.utmCampaign')}</Label>
+            <div className="flex items-center gap-1.5">
+              <Label htmlFor="campaign">{t('sources.utmCampaign')}</Label>
+              <InfoTooltipRich title={TOOLTIPS.utmCampaign.title} description={TOOLTIPS.utmCampaign.description} icon="help" />
+            </div>
             <Input
               id="campaign"
               placeholder={t('sources.utmCampaignPlaceholder')}
@@ -184,7 +195,10 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">{t('sources.utmContent')}</Label>
+            <div className="flex items-center gap-1.5">
+              <Label htmlFor="content">{t('sources.utmContent')}</Label>
+              <InfoTooltipRich title={TOOLTIPS.utmContent.title} description={TOOLTIPS.utmContent.description} icon="help" />
+            </div>
             <Input
               id="content"
               placeholder={t('sources.utmContentPlaceholder')}

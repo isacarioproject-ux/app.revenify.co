@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
   DialogContent,
@@ -32,6 +33,7 @@ export function CreateTemplateDialog({
   onOpenChange,
   onCreate,
 }: CreateTemplateDialogProps) {
+  const { t } = useI18n()
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -69,14 +71,14 @@ export function CreateTemplateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Criar Template UTM</DialogTitle>
+          <DialogTitle>{t('templates.createTemplate')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">
           {/* Template Name */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Label htmlFor="name">Nome do Template</Label>
+              <Label htmlFor="name">{t('templates.templateName')}</Label>
               <InfoTooltipRich
                 title={TOOLTIPS.templateName.title}
                 description={TOOLTIPS.templateName.description}
@@ -85,7 +87,7 @@ export function CreateTemplateDialog({
             </div>
             <Input
               id="name"
-              placeholder="Ex: Campanha Facebook Verão"
+              placeholder={t('templates.templateNamePlaceholder')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -94,10 +96,10 @@ export function CreateTemplateDialog({
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Descrição (opcional)</Label>
+            <Label htmlFor="description">{t('templates.descriptionOptional')}</Label>
             <Textarea
               id="description"
-              placeholder="Para que serve este template?"
+              placeholder={t('templates.descriptionPlaceholder')}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
@@ -106,7 +108,7 @@ export function CreateTemplateDialog({
 
           {/* Parameters Header */}
           <div className="border-t pt-4">
-            <h3 className="font-semibold mb-3">Parâmetros UTM</h3>
+            <h3 className="font-semibold mb-3">{t('templates.utmParameters')}</h3>
           </div>
 
           {/* UTM Source */}
@@ -215,14 +217,14 @@ export function CreateTemplateDialog({
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
             >
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               className="flex-1"
               disabled={isLoading || !formData.name || !formData.utm_source || !formData.utm_medium}
             >
-              {isLoading ? 'Criando...' : 'Criar Template'}
+              {isLoading ? t('common.creating') : t('templates.createTemplate')}
             </Button>
           </div>
         </form>
