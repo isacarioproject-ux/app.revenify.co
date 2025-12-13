@@ -159,48 +159,7 @@ export default function OnboardingPage() {
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-muted/30">
-        <div className="max-w-screen-xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-2">
-            {STEPS.map((step, index) => (
-              <div key={step.id} className="flex items-center">
-                <div className="flex flex-col items-center">
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      scale: index === currentStep ? 1.1 : 1,
-                      backgroundColor: index <= currentStep ? 'hsl(var(--primary))' : 'hsl(var(--muted))'
-                    }}
-                    className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors',
-                      index <= currentStep ? 'text-primary-foreground' : 'text-muted-foreground'
-                    )}
-                  >
-                    {index < currentStep ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      index + 1
-                    )}
-                  </motion.div>
-                  <span className={cn(
-                    'text-xs mt-1 hidden sm:block',
-                    index === currentStep ? 'text-foreground font-medium' : 'text-muted-foreground'
-                  )}>
-                    {step.title}
-                  </span>
-                </div>
-                {index < STEPS.length - 1 && (
-                  <div className={cn(
-                    'w-12 sm:w-24 h-0.5 mx-2',
-                    index < currentStep ? 'bg-primary' : 'bg-muted'
-                  )} />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+{/* Progress Bar - Hidden for cleaner UI */}
 
       {/* Content */}
       <main className="flex-1 flex items-center justify-center p-4">
