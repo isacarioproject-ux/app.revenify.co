@@ -30,7 +30,7 @@ export const PLANS: Record<string, Plan> = {
   free: {
     id: 'free',
     name: 'Free',
-    description: 'Para experimentar o Revenify',
+    description: 'Perfect for testing and small projects',
     price: {
       monthly: 0,
       yearly: 0,
@@ -38,11 +38,11 @@ export const PLANS: Record<string, Plan> = {
     limits: {
       max_projects: 1,
       max_sources: 3,
-      max_monthly_events: 10000,
-      max_short_links: 30,
+      max_monthly_events: 1000,
+      max_short_links: 10,
       max_ai_messages: 10,
       max_domains: 0,
-      data_retention_days: 30,
+      data_retention_days: 7,
       revenue_tracking_enabled: false,
       api_access_enabled: false,
       webhooks_enabled: false,
@@ -50,62 +50,61 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: false,
     },
     features: [
-      '1 projeto',
-      '3 fontes de tráfego',
-      '10.000 eventos/mês',
-      '30 links curtos',
-      '10 mensagens IA/mês',
-      '30 dias de retenção',
+      '1,000 events/month',
+      '1 project',
+      '10 short links',
+      '7-day data retention',
+      'Basic analytics dashboard',
+      'Community support',
     ],
   },
   
   starter: {
     id: 'starter',
     name: 'Starter',
-    description: 'Para pequenos projetos',
+    description: 'For growing businesses',
     price: {
       monthly: 49,
-      yearly: 490,
+      yearly: 470,
     },
     limits: {
       max_projects: 3,
       max_sources: -1, // unlimited
-      max_monthly_events: 100000,
-      max_short_links: 100,
+      max_monthly_events: 10000,
+      max_short_links: 30,
       max_ai_messages: 50,
       max_domains: 1,
       data_retention_days: 90,
       revenue_tracking_enabled: true,
-      api_access_enabled: false,
+      api_access_enabled: true,
       webhooks_enabled: false,
       white_label_enabled: false,
       custom_domain_enabled: false,
     },
     features: [
-      '3 projetos',
-      'Fontes ilimitadas',
-      '100.000 eventos/mês',
-      '100 links curtos',
-      '50 mensagens IA/mês',
-      '90 dias de retenção',
-      'Rastreamento de receita',
-      'Integração Stripe',
+      '10,000 events/month',
+      '3 projects',
+      '30 short links',
+      '90-day data retention',
+      'Advanced analytics',
+      'Email support',
+      'Custom domains',
+      'API access',
     ],
-    popular: true,
   },
   
   pro: {
     id: 'pro',
     name: 'Pro',
-    description: 'Para negócios em crescimento',
+    description: 'For scaling companies',
     price: {
-      monthly: 149,
-      yearly: 1490,
+      monthly: 99,
+      yearly: 950,
     },
     limits: {
       max_projects: 10,
       max_sources: -1,
-      max_monthly_events: 500000,
+      max_monthly_events: 50000,
       max_short_links: -1, // unlimited
       max_ai_messages: 200,
       max_domains: 3,
@@ -117,35 +116,37 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '10 projetos',
-      'Fontes ilimitadas',
-      '500.000 eventos/mês',
-      'Links curtos ilimitados',
-      '200 mensagens IA/mês',
-      '1 ano de retenção',
-      'Domínio customizado',
-      'Acesso à API',
+      '50,000 events/month',
+      '10 projects',
+      'Unlimited short links',
+      'Custom short link domain',
+      '1-year data retention',
+      'Multi-touch attribution',
+      'Priority support',
+      'Advanced API access',
       'Webhooks',
-      'Suporte prioritário',
+      'Custom integrations',
+      'White-label reports',
     ],
+    popular: true,
   },
   
   business: {
     id: 'business',
     name: 'Business',
-    description: 'Para empresas em expansão',
+    description: 'For enterprises',
     price: {
-      monthly: 399,
-      yearly: 3990,
+      monthly: 249,
+      yearly: 2390,
     },
     limits: {
-      max_projects: 50,
+      max_projects: -1, // unlimited
       max_sources: -1,
-      max_monthly_events: 2000000,
+      max_monthly_events: 200000,
       max_short_links: -1, // unlimited
       max_ai_messages: 1000,
-      max_domains: 10,
-      data_retention_days: 730,
+      max_domains: -1, // unlimited
+      data_retention_days: -1, // unlimited
       revenue_tracking_enabled: true,
       api_access_enabled: true,
       webhooks_enabled: true,
@@ -153,17 +154,17 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '50 projetos',
-      'Fontes ilimitadas',
-      '2.000.000 eventos/mês',
-      'Links curtos ilimitados',
-      '1.000 mensagens IA/mês',
-      '2 anos de retenção',
-      'Domínio customizado',
-      'White label',
-      'Acesso à API',
-      'Webhooks',
-      'Suporte dedicado',
+      '200,000 events/month',
+      'Unlimited projects',
+      'Unlimited short links',
+      'Custom short link domain',
+      'Unlimited data retention',
+      'White-label options',
+      'Dedicated support',
+      'SLA guarantee',
+      'Custom contracts',
+      'SSO (SAML)',
+      'Advanced security',
     ],
   },
 }
@@ -188,6 +189,6 @@ export function canTrackEvent(plan: string, currentEvents: number): boolean {
 
 export function formatPlanPrice(plan: Plan, interval: 'monthly' | 'yearly'): string {
   const price = plan.price[interval]
-  if (price === 0) return 'Grátis'
-  return `R$ ${price}`
+  if (price === 0) return 'Free'
+  return `$${price}`
 }
