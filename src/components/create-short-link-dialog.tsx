@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ export function CreateShortLinkDialog({
   onOpenChange,
   onCreate,
 }: CreateShortLinkDialogProps) {
+  const { t } = useI18n()
   const [formData, setFormData] = useState({
     destination_url: '',
     title: '',
@@ -95,7 +97,7 @@ export function CreateShortLinkDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link2 className="h-5 w-5" />
-            Criar Link Curto
+            {t('shortLinks.createLink')}
           </DialogTitle>
         </DialogHeader>
 
@@ -103,32 +105,32 @@ export function CreateShortLinkDialog({
           {/* Destination URL */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Label htmlFor="destination_url">URL de Destino *</Label>
+              <Label htmlFor="destination_url">{t('shortLinks.destinationUrl')} *</Label>
               <InfoTooltipRich
-                title="URL de Destino"
-                description="A URL completa para onde o link curto vai redirecionar."
+                title={t('shortLinks.destinationUrl')}
+                description={t('shortLinks.destinationUrlDesc')}
                 icon="info"
               />
             </div>
             <Input
               id="destination_url"
               type="url"
-              placeholder="https://seusite.com/pagina"
+              placeholder={t('shortLinks.destinationUrlPlaceholder')}
               value={formData.destination_url}
               onChange={(e) => setFormData({ ...formData, destination_url: e.target.value })}
               required
             />
             {formData.destination_url && !isValidUrl(formData.destination_url) && (
-              <p className="text-xs text-destructive">URL inválida</p>
+              <p className="text-xs text-destructive">{t('shortLinks.invalidUrl')}</p>
             )}
           </div>
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Título (opcional)</Label>
+            <Label htmlFor="title">{t('shortLinks.titleOptional')}</Label>
             <Input
               id="title"
-              placeholder="Ex: Campanha Black Friday"
+              placeholder={t('shortLinks.titlePlaceholder')}
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
@@ -136,10 +138,10 @@ export function CreateShortLinkDialog({
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Descrição (opcional)</Label>
+            <Label htmlFor="description">{t('shortLinks.descriptionOptional')}</Label>
             <Textarea
               id="description"
-              placeholder="Notas sobre este link..."
+              placeholder={t('shortLinks.descriptionPlaceholder')}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
@@ -150,7 +152,7 @@ export function CreateShortLinkDialog({
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="utm">
               <AccordionTrigger className="text-sm font-medium">
-                Parâmetros UTM (opcional)
+                {t('shortLinks.utmParams')}
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
                 {/* UTM Source */}
@@ -250,17 +252,17 @@ export function CreateShortLinkDialog({
 
             <AccordionItem value="advanced">
               <AccordionTrigger className="text-sm font-medium">
-                Configurações Avançadas
+                {t('shortLinks.advancedSettings')}
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
                 {/* Expiration */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="expires_at">Data de Expiração</Label>
+                    <Label htmlFor="expires_at">{t('shortLinks.expirationDate')}</Label>
                     <InfoTooltipRich
-                      title="Expiração"
-                      description="Após esta data, o link não funcionará mais."
+                      title={t('shortLinks.expiration')}
+                      description={t('shortLinks.expirationDesc')}
                       icon="help"
                     />
                   </div>
@@ -284,14 +286,14 @@ export function CreateShortLinkDialog({
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
             >
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               className="flex-1"
               disabled={isLoading || !formData.destination_url || !isValidUrl(formData.destination_url)}
             >
-              {isLoading ? 'Criando...' : 'Criar Link'}
+              {isLoading ? t('common.creating') : t('shortLinks.createLink')}
             </Button>
           </div>
         </form>

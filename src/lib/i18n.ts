@@ -320,6 +320,19 @@ const translations: Translations = {
   'sources.created': { 'pt-BR': 'Fonte criada com sucesso!', 'en': 'Source created successfully!', 'es': '¡Fuente creada exitosamente!' },
   'sources.loadError': { 'pt-BR': 'Erro ao carregar fontes', 'en': 'Error loading sources', 'es': 'Error al cargar fuentes' },
   'sources.createError': { 'pt-BR': 'Erro ao criar fonte', 'en': 'Error creating source', 'es': 'Error al crear fuente' },
+  'sources.newSource': { 'pt-BR': 'Nova Fonte', 'en': 'New Source', 'es': 'Nueva Fuente' },
+  'sources.createSource': { 'pt-BR': 'Criar Fonte', 'en': 'Create Source', 'es': 'Crear Fuente' },
+  'sources.createSourceDesc': { 'pt-BR': 'Crie uma URL rastreável para suas campanhas de marketing.', 'en': 'Create a trackable URL for your marketing campaigns.', 'es': 'Crea una URL rastreable para tus campañas de marketing.' },
+  'sources.sourceName': { 'pt-BR': 'Nome da Fonte', 'en': 'Source Name', 'es': 'Nombre de la Fuente' },
+  'sources.sourceNamePlaceholder': { 'pt-BR': 'Ex: Campanha Black Friday', 'en': 'E.g.: Black Friday Campaign', 'es': 'Ej: Campaña Black Friday' },
+  'sources.nameRequired': { 'pt-BR': 'Digite um nome para a fonte', 'en': 'Enter a name for the source', 'es': 'Ingresa un nombre para la fuente' },
+  'sources.utmSource': { 'pt-BR': 'Origem (utm_source)', 'en': 'Source (utm_source)', 'es': 'Origen (utm_source)' },
+  'sources.utmMedium': { 'pt-BR': 'Mídia (utm_medium)', 'en': 'Medium (utm_medium)', 'es': 'Medio (utm_medium)' },
+  'sources.utmCampaign': { 'pt-BR': 'Campanha (utm_campaign)', 'en': 'Campaign (utm_campaign)', 'es': 'Campaña (utm_campaign)' },
+  'sources.utmCampaignPlaceholder': { 'pt-BR': 'Ex: black-friday-2024', 'en': 'E.g.: black-friday-2024', 'es': 'Ej: black-friday-2024' },
+  'sources.utmContent': { 'pt-BR': 'Conteúdo (utm_content)', 'en': 'Content (utm_content)', 'es': 'Contenido (utm_content)' },
+  'sources.utmContentPlaceholder': { 'pt-BR': 'Ex: banner-hero', 'en': 'E.g.: banner-hero', 'es': 'Ej: banner-hero' },
+  'sources.generatedUrl': { 'pt-BR': 'URL Gerada', 'en': 'Generated URL', 'es': 'URL Generada' },
 
   // ===== LEADS =====
   'leads.title': { 'pt-BR': 'Leads', 'en': 'Leads', 'es': 'Leads' },
@@ -381,6 +394,19 @@ const translations: Translations = {
   'shortLinks.status': { 'pt-BR': 'Status', 'en': 'Status', 'es': 'Estado' },
   'shortLinks.generateQr': { 'pt-BR': 'Gerar QR Code', 'en': 'Generate QR Code', 'es': 'Generar Código QR' },
   'shortLinks.linkCopied': { 'pt-BR': 'Link copiado!', 'en': 'Link copied!', 'es': '¡Enlace copiado!' },
+  'shortLinks.destinationUrl': { 'pt-BR': 'URL de Destino', 'en': 'Destination URL', 'es': 'URL de Destino' },
+  'shortLinks.destinationUrlDesc': { 'pt-BR': 'A URL completa para onde o link curto vai redirecionar.', 'en': 'The full URL where the short link will redirect to.', 'es': 'La URL completa a donde el enlace corto redirigirá.' },
+  'shortLinks.destinationUrlPlaceholder': { 'pt-BR': 'https://seusite.com/pagina', 'en': 'https://yoursite.com/page', 'es': 'https://tusitio.com/pagina' },
+  'shortLinks.invalidUrl': { 'pt-BR': 'URL inválida', 'en': 'Invalid URL', 'es': 'URL inválida' },
+  'shortLinks.titleOptional': { 'pt-BR': 'Título (opcional)', 'en': 'Title (optional)', 'es': 'Título (opcional)' },
+  'shortLinks.titlePlaceholder': { 'pt-BR': 'Ex: Campanha Black Friday', 'en': 'E.g.: Black Friday Campaign', 'es': 'Ej: Campaña Black Friday' },
+  'shortLinks.descriptionOptional': { 'pt-BR': 'Descrição (opcional)', 'en': 'Description (optional)', 'es': 'Descripción (opcional)' },
+  'shortLinks.descriptionPlaceholder': { 'pt-BR': 'Notas sobre este link...', 'en': 'Notes about this link...', 'es': 'Notas sobre este enlace...' },
+  'shortLinks.utmParams': { 'pt-BR': 'Parâmetros UTM (opcional)', 'en': 'UTM Parameters (optional)', 'es': 'Parámetros UTM (opcional)' },
+  'shortLinks.advancedSettings': { 'pt-BR': 'Configurações Avançadas', 'en': 'Advanced Settings', 'es': 'Configuración Avanzada' },
+  'shortLinks.expirationDate': { 'pt-BR': 'Data de Expiração', 'en': 'Expiration Date', 'es': 'Fecha de Expiración' },
+  'shortLinks.expiration': { 'pt-BR': 'Expiração', 'en': 'Expiration', 'es': 'Expiración' },
+  'shortLinks.expirationDesc': { 'pt-BR': 'Após esta data, o link não funcionará mais.', 'en': 'After this date, the link will no longer work.', 'es': 'Después de esta fecha, el enlace dejará de funcionar.' },
 
   // ===== TEMPLATES =====
   'templates.title': { 'pt-BR': 'Templates UTM', 'en': 'UTM Templates', 'es': 'Plantillas UTM' },
@@ -424,6 +450,7 @@ const translations: Translations = {
   'journey.totalRevenue': { 'pt-BR': 'Receita Total', 'en': 'Total Revenue', 'es': 'Ingresos Totales' },
   'journey.selectJourney': { 'pt-BR': 'Selecione uma jornada', 'en': 'Select a journey', 'es': 'Selecciona una jornada' },
   'journey.selectJourneyDesc': { 'pt-BR': 'Clique em uma jornada à esquerda para ver os detalhes', 'en': 'Click on a journey on the left to see details', 'es': 'Haz clic en una jornada a la izquierda para ver los detalles' },
+  'journey.anonymousVisitor': { 'pt-BR': 'Visitante Anônimo', 'en': 'Anonymous Visitor', 'es': 'Visitante Anónimo' },
 
   // ===== AUTH =====
   'auth.login': { 'pt-BR': 'Entrar', 'en': 'Sign In', 'es': 'Iniciar sesión' },
