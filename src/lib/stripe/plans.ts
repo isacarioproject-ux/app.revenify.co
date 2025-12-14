@@ -29,7 +29,7 @@ export interface Plan {
 export const PLANS: Record<string, Plan> = {
   free: {
     id: 'free',
-    name: 'Grátis',
+    name: 'Free',
     description: 'Perfeito para testes e projetos pequenos',
     price: {
       monthly: 0,
@@ -39,7 +39,7 @@ export const PLANS: Record<string, Plan> = {
       max_projects: 1,
       max_sources: 3,
       max_monthly_events: 1000,
-      max_short_links: 10,
+      max_short_links: 25,
       max_ai_messages: 10,
       max_domains: 0,
       data_retention_days: 7,
@@ -50,11 +50,12 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: false,
     },
     features: [
-      '1.000 eventos por mês',
+      '1.000 eventos/mês',
       '1 projeto',
-      'Retenção de dados em 7 dias',
-      'Painel básico de análise',
-      'Apoio da comunidade',
+      '25 short links',
+      'Retenção de 7 dias',
+      'Painel básico',
+      'Suporte comunidade',
     ],
   },
   
@@ -63,17 +64,17 @@ export const PLANS: Record<string, Plan> = {
     name: 'Starter',
     description: 'Para negócios em crescimento',
     price: {
-      monthly: 49,
-      yearly: 470,
+      monthly: 8,
+      yearly: 72,
     },
     limits: {
       max_projects: 3,
       max_sources: -1, // unlimited
       max_monthly_events: 10000,
-      max_short_links: 30,
+      max_short_links: 500,
       max_ai_messages: 50,
       max_domains: 1,
-      data_retention_days: 90,
+      data_retention_days: 30,
       revenue_tracking_enabled: true,
       api_access_enabled: true,
       webhooks_enabled: false,
@@ -83,10 +84,10 @@ export const PLANS: Record<string, Plan> = {
     features: [
       '10.000 eventos/mês',
       '3 projetos',
-      'Retenção de dados em 90 dias',
+      '500 short links',
+      'Retenção de 30 dias',
       'Análise avançada',
       'Suporte por e-mail',
-      'Domínios personalizados',
       'Acesso à API',
     ],
   },
@@ -94,35 +95,34 @@ export const PLANS: Record<string, Plan> = {
   pro: {
     id: 'pro',
     name: 'Pro',
-    description: 'Para empresas de escalabilidade',
+    description: 'Para empresas em escala',
     price: {
-      monthly: 99,
-      yearly: 950,
+      monthly: 20,
+      yearly: 192,
     },
     limits: {
       max_projects: 10,
       max_sources: -1,
-      max_monthly_events: 50000,
-      max_short_links: -1, // unlimited
+      max_monthly_events: 100000,
+      max_short_links: 5000,
       max_ai_messages: 200,
       max_domains: 3,
       data_retention_days: 365,
       revenue_tracking_enabled: true,
       api_access_enabled: true,
       webhooks_enabled: true,
-      white_label_enabled: true,
+      white_label_enabled: false,
       custom_domain_enabled: true,
     },
     features: [
-      '50.000 eventos/mês',
+      '100.000 eventos/mês',
       '10 projetos',
-      'Retenção de dados por 1 ano',
+      '5.000 short links',
+      'Retenção de 1 ano',
       'Atribuição multi-toque',
       'Suporte prioritário',
-      'Acesso avançado à API',
       'Webhooks',
       'Integrações personalizadas',
-      'Relatórios de marca branca',
     ],
     popular: true,
   },
@@ -130,19 +130,19 @@ export const PLANS: Record<string, Plan> = {
   business: {
     id: 'business',
     name: 'Business',
-    description: 'Para empresas',
+    description: 'Para grandes empresas',
     price: {
-      monthly: 249,
-      yearly: 2390,
+      monthly: 50,
+      yearly: 480,
     },
     limits: {
       max_projects: -1, // unlimited
       max_sources: -1,
-      max_monthly_events: 200000,
+      max_monthly_events: 1000000,
       max_short_links: -1, // unlimited
       max_ai_messages: 1000,
       max_domains: -1, // unlimited
-      data_retention_days: -1, // unlimited
+      data_retention_days: 1095, // 3 anos
       revenue_tracking_enabled: true,
       api_access_enabled: true,
       webhooks_enabled: true,
@@ -150,15 +150,14 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '200.000 eventos/mês',
+      '1.000.000 eventos/mês',
       'Projetos ilimitados',
-      'Retenção ilimitada de dados',
-      'Opções de marca branca',
+      'Short links ilimitados',
+      'Retenção de 3 anos',
+      'White-label',
       'Suporte dedicado',
-      'Garantia SLA',
-      'Contratos personalizados',
+      'SLA garantido',
       'SSO (SAML)',
-      'Segurança avançada',
     ],
   },
 }

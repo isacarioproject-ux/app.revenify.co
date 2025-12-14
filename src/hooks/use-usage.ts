@@ -24,7 +24,7 @@ interface UsageData {
 
 export function useUsage(projectId: string | null): UsageData {
   const [usage, setUsage] = useState<Usage>({ events: 0, shortLinks: 0, projects: 0 })
-  const [limits, setLimits] = useState<Limits>({ plan: 'free', events: 1000, shortLinks: 10, projects: 1 })
+  const [limits, setLimits] = useState<Limits>({ plan: 'free', events: 1000, shortLinks: 25, projects: 1 })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const hasLoadedOnce = useRef(false)
@@ -101,43 +101,43 @@ export function useUsage(projectId: string | null): UsageData {
   return { usage, limits, isLoading, error, refetch: fetchUsage }
 }
 
-// Limites por plano (sincronizado com banco e site)
+// Limites por plano (sincronizado com STRIPE-SETUP.md)
 export const PLAN_LIMITS = {
   free: {
     name: 'Free',
     price: 0,
     events: 1000,
-    links: 10,
+    links: 25,
     projects: 1,
     aiMessages: 10,
     dataRetentionDays: 7,
   },
   starter: {
     name: 'Starter',
-    price: 49,
+    price: 8,
     events: 10000,
-    links: 30,
+    links: 500,
     projects: 3,
     aiMessages: 50,
-    dataRetentionDays: 90,
+    dataRetentionDays: 30,
   },
   pro: {
     name: 'Pro',
-    price: 99,
-    events: 50000,
-    links: -1, // Ilimitado
+    price: 20,
+    events: 100000,
+    links: 5000,
     projects: 10,
     aiMessages: 200,
     dataRetentionDays: 365,
   },
   business: {
     name: 'Business',
-    price: 249,
-    events: 200000,
+    price: 50,
+    events: 1000000,
     links: -1, // Ilimitado
     projects: -1, // Ilimitado
     aiMessages: 1000,
-    dataRetentionDays: -1, // Ilimitado
+    dataRetentionDays: 1095, // 3 anos
   },
 }
 
