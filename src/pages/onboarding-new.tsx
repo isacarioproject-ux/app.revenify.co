@@ -195,7 +195,7 @@ export default function OnboardingPage() {
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                   className="mx-auto mb-6"
                 >
-                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain" />
+                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
                 </motion.div>
 
                 <h1 className="text-3xl font-bold mb-3">
@@ -223,7 +223,7 @@ export default function OnboardingPage() {
                       className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer shadow-sm hover:shadow-lg transition-shadow"
                     >
                       <motion.div 
-                        className={cn('p-3 rounded-xl bg-gradient-to-br', feature.color)}
+                        className="p-3 rounded-xl bg-muted"
                         animate={{ y: [0, -3, 0] }}
                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                       >
@@ -405,7 +405,7 @@ export default function OnboardingPage() {
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                   className="mx-auto mb-6"
                 >
-                  <CheckCircle2 className="h-16 w-16 text-emerald-500" />
+                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
                 </motion.div>
 
                 <motion.h1 
@@ -414,7 +414,7 @@ export default function OnboardingPage() {
                   transition={{ delay: 0.3 }}
                   className="text-3xl font-bold mb-3"
                 >
-                  {t('onboarding.allSet')} 🎉
+                  {t('onboarding.allSet')}
                 </motion.h1>
                 
                 <motion.p 

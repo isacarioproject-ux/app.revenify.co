@@ -176,15 +176,15 @@ export default function ShortLinksPage() {
             <div className="mt-8 space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>Links curtos branded (rvnfy.co/abc123)</span>
+                <span>{t('shortLinks.feature1')}</span>
               </div>
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>Analytics de cliques em tempo real</span>
+                <span>{t('shortLinks.feature2')}</span>
               </div>
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>QR Codes automáticos para campanhas offline</span>
+                <span>{t('shortLinks.feature3')}</span>
               </div>
             </div>
           </div>

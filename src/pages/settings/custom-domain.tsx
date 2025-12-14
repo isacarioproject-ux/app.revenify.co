@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard-layout'
+import { HeaderSkeleton, CardSkeleton } from '@/components/page-skeleton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -40,6 +41,14 @@ export default function CustomDomainPage() {
   const planLimits = getPlanLimits(subscription?.plan || 'free')
   const canUseCustomDomain = planLimits.custom_domain_enabled
   const currentDomain = subscription?.custom_short_domain
+  const [loading, setLoading] = useState(true)
+
+  // Skeleton loading
+  useEffect(() => {
+    if (subscription !== undefined) {
+      setLoading(false)
+    }
+  }, [subscription])
 
   useEffect(() => {
     if (currentDomain) {
@@ -147,6 +156,19 @@ export default function CustomDomainPage() {
   }
 
   const cnameTarget = 'links.revenify.co'
+
+  // Loading skeleton
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="w-full p-4 md:p-6 space-y-6">
+          <HeaderSkeleton />
+          <CardSkeleton lines={4} />
+          <CardSkeleton lines={6} />
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   if (!canUseCustomDomain) {
     return (

@@ -367,10 +367,6 @@ export function AppSidebar() {
                   <Plug className="mr-2 h-4 w-4" />
                   {t('settings.integrations')}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/settings/custom-domain')}>
-                  <Globe className="mr-2 h-4 w-4" />
-                  {t('customDomain.title')}
-                </DropdownMenuItem>
                 {/* Blog - apenas para admin */}
                 {user?.email === 'revenify.co@gmail.com' && (
                   <>

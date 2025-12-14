@@ -14,7 +14,7 @@ interface UsageWidgetProps {
 
 // Formatar número ou mostrar "Ilimitado"
 function formatLimit(value: number): string {
-  if (value >= 999999) return '∞'
+  if (value === -1 || value >= 999999) return '∞'
   if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`
   if (value >= 1000) return `${(value / 1000).toFixed(0)}K`
   return value.toLocaleString()
@@ -27,7 +27,7 @@ export function UsageWidget({ projectId, compact = false }: UsageWidgetProps) {
   if (isLoading || !projectId) return null
 
   // Links ilimitados = não mostrar porcentagem
-  const isLinksUnlimited = limits.shortLinks >= 999999
+  const isLinksUnlimited = limits.shortLinks === -1 || limits.shortLinks >= 999999
   const eventsPercentage = limits.events > 0 ? (usage.events / limits.events) * 100 : 0
   const linksPercentage = isLinksUnlimited ? 0 : (limits.shortLinks > 0 ? (usage.shortLinks / limits.shortLinks) * 100 : 0)
 
