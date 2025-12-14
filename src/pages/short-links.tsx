@@ -37,6 +37,12 @@ import { QRCodeDialog } from '@/components/qrcode-dialog'
 import { InfoTooltipRich } from '@/components/ui/info-tooltip'
 import { TOOLTIPS } from '@/lib/tooltips'
 import { getShortLinkUrl, getShortLinkDisplayUrl, DOMAIN_CONFIGURED, DEFAULT_SHORT_DOMAIN } from '@/lib/config'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertTriangle } from 'lucide-react'
 import { format } from 'date-fns'
@@ -329,9 +335,26 @@ export default function ShortLinksPage() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Link2 className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                        <span className="font-mono text-sm">
-                          {getShortLinkDisplayUrl(link.short_code)}
-                        </span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="font-mono text-sm cursor-help hover:text-primary transition-colors">
+                                {getShortLinkDisplayUrl(link.short_code)}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-sm">
+                              <div className="space-y-1">
+                                <p className="text-xs font-medium">{t('shortLinks.previewTitle')}</p>
+                                <p className="text-xs font-mono break-all text-muted-foreground">
+                                  {getShortLinkUrl(link.short_code)}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  → {link.destination_url.length > 50 ? link.destination_url.slice(0, 50) + '...' : link.destination_url}
+                                </p>
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                         <Button
                           size="icon"
                           variant="ghost"

@@ -398,6 +398,7 @@ const translations: Translations = {
   'shortLinks.exportCsv': { 'pt-BR': 'Exportar CSV', 'en': 'Export CSV', 'es': 'Exportar CSV' },
   'shortLinks.exportSuccess': { 'pt-BR': 'Links exportados com sucesso!', 'en': 'Links exported successfully!', 'es': '¡Enlaces exportados exitosamente!' },
   'shortLinks.noLinksToExport': { 'pt-BR': 'Nenhum link para exportar', 'en': 'No links to export', 'es': 'No hay enlaces para exportar' },
+  'shortLinks.previewTitle': { 'pt-BR': 'Preview do Link', 'en': 'Link Preview', 'es': 'Vista previa del enlace' },
   'shortLinks.destinationUrl': { 'pt-BR': 'URL de Destino', 'en': 'Destination URL', 'es': 'URL de Destino' },
   'shortLinks.destinationUrlDesc': { 'pt-BR': 'A URL completa para onde o link curto vai redirecionar.', 'en': 'The full URL where the short link will redirect to.', 'es': 'La URL completa a donde el enlace corto redirigirá.' },
   'shortLinks.destinationUrlPlaceholder': { 'pt-BR': 'https://seusite.com/pagina', 'en': 'https://yoursite.com/page', 'es': 'https://tusitio.com/pagina' },
@@ -1042,6 +1043,16 @@ const translations: Translations = {
   'journey.attribution': { 'pt-BR': 'Atribuição', 'en': 'Attribution', 'es': 'Atribución' },
   'journey.details': { 'pt-BR': 'Detalhes', 'en': 'Details', 'es': 'Detalles' },
   'journey.selectJourney': { 'pt-BR': 'Selecione uma jornada para ver os detalhes', 'en': 'Select a journey to see details', 'es': 'Selecciona un recorrido para ver los detalles' },
+
+  // ===== TRIAL =====
+  'trial.trialEndsIn': { 'pt-BR': 'Seu trial termina em', 'en': 'Your trial ends in', 'es': 'Tu prueba termina en' },
+  'trial.days': { 'pt-BR': 'dias', 'en': 'days', 'es': 'días' },
+  'trial.hours': { 'pt-BR': 'horas', 'en': 'hours', 'es': 'horas' },
+  'trial.and': { 'pt-BR': 'e', 'en': 'and', 'es': 'y' },
+  'trial.upgradeToKeep': { 'pt-BR': '- Faça upgrade para manter seus dados', 'en': '- Upgrade to keep your data', 'es': '- Actualiza para mantener tus datos' },
+  'trial.upgrade': { 'pt-BR': 'Fazer Upgrade', 'en': 'Upgrade Now', 'es': 'Actualizar Ahora' },
+  'trial.trialExpired': { 'pt-BR': 'Seu período de teste expirou', 'en': 'Your trial period has expired', 'es': 'Tu período de prueba ha expirado' },
+  'trial.trialExpiredDesc': { 'pt-BR': 'Faça upgrade para continuar usando todas as funcionalidades', 'en': 'Upgrade to continue using all features', 'es': 'Actualiza para seguir usando todas las funcionalidades' },
 
   // ===== PRICING =====
   'pricing.title': { 'pt-BR': 'Escolha seu plano', 'en': 'Choose your plan', 'es': 'Elige tu plan' },
