@@ -40,6 +40,7 @@ import {
   FileText,
   Radio,
   PenSquare,
+  Globe,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
@@ -96,6 +97,11 @@ export function AppSidebar() {
       title: t('nav.shortLinks'),
       icon: Link2,
       href: '/short-links',
+    },
+    {
+      title: t('nav.customDomain'),
+      icon: Globe,
+      href: '/settings/custom-domain',
     },
   ]
 

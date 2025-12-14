@@ -13,6 +13,7 @@ export interface Subscription {
   current_monthly_events: number
   stripe_customer_id: string | null
   stripe_subscription_id: string | null
+  custom_short_domain: string | null
   created_at: string
   updated_at: string
 }
@@ -36,6 +37,7 @@ const DEFAULT_SUBSCRIPTION: Omit<Subscription, 'id' | 'user_id' | 'created_at' |
   current_monthly_events: 0,
   stripe_customer_id: null,
   stripe_subscription_id: null,
+  custom_short_domain: null,
 }
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {

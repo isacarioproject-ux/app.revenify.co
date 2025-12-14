@@ -7,27 +7,34 @@ import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Check, Zap, Crown, Building2 } from 'lucide-react'
-import { PLANS, formatPlanPrice } from '@/lib/stripe/plans'
+import { PLANS } from '@/lib/stripe/plans'
 import { useSubscription } from '@/contexts/subscription-context'
+import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
 export default function PricingPage() {
   const navigate = useNavigate()
+  const { t } = useI18n()
   const { subscription } = useSubscription()
   const [interval, setInterval] = useState<'monthly' | 'yearly'>('monthly')
   const [loading, setLoading] = useState<string | null>(null)
 
   const currentPlan = subscription?.plan || 'free'
 
+  const formatPrice = (price: number) => {
+    if (price === 0) return t('pricing.free')
+    return `$${price}`
+  }
+
   const handleSelectPlan = async (planId: string) => {
     if (planId === 'free') {
-      toast.info('Você já está no plano gratuito')
+      toast.info(t('pricing.alreadyFree'))
       return
     }
 
     if (planId === currentPlan) {
-      toast.info('Você já está neste plano')
+      toast.info(t('pricing.alreadyOnPlan'))
       return
     }
 
@@ -37,7 +44,7 @@ export default function PricingPage() {
       // Redirecionar para billing com o plano selecionado
       navigate(`/settings/billing?upgrade=${planId}&interval=${interval}`)
     } catch (error) {
-      toast.error('Erro ao processar. Tente novamente.')
+      toast.error(t('pricing.error'))
     } finally {
       setLoading(null)
     }
@@ -61,16 +68,16 @@ export default function PricingPage() {
       <div className="space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-2">Escolha seu plano</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('pricing.title')}</h1>
           <p className="text-muted-foreground">
-            Comece grátis e faça upgrade quando precisar de mais
+            {t('pricing.subtitle')}
           </p>
         </div>
 
         {/* Interval Toggle */}
         <div className="flex items-center justify-center gap-4">
           <Label htmlFor="interval" className={cn(interval === 'monthly' && 'font-semibold')}>
-            Mensal
+            {t('pricing.monthly')}
           </Label>
           <Switch
             id="interval"
@@ -78,9 +85,9 @@ export default function PricingPage() {
             onCheckedChange={(checked) => setInterval(checked ? 'yearly' : 'monthly')}
           />
           <Label htmlFor="interval" className={cn(interval === 'yearly' && 'font-semibold')}>
-            Anual
+            {t('pricing.yearly')}
             <Badge variant="secondary" className="ml-2">
-              2 meses grátis
+              {t('pricing.saveMonths')}
             </Badge>
           </Label>
         </div>
@@ -103,7 +110,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    Mais Popular
+                    {t('pricing.mostPopular')}
                   </Badge>
                 )}
                 
@@ -125,17 +132,17 @@ export default function PricingPage() {
                   <div className="mb-6">
                     <div className="flex items-baseline gap-1">
                       <span className="text-4xl font-bold">
-                        {price === 0 ? 'Grátis' : `R$${price}`}
+                        {formatPrice(price)}
                       </span>
                       {price > 0 && (
                         <span className="text-muted-foreground">
-                          /{interval === 'monthly' ? 'mês' : 'ano'}
+                          /{interval === 'monthly' ? t('pricing.mo') : t('pricing.yr')}
                         </span>
                       )}
                     </div>
                     {interval === 'yearly' && price > 0 && (
                       <p className="text-sm text-muted-foreground mt-1">
-                        R${(price / 12).toFixed(0)}/mês cobrado anualmente
+                        ${(price / 12).toFixed(0)}/{t('pricing.mo')} {t('pricing.billedAnnually')}
                       </p>
                     )}
                   </div>
@@ -159,17 +166,17 @@ export default function PricingPage() {
                       onClick={() => handleSelectPlan(plan.id)}
                     >
                       {loading === plan.id ? (
-                        'Processando...'
+                        t('common.processing')
                       ) : isCurrentPlan ? (
-                        'Plano Atual'
+                        t('pricing.currentPlan')
                       ) : (
-                        'Fazer Upgrade'
+                        t('pricing.upgrade')
                       )}
                     </Button>
                   )}
                   {plan.id === 'free' && isCurrentPlan && (
                     <div className="mt-6 text-center text-sm text-muted-foreground">
-                      Plano Atual
+                      {t('pricing.currentPlan')}
                     </div>
                   )}
                 </CardContent>
@@ -181,25 +188,25 @@ export default function PricingPage() {
         {/* FAQ or Additional Info */}
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle>Perguntas Frequentes</CardTitle>
+            <CardTitle>{t('pricing.faq')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-medium mb-1">Posso mudar de plano a qualquer momento?</h4>
+              <h4 className="font-medium mb-1">{t('pricing.faq1Question')}</h4>
               <p className="text-sm text-muted-foreground">
-                Sim! Você pode fazer upgrade ou downgrade a qualquer momento. O valor será ajustado proporcionalmente.
+                {t('pricing.faq1Answer')}
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-1">O que acontece se eu exceder o limite de eventos?</h4>
+              <h4 className="font-medium mb-1">{t('pricing.faq2Question')}</h4>
               <p className="text-sm text-muted-foreground">
-                Você receberá um aviso e poderá fazer upgrade. Não perdemos nenhum dado.
+                {t('pricing.faq2Answer')}
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-1">Posso cancelar a qualquer momento?</h4>
+              <h4 className="font-medium mb-1">{t('pricing.faq3Question')}</h4>
               <p className="text-sm text-muted-foreground">
-                Sim, sem multas ou taxas. Seu plano continua ativo até o fim do período pago.
+                {t('pricing.faq3Answer')}
               </p>
             </div>
           </CardContent>

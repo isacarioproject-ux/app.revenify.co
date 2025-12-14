@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { Copy, Check, Link2 } from 'lucide-react'
+import { useI18n } from '@/hooks/use-i18n'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { InfoTooltipRich } from '@/components/ui/info-tooltip'
+import { TOOLTIPS } from '@/lib/tooltips'
 import {
   Dialog,
   DialogContent,
@@ -52,6 +55,7 @@ const UTM_MEDIUMS = [
 ]
 
 export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: CreateSourceDialogProps) {
+  const { t } = useI18n()
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [formData, setFormData] = useState({
@@ -76,13 +80,13 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(generatedUrl())
     setCopied(true)
-    toast.success('URL copiada!')
+    toast.success(t('sources.urlCopied'))
     setTimeout(() => setCopied(false), 2000)
   }
 
   const handleCreate = () => {
     if (!formData.name) {
-      toast.error('Digite um nome para a fonte')
+      toast.error(t('sources.nameRequired'))
       return
     }
     
@@ -91,7 +95,7 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
       url: generatedUrl(),
     })
     
-    toast.success('Fonte criada com sucesso!')
+    toast.success(t('sources.created'))
     setOpen(false)
     setFormData({
       name: '',
@@ -108,24 +112,24 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
         {trigger || (
           <Button>
             <Link2 className="mr-2 h-4 w-4" />
-            Nova Fonte
+            {t('sources.newSource')}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Criar Nova Fonte</DialogTitle>
+          <DialogTitle>{t('sources.createSource')}</DialogTitle>
           <DialogDescription>
-            Crie uma URL rastreável para suas campanhas de marketing.
+            {t('sources.createSourceDesc')}
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome da Fonte *</Label>
+            <Label htmlFor="name">{t('sources.sourceName')} *</Label>
             <Input
               id="name"
-              placeholder="Ex: Campanha Black Friday"
+              placeholder={t('sources.sourceNamePlaceholder')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
@@ -133,13 +137,16 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Origem (utm_source)</Label>
+              <div className="flex items-center gap-1.5">
+                <Label>{t('sources.utmSource')}</Label>
+                <InfoTooltipRich title={TOOLTIPS.utmSource.title} description={TOOLTIPS.utmSource.description} icon="help" />
+              </div>
               <Select
                 value={formData.utm_source}
                 onValueChange={(value) => setFormData({ ...formData, utm_source: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione" />
+                  <SelectValue placeholder={t('common.select')} />
                 </SelectTrigger>
                 <SelectContent>
                   {UTM_SOURCES.map((source) => (
@@ -152,13 +159,16 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
             </div>
 
             <div className="space-y-2">
-              <Label>Mídia (utm_medium)</Label>
+              <div className="flex items-center gap-1.5">
+                <Label>{t('sources.utmMedium')}</Label>
+                <InfoTooltipRich title={TOOLTIPS.utmMedium.title} description={TOOLTIPS.utmMedium.description} icon="help" />
+              </div>
               <Select
                 value={formData.utm_medium}
                 onValueChange={(value) => setFormData({ ...formData, utm_medium: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione" />
+                  <SelectValue placeholder={t('common.select')} />
                 </SelectTrigger>
                 <SelectContent>
                   {UTM_MEDIUMS.map((medium) => (
@@ -172,27 +182,33 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="campaign">Campanha (utm_campaign)</Label>
+            <div className="flex items-center gap-1.5">
+              <Label htmlFor="campaign">{t('sources.utmCampaign')}</Label>
+              <InfoTooltipRich title={TOOLTIPS.utmCampaign.title} description={TOOLTIPS.utmCampaign.description} icon="help" />
+            </div>
             <Input
               id="campaign"
-              placeholder="Ex: black-friday-2024"
+              placeholder={t('sources.utmCampaignPlaceholder')}
               value={formData.utm_campaign}
               onChange={(e) => setFormData({ ...formData, utm_campaign: e.target.value })}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">Conteúdo (utm_content)</Label>
+            <div className="flex items-center gap-1.5">
+              <Label htmlFor="content">{t('sources.utmContent')}</Label>
+              <InfoTooltipRich title={TOOLTIPS.utmContent.title} description={TOOLTIPS.utmContent.description} icon="help" />
+            </div>
             <Input
               id="content"
-              placeholder="Ex: banner-hero"
+              placeholder={t('sources.utmContentPlaceholder')}
               value={formData.utm_content}
               onChange={(e) => setFormData({ ...formData, utm_content: e.target.value })}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>URL Gerada</Label>
+            <Label>{t('sources.generatedUrl')}</Label>
             <div className="flex gap-2">
               <Input
                 readOnly
@@ -208,10 +224,10 @@ export function CreateSourceDialog({ projectDomain, onSourceCreated, trigger }: 
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancelar
+            {t('common.cancel')}
           </Button>
           <Button onClick={handleCreate}>
-            Criar Fonte
+            {t('sources.createSource')}
           </Button>
         </DialogFooter>
       </DialogContent>

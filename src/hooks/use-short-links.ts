@@ -104,6 +104,16 @@ export function useShortLinks() {
     }
   }, [selectedProject?.id, fetchShortLinks])
 
+  // Gerar short code no frontend (fallback se RPC não existir)
+  const generateShortCode = (): string => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    let code = ''
+    for (let i = 0; i < 7; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return code
+  }
+
   const createShortLink = async (data: CreateShortLinkData): Promise<ShortLink | null> => {
     if (!selectedProject?.id) {
       toast.error('Selecione um projeto primeiro')
@@ -111,17 +121,14 @@ export function useShortLinks() {
     }
 
     try {
-      // Gerar short code
-      const { data: codeData, error: codeError } = await supabase
-        .rpc('generate_short_code')
-
-      if (codeError) throw codeError
+      // Gerar short code no frontend
+      const shortCode = generateShortCode()
 
       const { data: newLink, error: insertError } = await supabase
         .from('short_links')
         .insert({
           project_id: selectedProject.id,
-          short_code: codeData,
+          short_code: shortCode,
           destination_url: data.destination_url,
           title: data.title || null,
           description: data.description || null,

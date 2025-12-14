@@ -42,24 +42,24 @@ export const TOOLTIPS = {
     description: 'Canal de marketing ou campanha que trouxe tráfego para seu site.',
   },
   utmSource: {
-    title: 'UTM Source',
-    description: 'De onde vem o tráfego (ex: google, facebook, newsletter).',
+    title: 'UTM Source (Origem)',
+    description: 'De onde vem o tráfego. Exemplos: google, facebook, instagram, newsletter, linkedin. É o canal principal que trouxe o visitante.',
   },
   utmMedium: {
-    title: 'UTM Medium',
-    description: 'Meio de marketing (ex: cpc, email, social, referral).',
+    title: 'UTM Medium (Mídia)',
+    description: 'Tipo de mídia ou canal. Exemplos: cpc (anúncio pago), organic (busca orgânica), email, social, referral (indicação), display (banner).',
   },
   utmCampaign: {
-    title: 'UTM Campaign',
-    description: 'Identificador da campanha nos links (utm_campaign=). Usado para atribuição automática.',
+    title: 'UTM Campaign (Campanha)',
+    description: 'Nome da sua campanha de marketing. Exemplos: black_friday_2024, lancamento_produto, webinar_janeiro. Use nomes descritivos para identificar facilmente.',
   },
   utmTerm: {
-    title: 'UTM Term',
-    description: 'Palavras-chave de busca paga (opcional). Usado para campanhas PPC.',
+    title: 'UTM Term (Termo)',
+    description: 'Palavra-chave usada em anúncios pagos (Google Ads, etc). Exemplos: sapatos_femininos, curso_marketing. Opcional para campanhas que não são de busca.',
   },
   utmContent: {
-    title: 'UTM Content',
-    description: 'Diferencia conteúdo similar (ex: logo-link vs text-link).',
+    title: 'UTM Content (Conteúdo)',
+    description: 'Diferencia variações do mesmo anúncio para testes A/B. Exemplos: banner_azul, cta_comprar, video_curto. Útil para saber qual criativo performou melhor.',
   },
   roi: {
     title: 'Retorno sobre Investimento',

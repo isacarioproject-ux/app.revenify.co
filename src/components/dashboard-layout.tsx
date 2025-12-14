@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { AIChatWidget } from '@/components/ai-chat-widget'
+import { TrialBanner } from '@/components/trial-banner'
 import { Search } from 'lucide-react'
 import { User } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
@@ -105,6 +106,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </header>
           )}
           <div className="relative flex-1 overflow-y-auto">
+            <div className="p-4 pb-0">
+              <TrialBanner />
+            </div>
             {children}
           </div>
         </main>

@@ -51,3 +51,4 @@ supabase/migrations/
 # Supabase config local
 supabase/.temp/
 supabase/config.toml
+.vercel

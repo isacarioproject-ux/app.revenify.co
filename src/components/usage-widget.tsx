@@ -14,7 +14,7 @@ interface UsageWidgetProps {
 
 // Formatar número ou mostrar "Ilimitado"
 function formatLimit(value: number): string {
-  if (value >= 999999) return '∞'
+  if (value === -1 || value >= 999999) return '∞'
   if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`
   if (value >= 1000) return `${(value / 1000).toFixed(0)}K`
   return value.toLocaleString()
@@ -27,7 +27,7 @@ export function UsageWidget({ projectId, compact = false }: UsageWidgetProps) {
   if (isLoading || !projectId) return null
 
   // Links ilimitados = não mostrar porcentagem
-  const isLinksUnlimited = limits.shortLinks >= 999999
+  const isLinksUnlimited = limits.shortLinks === -1 || limits.shortLinks >= 999999
   const eventsPercentage = limits.events > 0 ? (usage.events / limits.events) * 100 : 0
   const linksPercentage = isLinksUnlimited ? 0 : (limits.shortLinks > 0 ? (usage.shortLinks / limits.shortLinks) * 100 : 0)
 
@@ -74,7 +74,11 @@ export function UsageWidget({ projectId, compact = false }: UsageWidgetProps) {
               !isLinksUnlimited && linksPercentage >= 100 && 'text-destructive font-medium',
               !isLinksUnlimited && linksPercentage >= 80 && linksPercentage < 100 && 'text-yellow-600'
             )}>
-              {usage.shortLinks} / {formatLimit(limits.shortLinks)}
+              {isLinksUnlimited ? (
+                <>{Math.max(0, usage.shortLinks)} / ∞</>
+              ) : (
+                <>{Math.max(0, usage.shortLinks)} / {formatLimit(limits.shortLinks)}</>
+              )}
             </span>
           </div>
           <Progress 
@@ -189,7 +193,7 @@ function UsageMetric({
             isExceeded && 'text-destructive font-semibold',
             isWarning && 'text-yellow-600 font-semibold'
           )}>
-            {used.toLocaleString()} / {formatLimit(limit)}
+            {Math.max(0, used).toLocaleString()} / {formatLimit(limit)}
           </span>
 
           {/* Hover Tooltip com próximo plano - só se não for ilimitado */}

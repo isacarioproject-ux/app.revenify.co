@@ -300,7 +300,7 @@ export default function CustomerJourneyPage() {
                         {journey.lead?.email || journey.visitor_id.slice(0, 20) + '...'}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {journey.touchpoints.length} touchpoints
+                        {journey.touchpoints.length} {t('journey.touchpoints').toLowerCase()}
                       </p>
                     </div>
                     <div className="text-right">
@@ -326,7 +326,7 @@ export default function CustomerJourneyPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">
-                    {selectedJourney.lead?.email || 'Visitante Anônimo'}
+                    {selectedJourney.lead?.email || t('journey.anonymousVisitor')}
                   </CardTitle>
                   <CardDescription>
                     ID: {selectedJourney.visitor_id}

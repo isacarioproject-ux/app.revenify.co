@@ -44,8 +44,25 @@ const fadeInUp = {
 const staggerChildren = {
   animate: {
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.15
     }
+  }
+}
+
+// Animação flutuante para os cards
+const floatingAnimation = {
+  initial: { opacity: 0, y: 30, scale: 0.95 },
+  animate: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { duration: 0.5, ease: 'easeOut' }
+  },
+  whileHover: { 
+    y: -4, 
+    scale: 1.02,
+    boxShadow: '0 10px 40px -10px rgba(99, 102, 241, 0.3)',
+    transition: { duration: 0.2 }
   }
 }
 
@@ -173,12 +190,12 @@ export default function OnboardingPage() {
                 className="text-center"
               >
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                  className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
+                  className="mx-auto mb-6"
                 >
-                  <Sparkles className="h-8 w-8 text-primary" />
+                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
                 </motion.div>
 
                 <h1 className="text-3xl font-bold mb-3">
@@ -195,21 +212,26 @@ export default function OnboardingPage() {
                   className="grid gap-4 mb-8"
                 >
                   {[
-                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc') },
-                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc') },
-                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc') },
+                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc'), color: 'from-indigo-500/20 to-indigo-500/5', iconColor: 'text-indigo-500' },
+                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), color: 'from-emerald-500/20 to-emerald-500/5', iconColor: 'text-emerald-500' },
+                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), color: 'from-amber-500/20 to-amber-500/5', iconColor: 'text-amber-500' },
                   ].map((feature, i) => (
                     <motion.div
                       key={i}
-                      variants={fadeInUp}
-                      className="flex items-start gap-4 p-4 rounded-xl bg-muted/50 border border-border/50 text-left"
+                      variants={floatingAnimation}
+                      whileHover="whileHover"
+                      className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer shadow-sm hover:shadow-lg transition-shadow"
                     >
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <feature.icon className="h-5 w-5 text-primary" />
-                      </div>
+                      <motion.div 
+                        className="p-3 rounded-xl bg-muted"
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                      >
+                        <feature.icon className={cn('h-6 w-6', feature.iconColor)} />
+                      </motion.div>
                       <div>
-                        <h3 className="font-semibold">{feature.title}</h3>
-                        <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                        <h3 className="font-semibold text-base">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{feature.desc}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -229,14 +251,6 @@ export default function OnboardingPage() {
                 {...fadeInUp}
               >
                 <div className="text-center mb-8">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                    className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center"
-                  >
-                    <Globe className="h-7 w-7 text-blue-500" />
-                  </motion.div>
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.createProjectTitle')}</h1>
                   <p className="text-muted-foreground">
                     {t('onboarding.createProjectDesc')}
@@ -303,14 +317,6 @@ export default function OnboardingPage() {
                 {...fadeInUp}
               >
                 <div className="text-center mb-6">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                    className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center"
-                  >
-                    <Code2 className="h-7 w-7 text-emerald-500" />
-                  </motion.div>
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.installPixelTitle')}</h1>
                   <p className="text-muted-foreground">
                     {t('onboarding.installPixelDesc')}
@@ -397,15 +403,9 @@ export default function OnboardingPage() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                  className="mx-auto mb-6 w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center"
+                  className="mx-auto mb-6"
                 >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.4, type: 'spring', stiffness: 300 }}
-                  >
-                    <CheckCircle2 className="h-10 w-10 text-emerald-500" />
-                  </motion.div>
+                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
                 </motion.div>
 
                 <motion.h1 
@@ -414,7 +414,7 @@ export default function OnboardingPage() {
                   transition={{ delay: 0.3 }}
                   className="text-3xl font-bold mb-3"
                 >
-                  {t('onboarding.allSet')} 🎉
+                  {t('onboarding.allSet')}
                 </motion.h1>
                 
                 <motion.p 

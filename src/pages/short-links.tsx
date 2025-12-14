@@ -28,6 +28,7 @@ import {
   Check,
   ExternalLink,
   MousePointerClick,
+  Download,
 } from 'lucide-react'
 import { useProjects } from '@/hooks/use-projects'
 import { useShortLinks, ShortLink } from '@/hooks/use-short-links'
@@ -36,6 +37,12 @@ import { QRCodeDialog } from '@/components/qrcode-dialog'
 import { InfoTooltipRich } from '@/components/ui/info-tooltip'
 import { TOOLTIPS } from '@/lib/tooltips'
 import { getShortLinkUrl, getShortLinkDisplayUrl, DOMAIN_CONFIGURED, DEFAULT_SHORT_DOMAIN } from '@/lib/config'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertTriangle } from 'lucide-react'
 import { format } from 'date-fns'
@@ -73,6 +80,43 @@ export default function ShortLinksPage() {
   const openQRCode = (link: ShortLink) => {
     setSelectedLink(link)
     setQrDialogOpen(true)
+  }
+
+  const exportToCSV = () => {
+    if (shortLinks.length === 0) {
+      toast.error(t('shortLinks.noLinksToExport'))
+      return
+    }
+
+    const headers = ['Short Code', 'Short URL', 'Destination URL', 'Title', 'Clicks', 'Created At', 'UTM Source', 'UTM Medium', 'UTM Campaign']
+    const rows = shortLinks.map(link => [
+      link.short_code,
+      getShortLinkUrl(link.short_code),
+      link.destination_url,
+      link.title || '',
+      link.clicks_count.toString(),
+      format(new Date(link.created_at), 'yyyy-MM-dd HH:mm'),
+      link.utm_source || '',
+      link.utm_medium || '',
+      link.utm_campaign || '',
+    ])
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `short-links-${selectedProject?.name || 'export'}-${format(new Date(), 'yyyy-MM-dd')}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    toast.success(t('shortLinks.exportSuccess'))
   }
 
   // Loading State - só na primeira carga
@@ -132,15 +176,15 @@ export default function ShortLinksPage() {
             <div className="mt-8 space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>Links curtos branded (rvnfy.co/abc123)</span>
+                <span>{t('shortLinks.feature1')}</span>
               </div>
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>Analytics de cliques em tempo real</span>
+                <span>{t('shortLinks.feature2')}</span>
               </div>
               <div className="flex items-center gap-2 justify-center">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>QR Codes automáticos para campanhas offline</span>
+                <span>{t('shortLinks.feature3')}</span>
               </div>
             </div>
           </div>
@@ -185,6 +229,10 @@ export default function ShortLinksPage() {
                 ))}
               </SelectContent>
             </Select>
+            <Button variant="outline" onClick={exportToCSV} disabled={shortLinks.length === 0}>
+              <Download className="h-4 w-4 mr-2" />
+              {t('shortLinks.exportCsv')}
+            </Button>
             <Button onClick={() => setDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               {t('shortLinks.createLink')}
@@ -287,9 +335,26 @@ export default function ShortLinksPage() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Link2 className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                        <span className="font-mono text-sm">
-                          {getShortLinkDisplayUrl(link.short_code)}
-                        </span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="font-mono text-sm cursor-help hover:text-primary transition-colors">
+                                {getShortLinkDisplayUrl(link.short_code)}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-sm">
+                              <div className="space-y-1">
+                                <p className="text-xs font-medium">{t('shortLinks.previewTitle')}</p>
+                                <p className="text-xs font-mono break-all text-muted-foreground">
+                                  {getShortLinkUrl(link.short_code)}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  → {link.destination_url.length > 50 ? link.destination_url.slice(0, 50) + '...' : link.destination_url}
+                                </p>
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                         <Button
                           size="icon"
                           variant="ghost"
