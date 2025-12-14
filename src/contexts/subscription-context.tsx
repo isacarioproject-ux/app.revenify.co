@@ -14,6 +14,11 @@ export interface Subscription {
   stripe_customer_id: string | null
   stripe_subscription_id: string | null
   custom_short_domain: string | null
+  is_trial: boolean
+  trial_started_at: string | null
+  trial_ends_at: string | null
+  max_projects: number
+  max_short_links: number
   created_at: string
   updated_at: string
 }
@@ -38,6 +43,11 @@ const DEFAULT_SUBSCRIPTION: Omit<Subscription, 'id' | 'user_id' | 'created_at' |
   stripe_customer_id: null,
   stripe_subscription_id: null,
   custom_short_domain: null,
+  is_trial: false,
+  trial_started_at: null,
+  trial_ends_at: null,
+  max_projects: 1,
+  max_short_links: 25,
 }
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
