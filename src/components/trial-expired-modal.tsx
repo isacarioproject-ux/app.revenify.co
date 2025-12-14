@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from '@/contexts/subscription-context'
 import { useI18n } from '@/hooks/use-i18n'
@@ -10,12 +11,13 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Lock, Sparkles, Check, AlertTriangle } from 'lucide-react'
+import { Lock, Sparkles, Check, AlertTriangle, X } from 'lucide-react'
 
 export function TrialExpiredModal() {
   const { t } = useI18n()
   const { subscription } = useSubscription()
   const navigate = useNavigate()
+  const [dismissed, setDismissed] = useState(false)
 
   // Verificar se o trial expirou
   const isTrialExpired = 
@@ -24,13 +26,10 @@ export function TrialExpiredModal() {
     new Date(subscription.trial_ends_at) < new Date() &&
     !subscription?.stripe_subscription_id
 
-  // Também bloquear se status for 'canceled' ou 'past_due'
-  const isBlocked = 
-    isTrialExpired || 
-    subscription?.status === 'canceled' ||
-    subscription?.status === 'past_due'
+  // Mostrar modal se trial expirou (mas pode fechar e continuar usando até limite)
+  const shouldShowModal = isTrialExpired && !dismissed
 
-  if (!isBlocked) {
+  if (!shouldShowModal) {
     return null
   }
 
@@ -56,8 +55,8 @@ export function TrialExpiredModal() {
   ]
 
   return (
-    <Dialog open={true}>
-      <DialogContent className="sm:max-w-2xl" onInteractOutside={(e) => e.preventDefault()}>
+    <Dialog open={true} onOpenChange={(open) => !open && setDismissed(true)}>
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader className="text-center">
           <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center">
             <AlertTriangle className="h-8 w-8 text-amber-500" />
