@@ -42,14 +42,15 @@ export default function TemplatesPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const hasLoadedTemplates = useRef(false)
 
-  // Só mostrar skeleton enquanto não carregou templates pela primeira vez
-  const showInitialSkeleton = !hasLoadedTemplates.current && (projectsLoading || loading)
+  // Mostrar skeleton durante loading (inicial ou ao mudar projeto)
+  const showSkeleton = projectsLoading || loading
 
   useEffect(() => {
     if (selectedProject) {
       setBaseUrl(`https://${selectedProject.domain}`)
+      // Mostrar loading ao mudar de projeto para evitar flash do empty state
+      setLoading(true)
       loadTemplates()
-      // NÃO fechar o dialog ao mudar de projeto - manter aberto para o usuário
     } else if (!projectsLoading) {
       // Se não há projeto selecionado e já terminou de carregar projetos, parar loading
       setLoading(false)
@@ -58,11 +59,6 @@ export default function TemplatesPage() {
 
   const loadTemplates = async () => {
     if (!selectedProject) return
-    
-    // Só mostrar loading se ainda não carregou uma vez
-    if (!hasLoadedTemplates.current) {
-      setLoading(true)
-    }
     try {
       const { data, error } = await supabase
         .from('utm_templates')
@@ -146,7 +142,7 @@ export default function TemplatesPage() {
   }
 
   // Loading State - só na primeira carga
-  if (showInitialSkeleton) {
+  if (showSkeleton) {
     return (
       <DashboardLayout>
         <div className="w-full p-4 md:p-6 space-y-6">
