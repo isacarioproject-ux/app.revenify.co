@@ -177,7 +177,7 @@ export default function BillingPage() {
               >
                 {t('billing.yearly')}
                 <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
-                  -17%
+                  -20%
                 </Badge>
               </Label>
             </div>
@@ -211,8 +211,8 @@ export default function BillingPage() {
                         {plan.price.monthly === 0 
                           ? 'Free' 
                           : billingInterval === 'yearly'
-                            ? `R$ ${Math.round(plan.price.yearly / 12)}`
-                            : `R$ ${plan.price.monthly}`
+                            ? `$${Math.round(plan.price.yearly / 12)}`
+                            : `$${plan.price.monthly}`
                         }
                       </span>
                       {plan.price.monthly > 0 && (
@@ -220,7 +220,7 @@ export default function BillingPage() {
                       )}
                       {billingInterval === 'yearly' && plan.price.yearly > 0 && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          R$ {plan.price.yearly}/yr
+                          ${plan.price.yearly}/yr
                         </p>
                       )}
                     </div>
