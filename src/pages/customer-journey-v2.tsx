@@ -387,12 +387,12 @@ export default function CustomerJourneyPage() {
 
   const getStatusBadge = (journey: JourneyData) => {
     if (journey.payments.length > 0) {
-      return <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Cliente</Badge>
+      return <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">{t('journey.customers')}</Badge>
     }
     if (journey.lead) {
-      return <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20">Lead</Badge>
+      return <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20">{t('journey.leads')}</Badge>
     }
-    return <Badge variant="outline">Visitante</Badge>
+    return <Badge variant="outline">{t('journey.visitors')}</Badge>
   }
 
   return (
@@ -401,9 +401,9 @@ export default function CustomerJourneyPage() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Customer Journey</h1>
+            <h1 className="text-2xl font-bold">{t('journey.title')}</h1>
             <p className="text-muted-foreground">
-              Visualize a jornada completa de cada visitante
+              {t('journey.subtitle')}
             </p>
           </div>
           
@@ -416,7 +416,7 @@ export default function CustomerJourneyPage() {
               }}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Selecionar projeto" />
+                <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>
                 {projects.map((project) => (
@@ -433,9 +433,9 @@ export default function CustomerJourneyPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="7d">Últimos 7 dias</SelectItem>
-                <SelectItem value="30d">Últimos 30 dias</SelectItem>
-                <SelectItem value="90d">Últimos 90 dias</SelectItem>
+                <SelectItem value="7d">{t('journey.last7Days')}</SelectItem>
+                <SelectItem value="30d">{t('journey.last30Days')}</SelectItem>
+                <SelectItem value="90d">{t('journey.last90Days')}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -445,7 +445,7 @@ export default function CustomerJourneyPage() {
 
             <Button variant="outline" onClick={exportToCSV}>
               <Download className="h-4 w-4 mr-2" />
-              Exportar
+              {t('journey.export')}
             </Button>
           </div>
         </div>
@@ -461,7 +461,7 @@ export default function CustomerJourneyPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{stats.total_visitors}</p>
-                    <p className="text-xs text-muted-foreground">Visitantes</p>
+                    <p className="text-xs text-muted-foreground">{t('journey.visitors')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -475,7 +475,7 @@ export default function CustomerJourneyPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{stats.total_leads}</p>
-                    <p className="text-xs text-muted-foreground">Leads</p>
+                    <p className="text-xs text-muted-foreground">{t('journey.leads')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -489,7 +489,7 @@ export default function CustomerJourneyPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{stats.total_customers}</p>
-                    <p className="text-xs text-muted-foreground">Clientes</p>
+                    <p className="text-xs text-muted-foreground">{t('journey.customers')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -503,7 +503,7 @@ export default function CustomerJourneyPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{stats.conversion_rate.toFixed(1)}%</p>
-                    <p className="text-xs text-muted-foreground">Conversão</p>
+                    <p className="text-xs text-muted-foreground">{t('journey.conversionRate')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -517,7 +517,7 @@ export default function CustomerJourneyPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">R$ {stats.total_revenue.toLocaleString('pt-BR')}</p>
-                    <p className="text-xs text-muted-foreground">Receita</p>
+                    <p className="text-xs text-muted-foreground">{t('journey.totalRevenue')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -532,7 +532,7 @@ export default function CustomerJourneyPage() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Buscar por email ou visitor ID..."
+                  placeholder={t('journey.search')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && fetchJourneys()}
@@ -547,15 +547,15 @@ export default function CustomerJourneyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="visitors">Visitantes</SelectItem>
-                    <SelectItem value="leads">Leads</SelectItem>
-                    <SelectItem value="customers">Clientes</SelectItem>
+                    <SelectItem value="all">{t('journey.allStatus')}</SelectItem>
+                    <SelectItem value="visitors">{t('journey.visitors')}</SelectItem>
+                    <SelectItem value="leads">{t('journey.leads')}</SelectItem>
+                    <SelectItem value="customers">{t('journey.customers')}</SelectItem>
                   </SelectContent>
                 </Select>
 
                 <Button onClick={fetchJourneys} disabled={loading}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Buscar'}
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.search')}
                 </Button>
               </div>
             </div>
@@ -568,7 +568,7 @@ export default function CustomerJourneyPage() {
           <div className="lg:col-span-1 space-y-2">
             <div className="flex items-center justify-between px-1 mb-2">
               <h3 className="font-semibold text-sm text-muted-foreground">
-                {journeys.length} jornadas encontradas
+                {journeys.length} {t('journey.journeysFound')}
               </h3>
             </div>
 
@@ -593,11 +593,11 @@ export default function CustomerJourneyPage() {
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <p className="font-medium text-sm truncate">
-                              {journey.lead?.email || `Visitante ${journey.visitor_id.slice(0, 8)}...`}
+                              {journey.lead?.email || `${t('journey.anonymous')} ${journey.visitor_id.slice(0, 8)}...`}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               <span className="text-xs text-muted-foreground">
-                                {journey.touchpoints.length} eventos
+                                {journey.touchpoints.length} {t('journey.events')}
                               </span>
                               {journey.first_source.utm_source && (
                                 <Badge variant="outline" className="text-xs px-1.5 py-0">
@@ -629,7 +629,7 @@ export default function CustomerJourneyPage() {
                   <CardContent className="p-8 text-center">
                     <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      Nenhuma jornada encontrada
+                      {t('journey.noJourneys')}
                     </p>
                   </CardContent>
                 </Card>
@@ -645,7 +645,7 @@ export default function CustomerJourneyPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <CardTitle className="text-lg flex items-center gap-2">
-                        {selectedJourney.lead?.email || 'Visitante Anônimo'}
+                        {selectedJourney.lead?.email || t('journey.anonymous')}
                         {getStatusBadge(selectedJourney)}
                       </CardTitle>
                       <CardDescription className="mt-1">
@@ -657,7 +657,7 @@ export default function CustomerJourneyPage() {
                         <p className="text-2xl font-bold text-emerald-500">
                           R$ {selectedJourney.total_revenue.toLocaleString('pt-BR')}
                         </p>
-                        <p className="text-xs text-muted-foreground">Receita total</p>
+                        <p className="text-xs text-muted-foreground">{t('journey.totalRevenue')}</p>
                       </div>
                     )}
                   </div>
@@ -666,19 +666,19 @@ export default function CustomerJourneyPage() {
                   <div className="grid grid-cols-4 gap-3 mt-4 pt-4 border-t">
                     <div className="text-center">
                       <p className="text-lg font-bold">{selectedJourney.touchpoints.length}</p>
-                      <p className="text-xs text-muted-foreground">Eventos</p>
+                      <p className="text-xs text-muted-foreground">{t('journey.events')}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-lg font-bold">{selectedJourney.payments.length}</p>
-                      <p className="text-xs text-muted-foreground">Pagamentos</p>
+                      <p className="text-xs text-muted-foreground">{t('journey.payments')}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-lg font-bold">{selectedJourney.devices.length}</p>
-                      <p className="text-xs text-muted-foreground">Dispositivos</p>
+                      <p className="text-xs text-muted-foreground">{t('journey.devices')}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-lg font-bold">{selectedJourney.countries.length}</p>
-                      <p className="text-xs text-muted-foreground">Países</p>
+                      <p className="text-xs text-muted-foreground">{t('journey.countries')}</p>
                     </div>
                   </div>
                 </CardHeader>
@@ -686,9 +686,9 @@ export default function CustomerJourneyPage() {
                 <CardContent>
                   <Tabs value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="mb-4">
-                      <TabsTrigger value="timeline">Timeline</TabsTrigger>
-                      <TabsTrigger value="attribution">Atribuição</TabsTrigger>
-                      <TabsTrigger value="details">Detalhes</TabsTrigger>
+                      <TabsTrigger value="timeline">{t('journey.timeline')}</TabsTrigger>
+                      <TabsTrigger value="attribution">{t('journey.attribution')}</TabsTrigger>
+                      <TabsTrigger value="details">{t('journey.details')}</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="timeline" className="mt-0">

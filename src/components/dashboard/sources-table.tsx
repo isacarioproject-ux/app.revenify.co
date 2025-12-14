@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
+import { useI18n } from '@/hooks/use-i18n'
 
 interface Source {
   id: string
@@ -22,6 +23,7 @@ interface SourcesTableProps {
 }
 
 export function SourcesTable({ sources, loading = false }: SourcesTableProps) {
+  const { t } = useI18n()
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -56,13 +58,13 @@ export function SourcesTable({ sources, loading = false }: SourcesTableProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top Fontes de Tráfego</CardTitle>
+        <CardTitle>{t('sources.topSources')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {sources.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">
-              Nenhuma fonte de tráfego ainda.
+              {t('sources.noSources')}
             </p>
           ) : (
             sources.map((source, index) => (
@@ -83,11 +85,11 @@ export function SourcesTable({ sources, loading = false }: SourcesTableProps) {
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-                    <span>{source.visitors.toLocaleString()} visitantes</span>
+                    <span>{source.visitors.toLocaleString()} {t('sources.visitors')}</span>
                     <span>•</span>
-                    <span>{source.leads} leads</span>
+                    <span>{source.leads} {t('sources.leads')}</span>
                     <span>•</span>
-                    <span>{source.conversion_rate.toFixed(1)}% conversão</span>
+                    <span>{source.conversion_rate.toFixed(1)}% {t('sources.conversion')}</span>
                   </div>
                 </div>
                 <div className="text-right">

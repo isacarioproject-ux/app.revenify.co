@@ -4,6 +4,7 @@ import { User, UserCheck, DollarSign, Eye } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import { useI18n } from '@/hooks/use-i18n'
 
 interface LiveEvent {
   id: string
@@ -20,6 +21,7 @@ interface LiveEventsFeedProps {
 }
 
 export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeedProps) {
+  const { t } = useI18n()
   const [events, setEvents] = useState<LiveEvent[]>(initialEvents)
 
   const getEventIcon = (type: string) => {
@@ -51,13 +53,13 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
   const getEventLabel = (type: string) => {
     switch (type) {
       case 'page_view':
-        return 'Visualização'
+        return t('events.pageView')
       case 'signup':
-        return 'Cadastro'
+        return t('events.signup')
       case 'payment':
-        return 'Pagamento'
+        return t('events.payment')
       case 'session_start':
-        return 'Nova sessão'
+        return t('events.sessionStart')
       default:
         return type
     }
@@ -70,8 +72,8 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
     const diffSec = Math.floor(diffMs / 1000)
     const diffMin = Math.floor(diffSec / 60)
     
-    if (diffSec < 60) return 'agora'
-    if (diffMin < 60) return `${diffMin}m atrás`
+    if (diffSec < 60) return t('events.now')
+    if (diffMin < 60) return `${diffMin}m ${t('events.ago')}`
     return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
   }
 
@@ -83,7 +85,7 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          Eventos em Tempo Real
+          {t('events.realTimeEvents')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -91,7 +93,7 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
           <AnimatePresence mode="popLayout">
             {events.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">
-                Nenhum evento ainda. Instale o pixel para começar a rastrear.
+                {t('events.noEvents')}
               </p>
             ) : (
               events.map((event) => (
