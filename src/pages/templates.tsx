@@ -49,6 +49,7 @@ export default function TemplatesPage() {
     if (selectedProject) {
       setBaseUrl(`https://${selectedProject.domain}`)
       loadTemplates()
+      // NÃO fechar o dialog ao mudar de projeto - manter aberto para o usuário
     } else if (!projectsLoading) {
       // Se não há projeto selecionado e já terminou de carregar projetos, parar loading
       setLoading(false)

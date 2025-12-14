@@ -74,7 +74,11 @@ export function UsageWidget({ projectId, compact = false }: UsageWidgetProps) {
               !isLinksUnlimited && linksPercentage >= 100 && 'text-destructive font-medium',
               !isLinksUnlimited && linksPercentage >= 80 && linksPercentage < 100 && 'text-yellow-600'
             )}>
-              {usage.shortLinks} / {formatLimit(limits.shortLinks)}
+              {isLinksUnlimited ? (
+                <>{Math.max(0, usage.shortLinks)} / ∞</>
+              ) : (
+                <>{Math.max(0, usage.shortLinks)} / {formatLimit(limits.shortLinks)}</>
+              )}
             </span>
           </div>
           <Progress 
@@ -189,7 +193,7 @@ function UsageMetric({
             isExceeded && 'text-destructive font-semibold',
             isWarning && 'text-yellow-600 font-semibold'
           )}>
-            {used.toLocaleString()} / {formatLimit(limit)}
+            {Math.max(0, used).toLocaleString()} / {formatLimit(limit)}
           </span>
 
           {/* Hover Tooltip com próximo plano - só se não for ilimitado */}

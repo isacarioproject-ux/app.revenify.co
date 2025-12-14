@@ -21,6 +21,7 @@ const translations: Translations = {
   'nav.journey': { 'pt-BR': 'Jornada', 'en': 'Journey', 'es': 'Recorrido' },
   'nav.templates': { 'pt-BR': 'Templates', 'en': 'Templates', 'es': 'Plantillas' },
   'nav.shortLinks': { 'pt-BR': 'Links Curtos', 'en': 'Short Links', 'es': 'Enlaces Cortos' },
+  'nav.customDomain': { 'pt-BR': 'Domínio', 'en': 'Domain', 'es': 'Dominio' },
   'nav.settings': { 'pt-BR': 'Configurações', 'en': 'Settings', 'es': 'Configuración' },
   'nav.integrations': { 'pt-BR': 'Integrações', 'en': 'Integrations', 'es': 'Integraciones' },
   // Legacy navigation keys (kept for compatibility)

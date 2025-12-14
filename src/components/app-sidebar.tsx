@@ -98,6 +98,11 @@ export function AppSidebar() {
       icon: Link2,
       href: '/short-links',
     },
+    {
+      title: t('nav.customDomain'),
+      icon: Globe,
+      href: '/settings/custom-domain',
+    },
   ]
 
   useEffect(() => {
