@@ -70,8 +70,8 @@ export const PLANS: Record<string, Plan> = {
     limits: {
       max_projects: 3,
       max_sources: -1, // unlimited
-      max_monthly_events: 10000,
-      max_short_links: 500,
+      max_monthly_events: 5000,
+      max_short_links: 100,
       max_ai_messages: 50,
       max_domains: 1,
       data_retention_days: 30,
@@ -82,9 +82,9 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '10.000 eventos/mês',
+      '5.000 eventos/mês',
       '3 projetos',
-      '500 short links',
+      '100 short links',
       'Retenção de 30 dias',
       'Análise avançada',
       'Suporte por e-mail',
@@ -103,8 +103,8 @@ export const PLANS: Record<string, Plan> = {
     limits: {
       max_projects: 10,
       max_sources: -1,
-      max_monthly_events: 100000,
-      max_short_links: 5000,
+      max_monthly_events: 200000,
+      max_short_links: 1000,
       max_ai_messages: 200,
       max_domains: 3,
       data_retention_days: 365,
@@ -115,9 +115,9 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '100.000 eventos/mês',
+      '200.000 eventos/mês',
       '10 projetos',
-      '5.000 short links',
+      '1.000 short links',
       'Retenção de 1 ano',
       'Atribuição multi-toque',
       'Suporte prioritário',
@@ -138,7 +138,7 @@ export const PLANS: Record<string, Plan> = {
     limits: {
       max_projects: -1, // unlimited
       max_sources: -1,
-      max_monthly_events: 1000000,
+      max_monthly_events: 500000,
       max_short_links: -1, // unlimited
       max_ai_messages: 1000,
       max_domains: -1, // unlimited
@@ -150,7 +150,7 @@ export const PLANS: Record<string, Plan> = {
       custom_domain_enabled: true,
     },
     features: [
-      '1.000.000 eventos/mês',
+      '500.000 eventos/mês',
       'Projetos ilimitados',
       'Short links ilimitados',
       'Retenção de 3 anos',
