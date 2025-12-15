@@ -9,6 +9,7 @@ import { LanguageSwitcher } from '@/components/language-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { AIChatWidget } from '@/components/ai-chat-widget'
 import { TrialBanner } from '@/components/trial-banner'
+import { TrialExpiredModal } from '@/components/trial-expired-modal'
 import { Search } from 'lucide-react'
 import { User } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
@@ -115,6 +116,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
       {/* AI Chat Widget */}
       <AIChatWidget />
+      {/* Modal de Trial Expirado */}
+      <TrialExpiredModal />
     </SidebarProvider>
   )
 }
