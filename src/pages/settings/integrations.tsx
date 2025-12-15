@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { 
-  CreditCard, 
+  DollarSign, 
   Check, 
   ExternalLink, 
   Zap,
@@ -25,7 +25,8 @@ import {
   CheckCircle2,
   XCircle,
   Play,
-  Terminal
+  Terminal,
+  CreditCard
 } from 'lucide-react'
 import { useSubscription } from '@/contexts/subscription-context'
 import { supabase } from '@/lib/supabase'
@@ -505,11 +506,11 @@ export default function IntegrationsPage() {
         </div>
 
         {/* Tabs principais */}
-        <Tabs defaultValue="stripe" className="w-full">
+        <Tabs defaultValue="payments" className="w-full">
           <TabsList variant="default" className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="stripe" className="gap-2">
-              <CreditCard className="h-4 w-4" />
-              <span className="hidden sm:inline">Stripe</span>
+            <TabsTrigger value="payments" className="gap-2">
+              <DollarSign className="h-4 w-4" />
+              <span className="hidden sm:inline">{t('integrations.payments.title')}</span>
             </TabsTrigger>
             <TabsTrigger value="api" className="gap-2">
               <Key className="h-4 w-4" />
@@ -521,31 +522,21 @@ export default function IntegrationsPage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Tab Stripe */}
-          <TabsContent value="stripe" className="space-y-4">
+          {/* Tab Pagamentos */}
+          <TabsContent value="payments" className="space-y-4">
             <Card>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-[#635BFF]/10">
-                      <CreditCard className="h-6 w-6 text-[#635BFF]" />
+                    <div className="p-2.5 rounded-xl bg-emerald-500/10">
+                      <DollarSign className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
-                      <CardTitle>{t('integrations.stripe.title')}</CardTitle>
-                      <CardDescription>{t('integrations.stripe.description')}</CardDescription>
+                      <CardTitle>{t('integrations.payments.title')}</CardTitle>
+                      <CardDescription>{t('integrations.payments.description')}</CardDescription>
                     </div>
                   </div>
-                  {integration?.is_active ? (
-                    <Badge className="bg-green-600 gap-1">
-                      <CheckCircle2 className="h-3 w-3" />
-                      {t('integrations.stripe.connected')}
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary" className="gap-1">
-                      <XCircle className="h-3 w-3" />
-                      {t('integrations.stripe.disconnected')}
-                    </Badge>
-                  )}
+                  <Badge className="bg-emerald-600">{t('common.available')}</Badge>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -553,42 +544,14 @@ export default function IntegrationsPage() {
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
-                ) : integration?.is_active ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 rounded-lg bg-muted/50">
-                        <p className="text-xs text-muted-foreground mb-1">Account ID</p>
-                        <code className="text-sm font-mono">{integration.stripe_account_id}</code>
-                      </div>
-                      <div className="p-3 rounded-lg bg-muted/50">
-                        <p className="text-xs text-muted-foreground mb-1">{t('integrations.stripe.connectedAt')}</p>
-                        <p className="text-sm font-medium">
-                          {integration.stripe_connected_at 
-                            ? new Date(integration.stripe_connected_at).toLocaleDateString('pt-BR')
-                            : '-'
-                          }
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" asChild>
-                        <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          {t('integrations.stripe.dashboard')}
-                        </a>
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={handleDisconnectStripe}>
-                        {t('integrations.stripe.disconnect')}
-                      </Button>
-                    </div>
-                  </div>
                 ) : (
                   <div className="space-y-4">
+                    {/* Features */}
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { icon: Zap, text: t('integrations.stripe.feature1') },
-                        { icon: Zap, text: t('integrations.stripe.feature2') },
-                        { icon: Zap, text: t('integrations.stripe.feature3') },
+                        { icon: Zap, text: t('integrations.payments.feature1') },
+                        { icon: Zap, text: t('integrations.payments.feature2') },
+                        { icon: Zap, text: t('integrations.payments.feature3') },
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm p-2 rounded-lg bg-muted/30">
                           <item.icon className="h-4 w-4 text-primary shrink-0" />
@@ -596,17 +559,59 @@ export default function IntegrationsPage() {
                         </div>
                       ))}
                     </div>
-                    <Button 
-                      onClick={handleConnectStripe}
-                      disabled={connecting || !selectedProject}
-                      className="bg-[#635BFF] hover:bg-[#5851DB] w-full sm:w-auto"
-                    >
-                      {connecting ? (
-                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('integrations.stripe.connecting')}</>
-                      ) : (
-                        <><CreditCard className="h-4 w-4 mr-2" />{t('integrations.stripe.connect')}</>
-                      )}
-                    </Button>
+
+                    {/* Webhook URL */}
+                    <div className="space-y-2">
+                      <Label>{t('integrations.payments.webhookUrl')}</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          readOnly
+                          value={selectedProject?.id ? `https://gyqohtqfyzzifxjkuuiz.supabase.co/functions/v1/api-payments?project_id=${selectedProject.id}&api_key=${fullApiKey}` : 'Selecione um projeto'}
+                          className="flex-1 font-mono text-xs"
+                        />
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() => {
+                            if (selectedProject?.id) {
+                              navigator.clipboard.writeText(`https://gyqohtqfyzzifxjkuuiz.supabase.co/functions/v1/api-payments?project_id=${selectedProject.id}&api_key=${fullApiKey}`)
+                              toast.success(t('integrations.payments.copied'))
+                            }
+                          }}
+                          disabled={!selectedProject?.id}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {t('integrations.payments.webhookUrlDesc')}
+                      </p>
+                    </div>
+
+                    {/* Gateways suportados */}
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <p className="text-sm font-medium mb-2">{t('integrations.payments.gateways')}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {['Stripe', 'Hotmart', 'Kiwify', 'Eduzz', 'PagSeguro', 'Mercado Pago', 'PayPal', 'WooCommerce'].map((gateway) => (
+                          <Badge key={gateway} variant="secondary" className="text-xs">
+                            {gateway}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {t('integrations.payments.gatewaysDesc')}
+                      </p>
+                    </div>
+
+                    {/* Botões */}
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" asChild>
+                        <a href="https://docs.revenify.co/payments" target="_blank" rel="noopener noreferrer">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          {t('integrations.payments.viewDocs')}
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -615,14 +620,14 @@ export default function IntegrationsPage() {
             {/* Como funciona */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">{t('integrations.stripe.howItWorks')}</CardTitle>
+                <CardTitle className="text-base">{t('integrations.payments.howItWorks')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex gap-4">
                   {[
-                    { num: '1', title: t('integrations.stripe.step1'), desc: t('integrations.stripe.step1Desc') },
-                    { num: '2', title: t('integrations.stripe.step2'), desc: t('integrations.stripe.step2Desc') },
-                    { num: '3', title: t('integrations.stripe.step3'), desc: t('integrations.stripe.step3Desc') },
+                    { num: '1', title: t('integrations.payments.step1'), desc: t('integrations.payments.step1Desc') },
+                    { num: '2', title: t('integrations.payments.step2'), desc: t('integrations.payments.step2Desc') },
+                    { num: '3', title: t('integrations.payments.step3'), desc: t('integrations.payments.step3Desc') },
                   ].map((step) => (
                     <div key={step.num} className="flex-1 flex items-start gap-3">
                       <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium shrink-0">
