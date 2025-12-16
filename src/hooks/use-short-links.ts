@@ -22,7 +22,31 @@ export interface ShortLink {
   unique_clicks_count: number
   last_clicked_at: string | null
   created_at: string
-  custom_domain: string | null // Domínio customizado (Pro+)
+  custom_domain: string | null
+  password: string | null
+  ab_test_enabled: boolean
+  ab_test_url: string | null
+  ab_test_split: number
+  geo_targeting: GeoTargetingRule[] | null
+  device_targeting: DeviceTargetingRule | null
+  deep_link_ios: string | null
+  deep_link_android: string | null
+  deep_link_fallback: string | null
+  cloaking_enabled: boolean
+  cloaked_title: string | null
+  cloaked_description: string | null
+  cloaked_image: string | null
+}
+
+export interface GeoTargetingRule {
+  country: string
+  url: string
+}
+
+export interface DeviceTargetingRule {
+  desktop_url?: string
+  mobile_url?: string
+  tablet_url?: string
 }
 
 interface CreateShortLinkData {
@@ -35,6 +59,19 @@ interface CreateShortLinkData {
   utm_term?: string
   utm_content?: string
   expires_at?: string
+  password?: string
+  ab_test_enabled?: boolean
+  ab_test_url?: string
+  ab_test_split?: number
+  geo_targeting?: GeoTargetingRule[]
+  device_targeting?: DeviceTargetingRule
+  deep_link_ios?: string
+  deep_link_android?: string
+  deep_link_fallback?: string
+  cloaking_enabled?: boolean
+  cloaked_title?: string
+  cloaked_description?: string
+  cloaked_image?: string
 }
 
 export function useShortLinks() {
@@ -138,6 +175,19 @@ export function useShortLinks() {
           utm_term: data.utm_term || null,
           utm_content: data.utm_content || null,
           expires_at: data.expires_at || null,
+          password: data.password || null,
+          ab_test_enabled: data.ab_test_enabled || false,
+          ab_test_url: data.ab_test_url || null,
+          ab_test_split: data.ab_test_split || 50,
+          geo_targeting: data.geo_targeting || null,
+          device_targeting: data.device_targeting || null,
+          deep_link_ios: data.deep_link_ios || null,
+          deep_link_android: data.deep_link_android || null,
+          deep_link_fallback: data.deep_link_fallback || null,
+          cloaking_enabled: data.cloaking_enabled || false,
+          cloaked_title: data.cloaked_title || null,
+          cloaked_description: data.cloaked_description || null,
+          cloaked_image: data.cloaked_image || null,
         })
         .select()
         .single()

@@ -52,7 +52,17 @@ export function useSubscription(): UseSubscriptionReturn {
       setLoading(true)
       setError(null)
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      // Silenciar erros de rede
+      if (authError) {
+        if ((authError as any).name === 'AuthRetryableFetchError' || (authError as any).status === 0) {
+          console.warn('Subscription: Erro de rede temporário')
+          setLoading(false)
+          return
+        }
+      }
+      
       if (!user) {
         setSubscription(null)
         setLoading(false)
@@ -67,9 +77,12 @@ export function useSubscription(): UseSubscriptionReturn {
         .maybeSingle()
 
       if (fetchError) {
-        console.error('Erro ao buscar subscription:', fetchError)
-        // Não bloquear a UI, apenas logar o erro
-        setError(fetchError as Error)
+        // Silenciar erros de rede/RLS
+        if (fetchError.code === 'PGRST116' || fetchError.message?.includes('network')) {
+          console.warn('Subscription: Erro de rede/RLS')
+        } else {
+          console.warn('Subscription fetch warning:', fetchError.message)
+        }
         setLoading(false)
         return
       }

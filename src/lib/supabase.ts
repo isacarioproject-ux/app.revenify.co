@@ -16,5 +16,22 @@ export const supabase = createClient(url, anonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+  },
+  global: {
+    fetch: (url, options) => {
+      return fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(10000), // 10s timeout
+      }).catch((err) => {
+        // Silently handle network errors to avoid console spam
+        if (err.name === 'AbortError' || err.name === 'TypeError') {
+          console.warn('Supabase fetch warning:', err.message)
+          throw err
+        }
+        throw err
+      })
+    },
   },
 })

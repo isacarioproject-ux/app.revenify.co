@@ -345,10 +345,10 @@ export default function IntegrationsPage() {
         .from('integrations')
         .select('*')
         .eq('project_id', selectedProject.id)
-        .single()
+        .maybeSingle()
 
       // Se não existe, criar uma nova com API key
-      if (error && error.code === 'PGRST116') {
+      if (!data && !error) {
         const { data: newIntegration, error: createError } = await supabase
           .from('integrations')
           .insert({
@@ -358,13 +358,14 @@ export default function IntegrationsPage() {
           .select()
           .single()
 
-        if (createError) throw createError
-        data = newIntegration
-      } else if (error) {
-        throw error
+        if (!createError) {
+          data = newIntegration
+        }
       }
       
-      setIntegration(data)
+      if (data) {
+        setIntegration(data)
+      }
       
       // Carregar webhook salvo
       const { data: webhookData } = await supabase
@@ -514,11 +515,11 @@ export default function IntegrationsPage() {
             </TabsTrigger>
             <TabsTrigger value="api" className="gap-2">
               <Key className="h-4 w-4" />
-              <span className="hidden sm:inline">API</span>
+              <span className="hidden sm:inline">{t('integrations.api.title')}</span>
             </TabsTrigger>
             <TabsTrigger value="webhooks" className="gap-2">
               <Webhook className="h-4 w-4" />
-              <span className="hidden sm:inline">Webhooks</span>
+              <span className="hidden sm:inline">{t('integrations.webhooks.title')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -799,16 +800,42 @@ export default function IntegrationsPage() {
                       <p className="text-sm font-medium mb-2">{t('integrations.webhooks.events')}:</p>
                       <div className="grid grid-cols-2 gap-2">
                         {[
-                          { event: 'event.created', desc: 'Novo evento' },
-                          { event: 'lead.created', desc: 'Novo lead' },
-                          { event: 'revenue.attributed', desc: 'Receita atribuída' },
-                          { event: 'limit.reached', desc: 'Limite atingido' },
+                          { event: 'event.created', desc: t('integrations.webhooks.eventCreated') },
+                          { event: 'lead.created', desc: t('integrations.webhooks.leadCreated') },
+                          { event: 'revenue.attributed', desc: t('integrations.webhooks.paymentReceived') },
+                          { event: 'limit.reached', desc: t('integrations.webhooks.limitReached') },
                         ].map((item) => (
                           <div key={item.event} className="flex items-center gap-2 text-xs">
                             <code className="px-1.5 py-0.5 rounded bg-muted">{item.event}</code>
                             <span className="text-muted-foreground">{item.desc}</span>
                           </div>
                         ))}
+                      </div>
+                    </div>
+
+                    {/* Revenue Attribution API */}
+                    <div className="p-4 rounded-lg border border-primary/20 bg-primary/5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <DollarSign className="h-5 w-5 text-primary" />
+                        <p className="text-sm font-semibold">{t('integrations.webhooks.revenueApi')}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {t('integrations.webhooks.revenueApiDesc')}
+                      </p>
+                      <div className="bg-muted rounded-md p-3 font-mono text-xs overflow-x-auto">
+                        <pre className="text-muted-foreground">
+{`POST /functions/v1/revenue-attribution
+Headers:
+  X-API-Key: your_api_key
+
+Body:
+{
+  "visitor_id": "visitor_abc123",
+  "amount": 99.90,
+  "currency": "BRL",
+  "transaction_id": "txn_123"
+}`}
+                        </pre>
                       </div>
                     </div>
                   </>
