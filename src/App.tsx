@@ -20,6 +20,7 @@ const PreferencesPage = lazy(() => import('@/pages/settings/preferences'))
 const BillingPage = lazy(() => import('@/pages/settings/billing'))
 const IntegrationsPage = lazy(() => import('@/pages/settings/integrations'))
 const CustomDomainPage = lazy(() => import('@/pages/settings/custom-domain'))
+const SSOPage = lazy(() => import('@/pages/settings/sso'))
 const ProjectsPage = lazy(() => import('@/pages/projects'))
 const SourcesPage = lazy(() => import('@/pages/sources'))
 const AnalyticsPage = lazy(() => import('@/pages/analytics'))
@@ -76,6 +77,9 @@ function App() {
                 <Route path="/settings/billing" element={<ProtectedRoute><BillingPage /></ProtectedRoute>} />
                 <Route path="/settings/integrations" element={<ProtectedRoute><IntegrationsPage /></ProtectedRoute>} />
                 <Route path="/settings/custom-domain" element={<ProtectedRoute><CustomDomainPage /></ProtectedRoute>} />
+                <Route path="/custom-domain" element={<ProtectedRoute><CustomDomainPage /></ProtectedRoute>} />
+                <Route path="/settings/sso" element={<ProtectedRoute><SSOPage /></ProtectedRoute>} />
+                <Route path="/sso" element={<ProtectedRoute><SSOPage /></ProtectedRoute>} />
 
                 {/* Blog Routes */}
                 <Route path="/blog/create" element={<ProtectedRoute><BlogCreatePage /></ProtectedRoute>} />

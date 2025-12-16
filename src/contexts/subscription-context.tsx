@@ -80,8 +80,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         .maybeSingle()
 
       if (fetchError && fetchError.code !== 'PGRST116') {
-        console.error('Erro ao buscar subscription:', fetchError)
-        // Não lançar erro, usar default
+        // Silenciar erros de rede
+        console.warn('Subscription context: fetch warning', fetchError.message)
       }
 
       if (data) {
@@ -97,8 +97,13 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         })
       }
       hasLoadedOnce.current = true
-    } catch (err) {
-      console.error('Erro ao buscar subscription:', err)
+    } catch (err: any) {
+      // Silenciar erros de rede
+      if (err?.name === 'AuthRetryableFetchError' || err?.status === 0) {
+        console.warn('Subscription context: network error')
+      } else {
+        console.warn('Subscription context: error', err?.message)
+      }
       setError(err instanceof Error ? err : new Error('Erro ao buscar assinatura'))
     } finally {
       setLoading(false)
@@ -148,10 +153,22 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// Default context for when provider is not available
+const defaultContext: SubscriptionContextType = {
+  subscription: null,
+  loading: true,
+  error: null,
+  canCreateProject: () => false,
+  canTrackEvent: () => false,
+  refetch: async () => {},
+}
+
 export function useSubscription() {
   const context = useContext(SubscriptionContext)
+  // Return default context instead of throwing error
+  // This allows components to render safely before provider is mounted
   if (context === undefined) {
-    throw new Error('useSubscription must be used within a SubscriptionProvider')
+    return defaultContext
   }
   return context
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,10 +8,12 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Download, Copy, Check, QrCode } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Download, Copy, Check, QrCode, Image, FileImage, Upload, X } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ShortLink } from '@/hooks/use-short-links'
 import { getShortLinkUrl } from '@/lib/config'
+import { useI18n } from '@/hooks/use-i18n'
 
 interface QRCodeDialogProps {
   open: boolean
@@ -24,16 +26,24 @@ export function QRCodeDialog({
   onOpenChange,
   shortLink,
 }: QRCodeDialogProps) {
+  const { t } = useI18n()
   const [copied, setCopied] = useState(false)
   const [size, setSize] = useState(256)
   const [color, setColor] = useState('#000000')
   const [bgColor, setBgColor] = useState('#ffffff')
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [downloadFormat, setDownloadFormat] = useState<'png' | 'svg' | 'jpg'>('png')
+  const [downloading, setDownloading] = useState(false)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Usa a URL funcional (Edge Function ou domínio customizado)
   const fullUrl = getShortLinkUrl(shortLink.short_code, shortLink.custom_domain)
 
   // Gerar QR Code usando API externa (qrserver.com)
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(fullUrl)}&color=${color.replace('#', '')}&bgcolor=${bgColor.replace('#', '')}`
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(fullUrl)}&color=${color.replace('#', '')}&bgcolor=${bgColor.replace('#', '')}&format=png`
+  const qrCodeSvgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(fullUrl)}&color=${color.replace('#', '')}&bgcolor=${bgColor.replace('#', '')}&format=svg`
 
   const copyUrl = async () => {
     await navigator.clipboard.writeText(fullUrl)
@@ -42,14 +52,111 @@ export function QRCodeDialog({
     setTimeout(() => setCopied(false), 2000)
   }
 
+  // Handle logo upload
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Logo deve ter no máximo 2MB')
+        return
+      }
+      setLogoFile(file)
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setLogoUrl(event.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeLogo = () => {
+    setLogoUrl(null)
+    setLogoFile(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  // Generate QR with logo using canvas
+  const generateQRWithLogo = async (): Promise<Blob> => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (!ctx) throw new Error('Canvas not supported')
+
+        canvas.width = size
+        canvas.height = size
+
+        // Load QR code image
+        const qrImg = new window.Image()
+        qrImg.crossOrigin = 'anonymous'
+        
+        await new Promise<void>((res, rej) => {
+          qrImg.onload = () => res()
+          qrImg.onerror = () => rej(new Error('Failed to load QR'))
+          qrImg.src = qrCodeUrl
+        })
+
+        // Draw QR code
+        ctx.drawImage(qrImg, 0, 0, size, size)
+
+        // Draw logo if exists
+        if (logoUrl) {
+          const logoImg = new window.Image()
+          await new Promise<void>((res, rej) => {
+            logoImg.onload = () => res()
+            logoImg.onerror = () => rej(new Error('Failed to load logo'))
+            logoImg.src = logoUrl
+          })
+
+          // Logo size (20% of QR code)
+          const logoSize = size * 0.2
+          const logoX = (size - logoSize) / 2
+          const logoY = (size - logoSize) / 2
+
+          // Draw white background for logo
+          ctx.fillStyle = '#ffffff'
+          ctx.beginPath()
+          ctx.roundRect(logoX - 4, logoY - 4, logoSize + 8, logoSize + 8, 8)
+          ctx.fill()
+
+          // Draw logo
+          ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize)
+        }
+
+        // Convert to blob
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob)
+          else reject(new Error('Failed to create blob'))
+        }, downloadFormat === 'jpg' ? 'image/jpeg' : 'image/png', 0.95)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   const downloadQRCode = async () => {
+    setDownloading(true)
     try {
-      const response = await fetch(qrCodeUrl)
-      const blob = await response.blob()
+      let blob: Blob
+      let filename = `qrcode-${shortLink.short_code}`
+
+      if (downloadFormat === 'svg' && !logoUrl) {
+        // Download SVG directly (no logo support)
+        const response = await fetch(qrCodeSvgUrl)
+        blob = await response.blob()
+        filename += '.svg'
+      } else {
+        // Generate with canvas (supports logo)
+        blob = await generateQRWithLogo()
+        filename += downloadFormat === 'jpg' ? '.jpg' : '.png'
+      }
+
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `qrcode-${shortLink.short_code}.png`
+      a.download = filename
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -58,36 +165,52 @@ export function QRCodeDialog({
     } catch (error) {
       console.error('Error downloading QR code:', error)
       toast.error('Erro ao baixar QR Code')
+    } finally {
+      setDownloading(false)
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[400px]">
+      <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
-            QR Code
+            {t('qrCode.title')}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-5 py-4">
           {/* QR Code Preview */}
           <div className="flex justify-center">
-            <div className="p-4 bg-white rounded-lg shadow-sm border">
+            <div className="p-4 bg-white rounded-lg shadow-sm border relative">
               <img
                 src={qrCodeUrl}
                 alt="QR Code"
-                width={size}
-                height={size}
+                width={Math.min(size, 256)}
+                height={Math.min(size, 256)}
                 className="max-w-full h-auto"
               />
+              {logoUrl && (
+                <div 
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ padding: '16px' }}
+                >
+                  <div className="bg-white p-1 rounded-lg shadow-sm" style={{ width: '20%', height: '20%' }}>
+                    <img 
+                      src={logoUrl} 
+                      alt="Logo" 
+                      className="w-full h-full object-contain rounded"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* URL Display */}
           <div className="space-y-2">
-            <Label>Link Curto</Label>
+            <Label>{t('qrCode.shortLink')}</Label>
             <div className="flex gap-2">
               <Input
                 value={fullUrl}
@@ -108,47 +231,138 @@ export function QRCodeDialog({
             </div>
           </div>
 
-          {/* Customization */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="size">Tamanho</Label>
-              <select
-                id="size"
-                value={size}
-                onChange={(e) => setSize(Number(e.target.value))}
-                className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm"
-              >
-                <option value={128}>128px</option>
-                <option value={256}>256px</option>
-                <option value={512}>512px</option>
-                <option value={1024}>1024px</option>
-              </select>
-            </div>
+          {/* Customization Tabs */}
+          <Tabs defaultValue="style" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="style">{t('qrCode.style')}</TabsTrigger>
+              <TabsTrigger value="logo">{t('qrCode.logo')}</TabsTrigger>
+            </TabsList>
 
-            <div className="space-y-2">
-              <Label htmlFor="color">Cor</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="color"
-                  type="color"
-                  value={color}
-                  onChange={(e) => setColor(e.target.value)}
-                  className="w-12 h-9 p-1 cursor-pointer"
-                />
-                <Input
-                  type="color"
-                  value={bgColor}
-                  onChange={(e) => setBgColor(e.target.value)}
-                  className="w-12 h-9 p-1 cursor-pointer"
-                  title="Cor de fundo"
-                />
+            <TabsContent value="style" className="space-y-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="size">{t('qrCode.size')}</Label>
+                  <select
+                    id="size"
+                    value={size}
+                    onChange={(e) => setSize(Number(e.target.value))}
+                    className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm"
+                  >
+                    <option value={128}>{t('qrCode.sizeSmall')}</option>
+                    <option value={256}>{t('qrCode.sizeMedium')}</option>
+                    <option value={512}>{t('qrCode.sizeLarge')}</option>
+                    <option value={1024}>{t('qrCode.sizeHD')}</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>{t('qrCode.colors')}</Label>
+                  <div className="flex gap-2">
+                    <div className="flex-1">
+                      <Input
+                        type="color"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                        className="w-full h-9 p-1 cursor-pointer"
+                        title={t('qrCode.qrColor')}
+                      />
+                      <p className="text-[10px] text-muted-foreground text-center mt-1">{t('qrCode.qrColor')}</p>
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        type="color"
+                        value={bgColor}
+                        onChange={(e) => setBgColor(e.target.value)}
+                        className="w-full h-9 p-1 cursor-pointer"
+                        title={t('qrCode.bgColor')}
+                      />
+                      <p className="text-[10px] text-muted-foreground text-center mt-1">{t('qrCode.bgColor')}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+
+              {/* Preset Colors */}
+              <div className="space-y-2">
+                <Label>{t('qrCode.quickColors')}</Label>
+                <div className="flex gap-2 flex-wrap">
+                  {[
+                    { qr: '#000000', bg: '#ffffff', name: t('qrCode.classic') },
+                    { qr: '#1a1a2e', bg: '#eaeaea', name: t('qrCode.dark') },
+                    { qr: '#0066cc', bg: '#ffffff', name: t('qrCode.blue') },
+                    { qr: '#059669', bg: '#ffffff', name: t('qrCode.green') },
+                    { qr: '#7c3aed', bg: '#ffffff', name: t('qrCode.purple') },
+                    { qr: '#dc2626', bg: '#ffffff', name: t('qrCode.red') },
+                  ].map((preset) => (
+                    <button
+                      key={preset.name}
+                      onClick={() => {
+                        setColor(preset.qr)
+                        setBgColor(preset.bg)
+                      }}
+                      className="flex items-center gap-1.5 px-2 py-1 rounded-md border text-xs hover:bg-muted transition-colors"
+                      title={preset.name}
+                    >
+                      <div 
+                        className="w-3 h-3 rounded-full border"
+                        style={{ backgroundColor: preset.qr }}
+                      />
+                      {preset.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="logo" className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <Label>{t('qrCode.logoOptional')}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t('qrCode.logoDesc')}
+                </p>
+              </div>
+
+              {logoUrl ? (
+                <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30">
+                  <img 
+                    src={logoUrl} 
+                    alt="Logo preview" 
+                    className="w-12 h-12 object-contain rounded border bg-white"
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{logoFile?.name || 'Logo'}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {logoFile ? `${(logoFile.size / 1024).toFixed(1)} KB` : ''}
+                    </p>
+                  </div>
+                  <Button size="icon" variant="ghost" onClick={removeLogo}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div 
+                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/30 transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                  <p className="text-sm font-medium">{t('qrCode.clickToUpload')}</p>
+                  <p className="text-xs text-muted-foreground">{t('qrCode.fileTypes')}</p>
+                </div>
+              )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/svg+xml"
+                onChange={handleLogoUpload}
+                className="hidden"
+              />
+            </TabsContent>
+          </Tabs>
 
           {/* Title if exists */}
           {shortLink.title && (
-            <div className="text-center">
+            <div className="text-center p-3 rounded-lg bg-muted/30">
               <p className="text-sm font-medium">{shortLink.title}</p>
               {shortLink.description && (
                 <p className="text-xs text-muted-foreground mt-1">
@@ -158,13 +372,50 @@ export function QRCodeDialog({
             </div>
           )}
 
+          {/* Download Options */}
+          <div className="space-y-3">
+            <Label>{t('qrCode.downloadFormat')}</Label>
+            <div className="flex gap-2">
+              {[
+                { value: 'png' as const, label: 'PNG', icon: Image, desc: t('qrCode.bestQuality') },
+                { value: 'jpg' as const, label: 'JPG', icon: FileImage, desc: t('qrCode.smallerSize') },
+                { value: 'svg' as const, label: 'SVG', icon: FileImage, desc: t('qrCode.vector'), disabled: !!logoUrl },
+              ].map((format) => (
+                <button
+                  key={format.value}
+                  onClick={() => !format.disabled && setDownloadFormat(format.value)}
+                  disabled={format.disabled}
+                  className={`flex-1 p-3 rounded-lg border text-center transition-colors ${
+                    downloadFormat === format.value 
+                      ? 'border-primary bg-primary/5' 
+                      : 'hover:bg-muted/50'
+                  } ${format.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title={format.disabled ? t('qrCode.svgNoLogo') : format.desc}
+                >
+                  <format.icon className="h-5 w-5 mx-auto mb-1" />
+                  <p className="text-sm font-medium">{format.label}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Download Button */}
           <Button
             className="w-full"
             onClick={downloadQRCode}
+            disabled={downloading}
           >
-            <Download className="h-4 w-4 mr-2" />
-            Baixar QR Code
+            {downloading ? (
+              <>
+                <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                {t('qrCode.generating')}
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                {t('qrCode.download')} ({downloadFormat.toUpperCase()})
+              </>
+            )}
           </Button>
         </div>
       </DialogContent>

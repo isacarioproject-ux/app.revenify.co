@@ -45,7 +45,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertTriangle } from 'lucide-react'
-import { format } from 'date-fns'
+import { format, isPast, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { toast } from 'sonner'
 import { HeaderSkeleton, SelectSkeleton, ButtonSkeleton, MetricCardSkeleton, TableSkeleton } from '@/components/page-skeleton'
@@ -389,11 +389,58 @@ export default function ShortLinksPage() {
                       {format(new Date(link.created_at), "d 'de' MMM", { locale: ptBR })}
                     </TableCell>
                     <TableCell>
-                      {link.is_active ? (
-                        <Badge variant="default" className="bg-green-500">{t('projects.active')}</Badge>
-                      ) : (
-                        <Badge variant="secondary">{t('projects.inactive')}</Badge>
-                      )}
+                      <div className="flex flex-wrap gap-1">
+                        {link.expires_at && isPast(new Date(link.expires_at)) ? (
+                          <Badge variant="destructive">{t('shortLinks.expired')}</Badge>
+                        ) : link.expires_at ? (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge variant="outline" className="border-amber-500 text-amber-500">
+                                  {t('shortLinks.expires')}
+                                </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{t('shortLinks.expiresIn')}: {formatDistanceToNow(new Date(link.expires_at), { locale: ptBR, addSuffix: true })}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        ) : link.is_active ? (
+                          <Badge variant="default" className="bg-green-500">{t('projects.active')}</Badge>
+                        ) : (
+                          <Badge variant="secondary">{t('projects.inactive')}</Badge>
+                        )}
+                        {link.password && (
+                          <Badge variant="outline" className="border-purple-500 text-purple-500">
+                            🔒 {t('shortLinks.protected')}
+                          </Badge>
+                        )}
+                        {link.ab_test_enabled && (
+                          <Badge variant="outline" className="border-blue-500 text-blue-500">
+                            {t('shortLinks.abTest')}
+                          </Badge>
+                        )}
+                        {link.geo_targeting && link.geo_targeting.length > 0 && (
+                          <Badge variant="outline" className="border-orange-500 text-orange-500">
+                            🌍 {t('shortLinks.geoRules')}
+                          </Badge>
+                        )}
+                        {link.device_targeting && Object.keys(link.device_targeting).length > 0 && (
+                          <Badge variant="outline" className="border-cyan-500 text-cyan-500">
+                            📱 {t('shortLinks.deviceRules')}
+                          </Badge>
+                        )}
+                        {(link.deep_link_ios || link.deep_link_android) && (
+                          <Badge variant="outline" className="border-pink-500 text-pink-500">
+                            🔗 {t('shortLinks.deepLink')}
+                          </Badge>
+                        )}
+                        {link.cloaking_enabled && (
+                          <Badge variant="outline" className="border-violet-500 text-violet-500">
+                            👁️ {t('shortLinks.cloaked')}
+                          </Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-1">

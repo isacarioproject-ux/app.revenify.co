@@ -30,7 +30,7 @@ type DnsStatus = 'idle' | 'checking' | 'valid' | 'invalid' | 'error'
 
 export default function CustomDomainPage() {
   const { t } = useI18n()
-  const { subscription, refetch } = useSubscription()
+  const { subscription, refetch, loading: subscriptionLoading } = useSubscription()
   const { user } = useAuth()
   const [domain, setDomain] = useState('')
   const [dnsStatus, setDnsStatus] = useState<DnsStatus>('idle')
@@ -41,14 +41,6 @@ export default function CustomDomainPage() {
   const planLimits = getPlanLimits(subscription?.plan || 'free')
   const canUseCustomDomain = planLimits.custom_domain_enabled
   const currentDomain = subscription?.custom_short_domain
-  const [loading, setLoading] = useState(true)
-
-  // Skeleton loading
-  useEffect(() => {
-    if (subscription !== undefined) {
-      setLoading(false)
-    }
-  }, [subscription])
 
   useEffect(() => {
     if (currentDomain) {
@@ -158,7 +150,7 @@ export default function CustomDomainPage() {
   const cnameTarget = 'links.revenify.co'
 
   // Loading skeleton
-  if (loading) {
+  if (subscriptionLoading) {
     return (
       <DashboardLayout>
         <div className="w-full p-4 md:p-6 space-y-6">

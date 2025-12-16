@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
-import { Check, Zap, Crown, Building2 } from 'lucide-react'
+import { Check, Zap, Crown, Building2, HelpCircle } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { PLANS } from '@/lib/stripe/plans'
 import { useSubscription } from '@/contexts/subscription-context'
 import { useI18n } from '@/hooks/use-i18n'
@@ -24,7 +30,7 @@ export default function PricingPage() {
 
   const formatPrice = (price: number) => {
     if (price === 0) return t('pricing.free')
-    return `$${price}`
+    return `R$ ${price}`
   }
 
   const handleSelectPlan = async (planId: string) => {
@@ -65,7 +71,7 @@ export default function PricingPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <div className="space-y-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-2">{t('pricing.title')}</h1>
@@ -92,9 +98,22 @@ export default function PricingPage() {
           </Label>
         </div>
 
-        {/* Plans Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {Object.values(PLANS).map((plan) => {
+        {/* Plans Grid - Esconde Free se usuário está em trial */}
+        <div className={cn(
+          "grid gap-6",
+          subscription?.status === 'trialing' 
+            ? "md:grid-cols-3" // 3 colunas quando em trial (sem Free)
+            : "md:grid-cols-2 lg:grid-cols-4" // 4 colunas normal
+        )}>
+          {Object.values(PLANS)
+            .filter((plan) => {
+              // Se está em trial, não mostra o plano Free
+              if (subscription?.status === 'trialing' && plan.id === 'free') {
+                return false
+              }
+              return true
+            })
+            .map((plan) => {
             const Icon = getPlanIcon(plan.id)
             const isCurrentPlan = plan.id === currentPlan
             const price = plan.price[interval]
@@ -142,7 +161,7 @@ export default function PricingPage() {
                     </div>
                     {interval === 'yearly' && price > 0 && (
                       <p className="text-sm text-muted-foreground mt-1">
-                        ${(price / 12).toFixed(0)}/{t('pricing.mo')} {t('pricing.billedAnnually')}
+                        R$ {(price / 12).toFixed(0)}/{t('pricing.mo')} {t('pricing.billedAnnually')}
                       </p>
                     )}
                   </div>
@@ -185,30 +204,89 @@ export default function PricingPage() {
           })}
         </div>
 
-        {/* FAQ or Additional Info */}
-        <Card className="max-w-2xl mx-auto">
+        {/* FAQ Accordion */}
+        <Card className="max-w-3xl mx-auto">
           <CardHeader>
-            <CardTitle>{t('pricing.faq')}</CardTitle>
+            <div className="flex items-center gap-2">
+              <HelpCircle className="h-5 w-5 text-primary" />
+              <CardTitle>{t('pricing.faq')}</CardTitle>
+            </div>
+            <CardDescription>{t('pricing.faqSubtitle')}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-medium mb-1">{t('pricing.faq1Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('pricing.faq1Answer')}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium mb-1">{t('pricing.faq2Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('pricing.faq2Answer')}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium mb-1">{t('pricing.faq3Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('pricing.faq3Answer')}
-              </p>
-            </div>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq1Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq1Answer')}
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-2">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq2Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq2Answer')}
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-3">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq3Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq3Answer')}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq4Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq4Answer')}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-5">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq5Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq5Answer')}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-6">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq6Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq6Answer')}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-7">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq7Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq7Answer')}
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-8">
+                <AccordionTrigger className="text-left">
+                  {t('pricing.faq8Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  {t('pricing.faq8Answer')}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
         </Card>
       </div>

@@ -26,15 +26,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
         if (error) {
+          // Silenciar erros de rede retryable
+          if (error.name === 'AuthRetryableFetchError' || error.status === 0) {
+            console.warn('⚠️ AuthContext: Erro de rede temporário, tentando novamente...')
+            // Tentar novamente após 2 segundos
+            setTimeout(() => getInitialUser(), 2000)
+            return
+          }
           console.warn('⚠️ AuthContext: getSession retornou erro:', error.message)
         }
         const initialUser = session?.user ?? null
         console.log('👤 AuthContext: Usuário inicial:', initialUser?.id ? 'OK' : 'NULL')
         setUser(initialUser)
-      } catch (err) {
+        setLoading(false)
+      } catch (err: any) {
+        // Silenciar erros de rede
+        if (err?.name === 'AuthRetryableFetchError' || err?.status === 0) {
+          console.warn('⚠️ AuthContext: Erro de rede, aguardando conexão...')
+          setTimeout(() => getInitialUser(), 2000)
+          return
+        }
         console.error('❌ AuthContext: Erro ao buscar usuário:', err)
         setError(err instanceof Error ? err : new Error('Erro de autenticação'))
-      } finally {
         setLoading(false)
       }
     }

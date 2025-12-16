@@ -56,9 +56,14 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
         setSelectedProject(data[0])
       }
       hasLoadedOnce.current = true
-    } catch (err) {
+    } catch (err: any) {
+      // Silenciar erros de rede
+      if (err?.name === 'AuthRetryableFetchError' || err?.status === 0) {
+        console.warn('Projects: network error')
+      } else {
+        console.warn('Projects: fetch warning', err?.message)
+      }
       setError(err as Error)
-      console.error('Error fetching projects:', err)
     } finally {
       setLoading(false)
     }

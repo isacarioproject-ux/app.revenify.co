@@ -4,12 +4,18 @@ import { DashboardLayout } from '@/components/dashboard-layout'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Check, Zap, CreditCard, ExternalLink, AlertCircle } from 'lucide-react'
+import { Check, Zap, AlertCircle } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { useI18n } from '@/hooks/use-i18n'
 import { useSubscription } from '@/contexts/subscription-context'
 import { useAuth } from '@/contexts/auth-context'
 import { PLANS } from '@/lib/stripe/plans'
-import { redirectToCheckout, redirectToPortal } from '@/lib/stripe'
+import { redirectToCheckout } from '@/lib/stripe'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Switch } from '@/components/ui/switch'
@@ -57,26 +63,10 @@ export default function BillingPage() {
     } catch (error) {
       console.error('Checkout error:', error)
       toast.error('Erro ao iniciar checkout', {
-        description: 'Verifique se as chaves do Stripe estão configuradas'
+        description: 'Tente novamente ou entre em contato com o suporte'
       })
     } finally {
       setLoading(null)
-    }
-  }
-
-  const handleManageBilling = async () => {
-    if (!user?.id) {
-      toast.error('Você precisa estar logado')
-      return
-    }
-
-    try {
-      await redirectToPortal(user.id)
-    } catch (error) {
-      console.error('Portal error:', error)
-      toast.error('Erro ao abrir portal de faturamento', {
-        description: 'Verifique se você tem uma assinatura ativa'
-      })
     }
   }
 
@@ -123,11 +113,6 @@ export default function BillingPage() {
             >
               {currentPlanData?.name || 'Free'}
             </Badge>
-            {currentPlan !== 'free' && (
-              <Button variant="ghost" size="sm" onClick={handleManageBilling} className="h-8">
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            )}
           </div>
         </div>
 
@@ -211,22 +196,22 @@ export default function BillingPage() {
                         {plan.price.monthly === 0 
                           ? 'Free' 
                           : billingInterval === 'yearly'
-                            ? `$${Math.round(plan.price.yearly / 12)}`
-                            : `$${plan.price.monthly}`
+                            ? `R$ ${Math.round(plan.price.yearly / 12)}`
+                            : `R$ ${plan.price.monthly}`
                         }
                       </span>
                       {plan.price.monthly > 0 && (
-                        <span className="text-muted-foreground text-sm">/mo</span>
+                        <span className="text-muted-foreground text-sm">/mês</span>
                       )}
                       {billingInterval === 'yearly' && plan.price.yearly > 0 && (
                         <p className="text-xs text-muted-foreground mt-1">
-                          ${plan.price.yearly}/yr
+                          R$ {plan.price.yearly}/ano
                         </p>
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-1.5">
+                  <CardContent className="flex flex-col h-full space-y-4">
+                    <ul className="space-y-1.5 flex-1">
                       {plan.features.map((feature, i) => (
                         <li key={i} className="flex items-center gap-2 text-xs">
                           <Check className="h-3 w-3 text-green-500 shrink-0" />
@@ -234,14 +219,21 @@ export default function BillingPage() {
                         </li>
                       ))}
                     </ul>
-                    <Button 
-                      className="w-full" 
-                      variant={isCurrentPlan ? 'outline' : plan.popular ? 'default' : 'outline'}
-                      disabled={isCurrentPlan || loading === plan.id}
-                      onClick={() => handleUpgrade(plan.id)}
-                    >
-                      {loading === plan.id ? t('common.processing') : isCurrentPlan ? t('billing.currentPlan') : t('billing.upgrade')}
-                    </Button>
+                    {/* Botão apenas para planos pagos ou se é o plano atual */}
+                    {plan.id !== 'free' ? (
+                      <Button 
+                        className="w-full mt-auto" 
+                        variant={isCurrentPlan ? 'outline' : plan.popular ? 'default' : 'outline'}
+                        disabled={isCurrentPlan || loading === plan.id}
+                        onClick={() => handleUpgrade(plan.id)}
+                      >
+                        {loading === plan.id ? t('common.processing') : isCurrentPlan ? t('billing.currentPlan') : t('billing.upgrade')}
+                      </Button>
+                    ) : isCurrentPlan ? (
+                      <div className="text-center text-sm text-muted-foreground mt-auto py-2">
+                        {t('billing.currentPlan')}
+                      </div>
+                    ) : null}
                   </CardContent>
                 </Card>
               )
@@ -254,25 +246,33 @@ export default function BillingPage() {
           <CardHeader>
             <CardTitle>{t('billing.faqTitle')}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-medium">{t('billing.faq1Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('billing.faq1Answer')}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium">{t('billing.faq2Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('billing.faq2Answer')}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-medium">{t('billing.faq3Question')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {t('billing.faq3Answer')}
-              </p>
-            </div>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="text-left text-sm">
+                  {t('billing.faq1Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm">
+                  {t('billing.faq1Answer')}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2">
+                <AccordionTrigger className="text-left text-sm">
+                  {t('billing.faq2Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm">
+                  {t('billing.faq2Answer')}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger className="text-left text-sm">
+                  {t('billing.faq3Question')}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm">
+                  {t('billing.faq3Answer')}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
         </Card>
       </div>

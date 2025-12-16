@@ -212,18 +212,18 @@ export default function OnboardingPage() {
                   className="grid gap-4 mb-8"
                 >
                   {[
-                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc'), color: 'from-indigo-500/20 to-indigo-500/5', iconColor: 'text-indigo-500' },
-                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), color: 'from-emerald-500/20 to-emerald-500/5', iconColor: 'text-emerald-500' },
-                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), color: 'from-amber-500/20 to-amber-500/5', iconColor: 'text-amber-500' },
+                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc'), iconColor: 'text-indigo-500', bgColor: 'bg-indigo-500/10' },
+                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), iconColor: 'text-emerald-500', bgColor: 'bg-emerald-500/10' },
+                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), iconColor: 'text-amber-500', bgColor: 'bg-amber-500/10' },
                   ].map((feature, i) => (
                     <motion.div
                       key={i}
                       variants={floatingAnimation}
                       whileHover="whileHover"
-                      className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer shadow-sm hover:shadow-lg transition-shadow"
+                      className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer hover:bg-muted/30 transition-colors"
                     >
                       <motion.div 
-                        className="p-3 rounded-xl bg-muted"
+                        className={cn('p-3 rounded-xl', feature.bgColor)}
                         animate={{ y: [0, -3, 0] }}
                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                       >
