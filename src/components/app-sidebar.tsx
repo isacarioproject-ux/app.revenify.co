@@ -41,6 +41,7 @@ import {
   Radio,
   PenSquare,
   Globe,
+  Shield,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
@@ -101,7 +102,12 @@ export function AppSidebar() {
     {
       title: t('nav.customDomain'),
       icon: Globe,
-      href: '/settings/custom-domain',
+      href: '/custom-domain',
+    },
+    {
+      title: t('nav.sso'),
+      icon: Shield,
+      href: '/sso',
     },
   ]
 

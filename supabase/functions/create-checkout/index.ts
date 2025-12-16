@@ -27,19 +27,19 @@ serve(async (req) => {
 
     console.log('Checkout request:', { planId, interval, userId, userEmail })
 
-    // Price IDs mapping
-    const PRICE_IDS: Record<string, Record<string, string | undefined>> = {
+    // Price IDs mapping - Production USD prices
+    const PRICE_IDS: Record<string, Record<string, string>> = {
       starter: {
-        monthly: Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY'),
-        yearly: Deno.env.get('STRIPE_PRICE_STARTER_YEARLY'),
+        monthly: Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_1SeNTlGv40SOibxN3LFF9alH',
+        yearly: Deno.env.get('STRIPE_PRICE_STARTER_YEARLY') || 'price_1SeNWvGv40SOibxNQ4X9jiDg',
       },
       pro: {
-        monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY'),
-        yearly: Deno.env.get('STRIPE_PRICE_PRO_YEARLY'),
+        monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_1SeNYPGv40SOibxNAUmjt7i4',
+        yearly: Deno.env.get('STRIPE_PRICE_PRO_YEARLY') || 'price_1SeNaWGv40SOibxNP08riw0f',
       },
       business: {
-        monthly: Deno.env.get('STRIPE_PRICE_BUSINESS_MONTHLY'),
-        yearly: Deno.env.get('STRIPE_PRICE_BUSINESS_YEARLY'),
+        monthly: Deno.env.get('STRIPE_PRICE_BUSINESS_MONTHLY') || 'price_1SeNcsGv40SOibxNDeuginH2',
+        yearly: Deno.env.get('STRIPE_PRICE_BUSINESS_YEARLY') || 'price_1SeNeRGv40SOibxNgbyIZ1NI',
       },
     }
 

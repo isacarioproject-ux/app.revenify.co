@@ -322,7 +322,7 @@ export default function CustomerJourneyPage() {
   // Export to CSV
   const exportToCSV = () => {
     if (!journeys.length) {
-      toast.error('Nenhum dado para exportar')
+      toast.error(t('journey.noDataToExport'))
       return
     }
 
@@ -345,7 +345,7 @@ export default function CustomerJourneyPage() {
     a.download = `customer-journeys-${format(new Date(), 'yyyy-MM-dd')}.csv`
     a.click()
     URL.revokeObjectURL(url)
-    toast.success('Exportado com sucesso!')
+    toast.success(t('journey.exportSuccess'))
   }
 
   // Helpers
@@ -805,35 +805,185 @@ export default function CustomerJourneyPage() {
 
                     <TabsContent value="attribution" className="mt-0">
                       <div className="space-y-4">
-                        <div className="p-4 rounded-lg bg-muted/50 border">
-                          <h4 className="font-medium mb-3">First-Touch Attribution</h4>
-                          <div className="grid grid-cols-3 gap-4">
-                            <div>
-                              <p className="text-xs text-muted-foreground">Source</p>
-                              <p className="font-medium">{selectedJourney.first_source.utm_source || 'Direct'}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-muted-foreground">Medium</p>
-                              <p className="font-medium">{selectedJourney.first_source.utm_medium || '-'}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-muted-foreground">Campaign</p>
-                              <p className="font-medium">{selectedJourney.first_source.utm_campaign || '-'}</p>
-                            </div>
-                          </div>
-                        </div>
+                        {/* Multi-Touch Attribution Models */}
+                        {(() => {
+                          // Calculate attribution for each touchpoint
+                          const touchpointsWithSource = selectedJourney.touchpoints.filter(
+                            tp => tp.utm_source || tp.referrer
+                          )
+                          const uniqueSources = [...new Map(
+                            touchpointsWithSource.map(tp => [
+                              tp.utm_source || (tp.referrer ? new URL(tp.referrer).hostname : 'direct'),
+                              tp
+                            ])
+                          ).entries()]
 
-                        {selectedJourney.total_revenue > 0 && (
-                          <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-                            <h4 className="font-medium mb-2 text-emerald-500">Receita Atribuída</h4>
-                            <p className="text-3xl font-bold text-emerald-500">
-                              R$ {selectedJourney.total_revenue.toLocaleString('pt-BR')}
-                            </p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {selectedJourney.payments.length} pagamento(s) via {selectedJourney.first_source.utm_source || 'Direct'}
-                            </p>
-                          </div>
-                        )}
+                          const totalRevenue = selectedJourney.total_revenue
+                          const touchpointCount = Math.max(uniqueSources.length, 1)
+
+                          // First-Touch: 100% to first
+                          const firstTouch = selectedJourney.first_source
+
+                          // Last-Touch: 100% to last with UTM
+                          const lastTouchpoint = [...touchpointsWithSource].reverse()[0]
+                          const lastTouch = lastTouchpoint ? {
+                            utm_source: lastTouchpoint.utm_source || (lastTouchpoint.referrer ? new URL(lastTouchpoint.referrer).hostname : null),
+                            utm_medium: lastTouchpoint.utm_medium,
+                            utm_campaign: lastTouchpoint.utm_campaign
+                          } : firstTouch
+
+                          // Linear: Equal distribution
+                          const linearAttribution = uniqueSources.map(([source, tp]) => ({
+                            source,
+                            medium: tp.utm_medium || '-',
+                            campaign: tp.utm_campaign || '-',
+                            percentage: 100 / touchpointCount,
+                            revenue: totalRevenue / touchpointCount
+                          }))
+
+                          // Time-Decay: More weight to recent touchpoints
+                          const timeDecayAttribution = uniqueSources.map(([source, tp], index) => {
+                            const weight = Math.pow(2, index) // Exponential weight
+                            const totalWeight = uniqueSources.reduce((sum, _, i) => sum + Math.pow(2, i), 0)
+                            const percentage = (weight / totalWeight) * 100
+                            return {
+                              source,
+                              medium: tp.utm_medium || '-',
+                              campaign: tp.utm_campaign || '-',
+                              percentage,
+                              revenue: (percentage / 100) * totalRevenue
+                            }
+                          })
+
+                          return (
+                            <>
+                              {/* First-Touch */}
+                              <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                                <div className="flex items-center justify-between mb-3">
+                                  <h4 className="font-medium text-blue-600">{t('journey.firstTouch')}</h4>
+                                  <Badge variant="outline" className="text-blue-600 border-blue-300">100%</Badge>
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.source')}</p>
+                                    <p className="font-medium">{firstTouch.utm_source || 'Direct'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.medium')}</p>
+                                    <p className="font-medium">{firstTouch.utm_medium || '-'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.campaign')}</p>
+                                    <p className="font-medium">{firstTouch.utm_campaign || '-'}</p>
+                                  </div>
+                                </div>
+                                {totalRevenue > 0 && (
+                                  <p className="text-sm text-blue-600 mt-2 font-medium">
+                                    R$ {totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                  </p>
+                                )}
+                              </div>
+
+                              {/* Last-Touch */}
+                              <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20">
+                                <div className="flex items-center justify-between mb-3">
+                                  <h4 className="font-medium text-purple-600">{t('journey.lastTouch')}</h4>
+                                  <Badge variant="outline" className="text-purple-600 border-purple-300">100%</Badge>
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.source')}</p>
+                                    <p className="font-medium">{lastTouch.utm_source || 'Direct'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.medium')}</p>
+                                    <p className="font-medium">{lastTouch.utm_medium || '-'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground">{t('journey.campaign')}</p>
+                                    <p className="font-medium">{lastTouch.utm_campaign || '-'}</p>
+                                  </div>
+                                </div>
+                                {totalRevenue > 0 && (
+                                  <p className="text-sm text-purple-600 mt-2 font-medium">
+                                    R$ {totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                  </p>
+                                )}
+                              </div>
+
+                              {/* Linear Attribution */}
+                              {linearAttribution.length > 1 && (
+                                <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <h4 className="font-medium text-amber-600">{t('journey.linear')}</h4>
+                                    <Badge variant="outline" className="text-amber-600 border-amber-300">{t('journey.linearEqual')}</Badge>
+                                  </div>
+                                  <div className="space-y-2">
+                                    {linearAttribution.map((attr, i) => (
+                                      <div key={i} className="flex items-center justify-between text-sm">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                          <span>{attr.source}</span>
+                                          <span className="text-muted-foreground">/ {attr.medium}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                          <span className="text-muted-foreground">{attr.percentage.toFixed(1)}%</span>
+                                          {totalRevenue > 0 && (
+                                            <span className="font-medium text-amber-600">
+                                              R$ {attr.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Time-Decay Attribution */}
+                              {timeDecayAttribution.length > 1 && (
+                                <div className="p-4 rounded-lg bg-teal-500/5 border border-teal-500/20">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <h4 className="font-medium text-teal-600">{t('journey.timeDecay')}</h4>
+                                    <Badge variant="outline" className="text-teal-600 border-teal-300">{t('journey.timeDecayRecent')}</Badge>
+                                  </div>
+                                  <div className="space-y-2">
+                                    {timeDecayAttribution.map((attr, i) => (
+                                      <div key={i} className="flex items-center justify-between text-sm">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-2 h-2 rounded-full bg-teal-500" />
+                                          <span>{attr.source}</span>
+                                          <span className="text-muted-foreground">/ {attr.medium}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                          <span className="text-muted-foreground">{attr.percentage.toFixed(1)}%</span>
+                                          {totalRevenue > 0 && (
+                                            <span className="font-medium text-teal-600">
+                                              R$ {attr.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Revenue Summary */}
+                              {totalRevenue > 0 && (
+                                <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                                  <h4 className="font-medium mb-2 text-emerald-600">{t('journey.totalRevenue')}</h4>
+                                  <p className="text-3xl font-bold text-emerald-600">
+                                    R$ {totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground mt-1">
+                                    {selectedJourney.payments.length} pagamento(s) • {touchpointCount} touchpoint(s)
+                                  </p>
+                                </div>
+                              )}
+                            </>
+                          )
+                        })()}
                       </div>
                     </TabsContent>
 
@@ -841,17 +991,17 @@ export default function CustomerJourneyPage() {
                       <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="p-3 rounded-lg bg-muted/50">
-                            <p className="text-xs text-muted-foreground">Primeira visita</p>
+                            <p className="text-xs text-muted-foreground">{t('journey.firstVisit')}</p>
                             <p className="font-medium">{formatDate(selectedJourney.first_seen)}</p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50">
-                            <p className="text-xs text-muted-foreground">Última atividade</p>
+                            <p className="text-xs text-muted-foreground">{t('journey.lastActivity')}</p>
                             <p className="font-medium">{formatDate(selectedJourney.last_seen)}</p>
                           </div>
                         </div>
 
                         <div className="p-3 rounded-lg bg-muted/50">
-                          <p className="text-xs text-muted-foreground mb-2">Dispositivos</p>
+                          <p className="text-xs text-muted-foreground mb-2">{t('journey.devices')}</p>
                           <div className="flex gap-2">
                             {selectedJourney.devices.map((device, i) => {
                               const DeviceIcon = getDeviceIcon(device)
@@ -863,13 +1013,13 @@ export default function CustomerJourneyPage() {
                               )
                             })}
                             {selectedJourney.devices.length === 0 && (
-                              <span className="text-sm text-muted-foreground">Não identificado</span>
+                              <span className="text-sm text-muted-foreground">{t('journey.notIdentified')}</span>
                             )}
                           </div>
                         </div>
 
                         <div className="p-3 rounded-lg bg-muted/50">
-                          <p className="text-xs text-muted-foreground mb-2">Países</p>
+                          <p className="text-xs text-muted-foreground mb-2">{t('journey.countries')}</p>
                           <div className="flex gap-2">
                             {selectedJourney.countries.map((country, i) => (
                               <Badge key={i} variant="outline">
@@ -877,7 +1027,7 @@ export default function CustomerJourneyPage() {
                               </Badge>
                             ))}
                             {selectedJourney.countries.length === 0 && (
-                              <span className="text-sm text-muted-foreground">Não identificado</span>
+                              <span className="text-sm text-muted-foreground">{t('journey.notIdentified')}</span>
                             )}
                           </div>
                         </div>
@@ -890,9 +1040,9 @@ export default function CustomerJourneyPage() {
               <Card>
                 <CardContent className="p-12 text-center">
                   <MousePointer className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="font-semibold mb-2">Selecione uma jornada</h3>
+                  <h3 className="font-semibold mb-2">{t('journey.selectJourney')}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Clique em um visitante na lista para ver sua jornada completa
+                    {t('journey.selectJourneyDesc')}
                   </p>
                 </CardContent>
               </Card>
