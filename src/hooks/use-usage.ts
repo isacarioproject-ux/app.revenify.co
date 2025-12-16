@@ -127,7 +127,7 @@ export function useUsage(projectId: string | null): UsageData {
   return { usage, limits, trial, isLoading, error, refetch: fetchUsage }
 }
 
-// Limites por plano (sincronizado com STRIPE-SETUP.md)
+// Limites por plano (sincronizado com plans.ts)
 export const PLAN_LIMITS = {
   free: {
     name: 'Free',
@@ -140,26 +140,26 @@ export const PLAN_LIMITS = {
   },
   starter: {
     name: 'Starter',
-    price: 8,
-    events: 10000,
-    links: 500,
+    price: 39,
+    events: 5000,
+    links: 100,
     projects: 3,
     aiMessages: 50,
     dataRetentionDays: 30,
   },
   pro: {
     name: 'Pro',
-    price: 20,
-    events: 100000,
-    links: 5000,
+    price: 99,
+    events: 200000,
+    links: 1000,
     projects: 10,
     aiMessages: 200,
     dataRetentionDays: 365,
   },
   business: {
     name: 'Business',
-    price: 50,
-    events: 1000000,
+    price: 249,
+    events: 500000,
     links: -1, // Ilimitado
     projects: -1, // Ilimitado
     aiMessages: 1000,
