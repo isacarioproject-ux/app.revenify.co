@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "types": ["https://deno.land/x/types/index.d.ts"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "strict": false,
     "noImplicitAny": false,
     "skipLibCheck": true,
     "allowJs": true,
-    "moduleResolution": "node",
-    "noEmit": true
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "isolatedModules": true
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules"]
