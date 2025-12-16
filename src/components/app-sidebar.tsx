@@ -268,11 +268,13 @@ export function AppSidebar() {
 
       <SidebarFooter className="gap-2">
         {/* Usage Widget - No Footer (esconde quando sidebar colapsado) */}
-        {selectedProject && (
-          <div className="px-2 group-data-[collapsible=icon]:hidden">
-            <UsageWidget projectId={selectedProject.id} compact />
-          </div>
-        )}
+        <div className="px-2 group-data-[collapsible=icon]:hidden">
+          <UsageWidget 
+            projectId={selectedProject?.id} 
+            userId={user?.id}
+            compact 
+          />
+        </div>
         
         <motion.div
           initial={{ opacity: 0, y: 10 }}

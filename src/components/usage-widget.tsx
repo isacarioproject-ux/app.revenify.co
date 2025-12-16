@@ -8,7 +8,8 @@ import { cn } from '@/lib/utils'
 import { useNavigate } from 'react-router-dom'
 
 interface UsageWidgetProps {
-  projectId: string | null
+  projectId?: string | null
+  userId?: string | null
   compact?: boolean
 }
 
@@ -20,11 +21,15 @@ function formatLimit(value: number): string {
   return value.toLocaleString()
 }
 
-export function UsageWidget({ projectId, compact = false }: UsageWidgetProps) {
-  const { usage, limits, isLoading } = useUsage(projectId)
+export function UsageWidget({ projectId, userId, compact = false }: UsageWidgetProps) {
+  const { usage, limits, isLoading } = useUsage(projectId || null, userId)
   const navigate = useNavigate()
 
-  if (isLoading || !projectId) return null
+  // Só esconde durante loading inicial, não quando não tem projectId
+  if (isLoading) return null
+  
+  // Se não tem nem projectId nem userId, não mostra
+  if (!projectId && !userId) return null
 
   // Links ilimitados = não mostrar porcentagem
   const isLinksUnlimited = limits.shortLinks === -1 || limits.shortLinks >= 999999

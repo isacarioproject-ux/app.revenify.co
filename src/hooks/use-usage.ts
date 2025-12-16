@@ -30,7 +30,7 @@ interface UsageData {
   refetch: () => Promise<void>
 }
 
-export function useUsage(projectId: string | null): UsageData {
+export function useUsage(projectId: string | null, userId?: string | null): UsageData {
   const [usage, setUsage] = useState<Usage>({ events: 0, shortLinks: 0, projects: 0 })
   const [limits, setLimits] = useState<Limits>({ plan: 'free', events: 1000, shortLinks: 25, projects: 1 })
   const [trial, setTrial] = useState<TrialInfo>({ isTrial: false, trialEndsAt: null, trialDaysRemaining: 0, isBlocked: false })
@@ -39,7 +39,7 @@ export function useUsage(projectId: string | null): UsageData {
   const hasLoadedOnce = useRef(false)
 
   const fetchUsage = useCallback(async () => {
-    if (!projectId) {
+    if (!projectId && !userId) {
       setIsLoading(false)
       return
     }
@@ -51,18 +51,30 @@ export function useUsage(projectId: string | null): UsageData {
       }
       setError(null)
 
-      // Buscar user_id do projeto
-      const { data: project } = await supabase
-        .from('projects')
-        .select('user_id, events_count_current_month, short_links_count')
-        .eq('id', projectId)
-        .single()
+      const effectiveUserId = (() => {
+        if (userId) return userId
+        return null
+      })()
 
-      if (!project) throw new Error('Project not found')
+      const rpcUserId = await (async () => {
+        if (effectiveUserId) return effectiveUserId
+        if (!projectId) return null
+
+        // Buscar user_id do projeto (fallback)
+        const { data: project } = await supabase
+          .from('projects')
+          .select('user_id')
+          .eq('id', projectId)
+          .single()
+
+        return project?.user_id || null
+      })()
+
+      if (!rpcUserId) throw new Error('User not found')
 
       // Chamar função RPC com user_id
       const { data, error: rpcError } = await supabase
-        .rpc('check_usage_limits', { p_user_id: project.user_id })
+        .rpc('check_usage_limits', { p_user_id: rpcUserId })
 
       if (rpcError) throw rpcError
 
@@ -93,7 +105,7 @@ export function useUsage(projectId: string | null): UsageData {
     } finally {
       setIsLoading(false)
     }
-  }, [projectId])
+  }, [projectId, userId])
 
   useEffect(() => {
     fetchUsage()
