@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
+import { PLANS } from '@/lib/stripe/plans'
 
 interface Usage {
   events: number
@@ -139,45 +140,29 @@ export function useUsage(projectId: string | null, userId?: string | null): Usag
   return { usage, limits, trial, isLoading, error, refetch: fetchUsage }
 }
 
-// Limites por plano (sincronizado com plans.ts)
-export const PLAN_LIMITS = {
-  free: {
-    name: 'Free',
-    price: 0,
-    events: 1000,
-    links: 25,
-    projects: 1,
-    aiMessages: 10,
-    dataRetentionDays: 7,
-  },
-  starter: {
-    name: 'Starter',
-    price: 39,
-    events: 5000,
-    links: 100,
-    projects: 3,
-    aiMessages: 50,
-    dataRetentionDays: 30,
-  },
-  pro: {
-    name: 'Pro',
-    price: 99,
-    events: 200000,
-    links: 1000,
-    projects: 10,
-    aiMessages: 200,
-    dataRetentionDays: 365,
-  },
-  business: {
-    name: 'Business',
-    price: 249,
-    events: 500000,
-    links: -1, // Ilimitado
-    projects: -1, // Ilimitado
-    aiMessages: 1000,
-    dataRetentionDays: 1095, // 3 anos
-  },
-}
+// Limites por plano - Derivado de plans.ts para evitar duplicação
+export const PLAN_LIMITS = Object.fromEntries(
+  Object.entries(PLANS).map(([key, plan]) => [
+    key,
+    {
+      name: plan.name,
+      price: plan.price.monthly,
+      events: plan.limits.max_monthly_events,
+      links: plan.limits.max_short_links,
+      projects: plan.limits.max_projects,
+      aiMessages: plan.limits.max_ai_messages,
+      dataRetentionDays: plan.limits.data_retention_days,
+    },
+  ])
+) as Record<string, {
+  name: string
+  price: number
+  events: number
+  links: number
+  projects: number
+  aiMessages: number
+  dataRetentionDays: number
+}>
 
 // Helper para determinar próximo plano
 export function getNextPlan(currentPlan: string, metric: 'events' | 'links' | 'projects') {
