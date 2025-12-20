@@ -45,7 +45,6 @@ CHECKLIST*.md
 PRD*.md
 *.md.bak
 SUPABASE-REFERENCE.md
-ATUALIZACOES-SITE.txt
 
 # Migrations SQL (estrutura do banco - sensível)
 supabase/migrations/
