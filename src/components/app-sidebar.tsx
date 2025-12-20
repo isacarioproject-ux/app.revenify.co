@@ -23,26 +23,29 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
-  Home,
   User,
-  Users,
-  Bell,
-  Palette,
-  CreditCard,
   LogOut,
   ChevronUp,
-  FolderKanban,
   Settings,
-  Link2,
-  BarChart3,
-  Plug,
-  Route,
-  FileText,
-  Radio,
-  PenSquare,
-  Globe,
-  Shield,
 } from 'lucide-react'
+import {
+  AnimatedHome,
+  AnimatedFolderKanban,
+  AnimatedRadio,
+  AnimatedBarChart3,
+  AnimatedUsers,
+  AnimatedRoute,
+  AnimatedFileText,
+  AnimatedLink2,
+  AnimatedGlobe,
+  AnimatedShield,
+  AnimatedSettings,
+  AnimatedCreditCard,
+  AnimatedBell,
+  AnimatedPalette,
+  AnimatedUser,
+  AnimatedPlug,
+} from '@/components/animated-icons'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -61,52 +64,52 @@ export function AppSidebar() {
   const menuItems = [
     {
       title: t('nav.dashboard'),
-      icon: Home,
+      icon: AnimatedHome,
       href: '/dashboard',
     },
     {
       title: t('nav.projects'),
-      icon: FolderKanban,
+      icon: AnimatedFolderKanban,
       href: '/projects',
     },
     {
       title: t('nav.sources'),
-      icon: Radio,
+      icon: AnimatedRadio,
       href: '/sources',
     },
     {
       title: t('nav.analytics'),
-      icon: BarChart3,
+      icon: AnimatedBarChart3,
       href: '/analytics',
     },
     {
       title: t('nav.leads'),
-      icon: Users,
+      icon: AnimatedUsers,
       href: '/leads',
     },
     {
       title: t('nav.journey'),
-      icon: Route,
+      icon: AnimatedRoute,
       href: '/journey',
     },
     {
       title: t('nav.templates'),
-      icon: FileText,
+      icon: AnimatedFileText,
       href: '/templates',
     },
     {
       title: t('nav.shortLinks'),
-      icon: Link2,
+      icon: AnimatedLink2,
       href: '/short-links',
     },
     {
       title: t('nav.customDomain'),
-      icon: Globe,
+      icon: AnimatedGlobe,
       href: '/custom-domain',
     },
     {
       title: t('nav.sso'),
-      icon: Shield,
+      icon: AnimatedShield,
       href: '/sso',
     },
   ]
@@ -235,16 +238,13 @@ export function AppSidebar() {
                       className="group transition-all duration-200 hover:bg-sidebar-accent/50"
                     >
                       <Link to={item.href} className="gap-3 flex items-center">
-                        <motion.div
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ duration: 0.2 }}
+                        <div
                           className={`transition-colors duration-200 ${
                             isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
                           }`}
                         >
-                          <Icon className="h-4 w-4" />
-                        </motion.div>
+                          <Icon isActive={isActive} />
+                        </div>
                         <motion.span
                           initial={{ opacity: 0.8 }}
                           whileHover={{ opacity: 1 }}
