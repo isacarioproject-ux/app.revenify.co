@@ -27,6 +27,9 @@ import {
   LogOut,
   ChevronUp,
   Settings,
+  Bell,
+  CreditCard,
+  Palette,
 } from 'lucide-react'
 import {
   AnimatedHome,
