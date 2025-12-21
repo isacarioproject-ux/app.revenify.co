@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { InfoTooltipRich } from '@/components/ui/info-tooltip'
 import { TOOLTIPS } from '@/lib/tooltips'
-import { Link2, Globe, Megaphone, Tag, Calendar, Lock, GitBranch, MapPin, Plus, Trash2, Smartphone, Monitor, Tablet, Apple, Play, Eye, Image } from 'lucide-react'
+import { Link2, Globe, Megaphone, Tag, Calendar, Lock, GitBranch, MapPin, Plus, Trash2, Smartphone, Monitor, Tablet, Apple, Play, Eye, Image, Upload, X, ChevronDown, Settings2 } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
@@ -24,6 +24,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { supabase } from '@/lib/supabase'
+import { toast } from 'sonner'
 
 interface CreateShortLinkDialogProps {
   open: boolean
@@ -108,6 +115,55 @@ export function CreateShortLinkDialog({
   const [deviceTargetingEnabled, setDeviceTargetingEnabled] = useState(false)
   const [deepLinksEnabled, setDeepLinksEnabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Upload de imagem para Supabase Storage
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validar tipo e tamanho (max 2MB)
+    if (!file.type.startsWith('image/')) {
+      toast.error('Apenas imagens são permitidas')
+      return
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Imagem deve ter no máximo 2MB')
+      return
+    }
+
+    setIsUploadingImage(true)
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `og-${Date.now()}.${fileExt}`
+      const filePath = `cloaking/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('public-assets')
+        .upload(filePath, file, { upsert: true })
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('public-assets')
+        .getPublicUrl(filePath)
+
+      setFormData({ ...formData, cloaked_image: publicUrl })
+      toast.success('Imagem enviada!')
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Erro ao enviar imagem')
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
+  const removeImage = () => {
+    setFormData({ ...formData, cloaked_image: '' })
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -229,9 +285,25 @@ export function CreateShortLinkDialog({
             />
           </div>
 
-          {/* UTM Parameters - Accordion */}
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="utm">
+          {/* Opções Avançadas - Collapsible */}
+          <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+            <CollapsibleTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-between text-muted-foreground hover:text-foreground"
+              >
+                <span className="flex items-center gap-2">
+                  <Settings2 className="h-4 w-4" />
+                  {t('shortLinks.advancedOptions')}
+                </span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+          <Accordion type="single" collapsible className="w-full border-none">
+            <AccordionItem value="utm" className="border-none">
               <AccordionTrigger className="text-sm font-medium">
                 {t('shortLinks.utmParams')}
               </AccordionTrigger>
@@ -331,7 +403,7 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="advanced">
+            <AccordionItem value="advanced" className="border-none">
               <AccordionTrigger className="text-sm font-medium">
                 {t('shortLinks.advancedSettings')}
               </AccordionTrigger>
@@ -585,7 +657,7 @@ export function CreateShortLinkDialog({
             </AccordionItem>
 
             {/* Deep Links */}
-            <AccordionItem value="deep-links">
+            <AccordionItem value="deep-links" className="border-none">
               <AccordionTrigger className="text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <Link2 className="h-4 w-4" />
@@ -724,26 +796,61 @@ export function CreateShortLinkDialog({
                       <div className="flex items-center gap-2">
                         <Image className="h-4 w-4 text-muted-foreground" />
                         <Label>{t('shortLinks.cloakedImage')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.cloakedImage')}
-                          description={t('shortLinks.cloakedImageDesc')}
-                          icon="help"
-                        />
                       </div>
-                      <Input
-                        placeholder="https://example.com/og-image.jpg"
-                        value={formData.cloaked_image}
-                        onChange={(e) => setFormData({ ...formData, cloaked_image: e.target.value })}
-                      />
+                      {formData.cloaked_image ? (
+                        <div className="flex items-center gap-2">
+                          <div className="relative h-10 w-16 rounded border overflow-hidden bg-muted">
+                            <img 
+                              src={formData.cloaked_image} 
+                              alt="Preview" 
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={removeImage}
+                            className="h-8 px-2"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            id="cloaked-image-upload"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isUploadingImage}
+                            className="h-8 text-xs"
+                          >
+                            <Upload className="h-3 w-3 mr-1" />
+                            {isUploadingImage ? '...' : 'Upload'}
+                          </Button>
+                          <span className="text-xs text-muted-foreground">Max 2MB</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          </CollapsibleContent>
+          </Collapsible>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t">
+          <div className="flex gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
