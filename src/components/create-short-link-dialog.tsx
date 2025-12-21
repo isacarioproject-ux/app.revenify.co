@@ -285,25 +285,9 @@ export function CreateShortLinkDialog({
             />
           </div>
 
-          {/* Opções Avançadas - Collapsible */}
-          <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-            <CollapsibleTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="w-full justify-between text-muted-foreground hover:text-foreground"
-              >
-                <span className="flex items-center gap-2">
-                  <Settings2 className="h-4 w-4" />
-                  {t('shortLinks.advancedOptions')}
-                </span>
-                <ChevronDown className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-          <Accordion type="single" collapsible className="w-full border-none">
-            <AccordionItem value="utm" className="border-none">
+          {/* UTM e Advanced Settings - GRÁTIS (fora do collapsible) */}
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="utm" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 {t('shortLinks.utmParams')}
               </AccordionTrigger>
@@ -403,7 +387,7 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="advanced" className="border-none">
+            <AccordionItem value="advanced" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 {t('shortLinks.advancedSettings')}
               </AccordionTrigger>
@@ -453,9 +437,28 @@ export function CreateShortLinkDialog({
                 </div>
               </AccordionContent>
             </AccordionItem>
+          </Accordion>
 
-            {/* A/B Testing */}
-            <AccordionItem value="ab-testing">
+          {/* Features Pro/Business - Collapsible */}
+          <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+            <CollapsibleTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-between text-muted-foreground hover:text-foreground"
+              >
+                <span className="flex items-center gap-2">
+                  <Settings2 className="h-4 w-4" />
+                  {t('shortLinks.proFeatures')}
+                </span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <Accordion type="single" collapsible className="w-full">
+                {/* A/B Testing */}
+                <AccordionItem value="ab-testing" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <GitBranch className="h-4 w-4" />
@@ -511,16 +514,16 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            {/* Geo Targeting */}
-            <AccordionItem value="geo-targeting">
-              <AccordionTrigger className="text-sm font-medium">
+                {/* Geo Targeting */}
+                <AccordionItem value="geo-targeting" className="border-0">
+              <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
                   {t('shortLinks.geoTargeting')}
                   <Badge variant="secondary" className="text-xs">Pro</Badge>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-4">
+              <AccordionContent className="space-y-4 pt-2">
                 <p className="text-xs text-muted-foreground">{t('shortLinks.geoTargetingDesc')}</p>
 
                 {geoRules.map((rule, index) => (
@@ -578,8 +581,8 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            {/* Device Targeting */}
-            <AccordionItem value="device-targeting">
+                {/* Device Targeting */}
+                <AccordionItem value="device-targeting" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <Smartphone className="h-4 w-4" />
@@ -656,8 +659,8 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            {/* Deep Links */}
-            <AccordionItem value="deep-links" className="border-none">
+                {/* Deep Links */}
+                <AccordionItem value="deep-links" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <Link2 className="h-4 w-4" />
@@ -734,8 +737,8 @@ export function CreateShortLinkDialog({
               </AccordionContent>
             </AccordionItem>
 
-            {/* Link Cloaking */}
-            <AccordionItem value="link-cloaking">
+                {/* Link Cloaking */}
+                <AccordionItem value="link-cloaking" className="border-0">
               <AccordionTrigger className="text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
