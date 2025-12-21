@@ -30,6 +30,8 @@ import {
   Bell,
   CreditCard,
   Palette,
+  Plug,
+  PenSquare,
 } from 'lucide-react'
 import {
   AnimatedHome,
