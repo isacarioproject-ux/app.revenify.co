@@ -415,6 +415,7 @@ const translations: Translations = {
   'shortLinks.descriptionPlaceholder': { 'pt-BR': 'Notas sobre este link...', 'en': 'Notes about this link...', 'es': 'Notas sobre este enlace...' },
   'shortLinks.utmParams': { 'pt-BR': 'Parâmetros UTM (opcional)', 'en': 'UTM Parameters (optional)', 'es': 'Parámetros UTM (opcional)' },
   'shortLinks.advancedSettings': { 'pt-BR': 'Configurações Avançadas', 'en': 'Advanced Settings', 'es': 'Configuración Avanzada' },
+  'shortLinks.proFeatures': { 'pt-BR': 'Recursos Pro/Business', 'en': 'Pro/Business Features', 'es': 'Funciones Pro/Business' },
   'shortLinks.expirationDate': { 'pt-BR': 'Data de Expiração', 'en': 'Expiration Date', 'es': 'Fecha de Expiración' },
   'shortLinks.expiration': { 'pt-BR': 'Expiração', 'en': 'Expiration', 'es': 'Expiración' },
   'shortLinks.expirationDesc': { 'pt-BR': 'Após esta data, o link não funcionará mais.', 'en': 'After this date, the link will no longer work.', 'es': 'Después de esta fecha, el enlace dejará de funcionar.' },
