@@ -51,12 +51,13 @@ interface Integration {
 
 // Componente de Documentação da API inline
 function ApiDocumentation({ onBack, apiKey }: { onBack: () => void; apiKey: string }) {
+  const { t } = useI18n()
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
-  
+
   const copyCode = (code: string, id: string) => {
     navigator.clipboard.writeText(code)
     setCopiedCode(id)
-    toast.success('Código copiado!')
+    toast.success(t('integrations.apiDocs.codeCopied'))
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
@@ -120,11 +121,11 @@ client.track_lead(
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
-          Voltar
+          {t('integrations.apiDocs.back')}
         </Button>
         <div>
-          <h2 className="text-xl font-bold">Documentação da API</h2>
-          <p className="text-sm text-muted-foreground">Integre o Revenify com suas aplicações</p>
+          <h2 className="text-xl font-bold">{t('integrations.apiDocs.title')}</h2>
+          <p className="text-sm text-muted-foreground">{t('integrations.apiDocs.subtitle')}</p>
         </div>
       </div>
 
@@ -133,21 +134,20 @@ client.track_lead(
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Introdução</CardTitle>
+            <CardTitle className="text-lg">{t('integrations.apiDocs.introduction')}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            A API REST do Revenify permite que você integre rastreamento de atribuição em qualquer aplicação.
-            Use nossa API para rastrear eventos, leads e pagamentos programaticamente.
+            {t('integrations.apiDocs.introText')}
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-3 rounded-lg bg-muted/50">
-              <p className="text-xs text-muted-foreground mb-1">Base URL</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('integrations.apiDocs.baseUrl')}</p>
               <code className="text-sm font-mono">https://api.revenify.co/v1</code>
             </div>
             <div className="p-3 rounded-lg bg-muted/50">
-              <p className="text-xs text-muted-foreground mb-1">Autenticação</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('integrations.apiDocs.authentication')}</p>
               <code className="text-sm font-mono">Bearer Token</code>
             </div>
           </div>
@@ -159,17 +159,17 @@ client.track_lead(
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Terminal className="h-5 w-5 text-emerald-600" />
-            <CardTitle className="text-lg">Endpoints</CardTitle>
+            <CardTitle className="text-lg">{t('integrations.apiDocs.endpoints')}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {[
-              { method: 'POST', path: '/events', desc: 'Rastrear um evento' },
-              { method: 'POST', path: '/leads', desc: 'Registrar um lead' },
-              { method: 'POST', path: '/payments', desc: 'Registrar um pagamento' },
-              { method: 'GET', path: '/analytics', desc: 'Obter métricas' },
-              { method: 'GET', path: '/sources', desc: 'Listar fontes' },
+              { method: 'POST', path: '/events', desc: t('integrations.apiDocs.trackEvent') },
+              { method: 'POST', path: '/leads', desc: t('integrations.apiDocs.registerLead') },
+              { method: 'POST', path: '/payments', desc: t('integrations.apiDocs.registerPayment') },
+              { method: 'GET', path: '/analytics', desc: t('integrations.apiDocs.getMetrics') },
+              { method: 'GET', path: '/sources', desc: t('integrations.apiDocs.listSources') },
             ].map((endpoint, i) => (
               <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
                 <Badge variant={endpoint.method === 'GET' ? 'secondary' : 'default'} className="font-mono text-xs w-14 justify-center">
@@ -188,7 +188,7 @@ client.track_lead(
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Code2 className="h-5 w-5 text-blue-600" />
-            <CardTitle className="text-lg">Exemplos de Código</CardTitle>
+            <CardTitle className="text-lg">{t('integrations.apiDocs.codeExamples')}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
@@ -223,21 +223,21 @@ client.track_lead(
       {/* Rate Limits */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Rate Limits</CardTitle>
+          <CardTitle className="text-lg">{t('integrations.apiDocs.rateLimits')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center p-3 rounded-lg bg-muted/50">
               <p className="text-2xl font-bold">1000</p>
-              <p className="text-xs text-muted-foreground">req/minuto (Free)</p>
+              <p className="text-xs text-muted-foreground">{t('integrations.apiDocs.rateLimitFree')}</p>
             </div>
             <div className="text-center p-3 rounded-lg bg-muted/50">
               <p className="text-2xl font-bold">10000</p>
-              <p className="text-xs text-muted-foreground">req/minuto (Pro)</p>
+              <p className="text-xs text-muted-foreground">{t('integrations.apiDocs.rateLimitPro')}</p>
             </div>
             <div className="text-center p-3 rounded-lg bg-muted/50">
               <p className="text-2xl font-bold">∞</p>
-              <p className="text-xs text-muted-foreground">Business</p>
+              <p className="text-xs text-muted-foreground">{t('integrations.apiDocs.rateLimitBusiness')}</p>
             </div>
           </div>
         </CardContent>
@@ -266,11 +266,11 @@ export default function IntegrationsPage() {
   // Testar webhook via Edge Function
   const testWebhook = async () => {
     if (!webhookUrl) {
-      toast.error('Configure uma URL de webhook primeiro')
+      toast.error(t('integrations.configureWebhookFirst'))
       return
     }
     if (!selectedProject?.id) {
-      toast.error('Selecione um projeto primeiro')
+      toast.error(t('integrations.selectProjectFirst'))
       return
     }
     
@@ -289,15 +289,15 @@ export default function IntegrationsPage() {
 
       if (data?.success) {
         setWebhookStatus('success')
-        toast.success(`Webhook testado! Resposta em ${data.response_time_ms}ms`)
+        toast.success(t('integrations.webhookTested').replace('{time}', data.response_time_ms))
       } else {
         setWebhookStatus('error')
-        toast.error(data?.message || 'Falha ao testar webhook')
+        toast.error(data?.message || t('integrations.webhookTestFailed'))
       }
     } catch (err) {
       console.error('Webhook test error:', err)
       setWebhookStatus('error')
-      toast.error('Erro ao testar webhook')
+      toast.error(t('integrations.webhookTestError'))
     } finally {
       setTestingWebhook(false)
     }
@@ -318,10 +318,10 @@ export default function IntegrationsPage() {
         }, { onConflict: 'project_id,url,event_type' })
 
       if (error) throw error
-      toast.success('Webhook salvo com sucesso!')
+      toast.success(t('integrations.webhookSaved'))
     } catch (err) {
       console.error('Save webhook error:', err)
-      toast.error('Erro ao salvar webhook')
+      toast.error(t('integrations.webhookSaveError'))
     }
   }
   
@@ -386,7 +386,7 @@ export default function IntegrationsPage() {
 
   const handleConnectStripe = async () => {
     if (!selectedProject?.id) {
-      toast.error('Selecione um projeto primeiro')
+      toast.error(t('integrations.selectProjectFirst'))
       return
     }
 
@@ -408,7 +408,7 @@ export default function IntegrationsPage() {
       }
     } catch (err) {
       console.error('Error connecting Stripe:', err)
-      toast.error('Erro ao conectar Stripe. Tente novamente.')
+      toast.error(t('integrations.stripeConnectError'))
     } finally {
       setConnecting(false)
     }
@@ -429,11 +429,11 @@ export default function IntegrationsPage() {
 
       if (error) throw error
 
-      toast.success('Stripe desconectado')
+      toast.success(t('integrations.stripeDisconnected'))
       loadIntegration()
     } catch (err) {
       console.error('Error disconnecting:', err)
-      toast.error('Erro ao desconectar')
+      toast.error(t('integrations.stripeDisconnectError'))
     }
   }
 
@@ -441,7 +441,7 @@ export default function IntegrationsPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.get('connected') === 'true') {
-      toast.success('Stripe conectado com sucesso!')
+      toast.success(t('integrations.stripeConnected'))
       loadIntegration()
       // Clean URL
       window.history.replaceState({}, '', '/settings/integrations')
@@ -486,15 +486,15 @@ export default function IntegrationsPage() {
             </p>
           </div>
           
-          <Select 
-            value={selectedProject?.id || ''} 
+          <Select
+            value={selectedProject?.id || ''}
             onValueChange={(value) => {
               const project = projects.find(p => p.id === value)
               if (project) setSelectedProject(project)
             }}
           >
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Selecione um projeto" />
+              <SelectValue placeholder={t('integrations.selectProjectPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
               {projects.map((project) => (
@@ -565,9 +565,9 @@ export default function IntegrationsPage() {
                     <div className="space-y-2">
                       <Label>{t('integrations.payments.webhookUrl')}</Label>
                       <div className="flex gap-2">
-                        <Input 
+                        <Input
                           readOnly
-                          value={selectedProject?.id ? `https://gyqohtqfyzzifxjkuuiz.supabase.co/functions/v1/api-payments?project_id=${selectedProject.id}&api_key=${fullApiKey}` : 'Selecione um projeto'}
+                          value={selectedProject?.id ? `https://gyqohtqfyzzifxjkuuiz.supabase.co/functions/v1/api-payments?project_id=${selectedProject.id}&api_key=${fullApiKey}` : t('integrations.selectProjectPlaceholder')}
                           className="flex-1 font-mono text-xs"
                         />
                         <Button

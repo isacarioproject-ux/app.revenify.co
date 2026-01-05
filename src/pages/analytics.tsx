@@ -15,6 +15,12 @@ import {
   Download,
   Loader2
 } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useProjects } from '@/hooks/use-projects'
 import { useDashboardData } from '@/hooks/use-dashboard-data'
 import { VisitorsChart } from '@/components/dashboard'
@@ -193,10 +199,10 @@ export default function AnalyticsPage() {
             <h1 className="text-2xl font-bold">{t('analytics.title')}</h1>
             <p className="text-muted-foreground">{t('analytics.subtitle')}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3 flex-wrap">
             {/* Date Range */}
             <Select value={dateRange} onValueChange={setDateRange}>
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-[120px] md:w-[140px]">
                 <Calendar className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
@@ -215,7 +221,7 @@ export default function AnalyticsPage() {
                 if (project) setSelectedProject(project)
               }}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-[140px] md:w-[200px]">
                 <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>
@@ -227,7 +233,20 @@ export default function AnalyticsPage() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline" onClick={handleExport} disabled={!selectedProject}>
+            {/* Export Button - Icon only on mobile */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleExport} disabled={!selectedProject} className="md:hidden">
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('common.export')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <Button variant="outline" onClick={handleExport} disabled={!selectedProject} className="hidden md:flex">
               <Download className="h-4 w-4 mr-2" />
               {t('common.export')}
             </Button>

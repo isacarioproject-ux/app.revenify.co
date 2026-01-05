@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Revenify Supabase credentials
-const url = 'https://gyqohtqfyzzifxjkuuiz.supabase.co'
-const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5cW9odHFmeXp6aWZ4amt1dWl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NDMxMzYsImV4cCI6MjA4MDIxOTEzNn0.gvOPxR3nbQJn1nU46ObZoMXKX9HCZINjH2Jb1Jgzvv8'
+// Supabase credentials from environment variables
+const url = import.meta.env.VITE_SUPABASE_URL
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!url) {
   throw new Error('VITE_SUPABASE_URL não está definido. Configure no arquivo .env.local')

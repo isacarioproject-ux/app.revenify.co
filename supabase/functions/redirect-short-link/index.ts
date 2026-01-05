@@ -124,6 +124,11 @@ serve(async (req: Request) => {
 
     // ============================================
     // PASSWORD PROTECTION
+    // ⚠️ SECURITY TODO: Implementar bcrypt para hash de senhas
+    // Atualmente as senhas são comparadas em texto plano.
+    // Para produção, usar: https://deno.land/x/bcrypt
+    // 1. Ao criar short link: hash = await bcrypt.hash(password)
+    // 2. Ao verificar: await bcrypt.compare(submittedPassword, hash)
     // ============================================
     if (shortLink.password) {
       if (!submittedPassword) {
@@ -134,7 +139,7 @@ serve(async (req: Request) => {
         })
       }
       
-      // Verify password (simple comparison - in production use bcrypt)
+      // ⚠️ INSECURE: Plain text comparison - migrate to bcrypt
       if (submittedPassword !== shortLink.password) {
         return new Response(getPasswordPage(shortCode, true), {
           status: 200,

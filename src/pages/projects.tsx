@@ -214,33 +214,36 @@ export default function ProjectsPage() {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 overflow-hidden">
                   {/* Project Key */}
                   <div className="space-y-2">
                     <Label className="text-xs text-muted-foreground flex items-center gap-1">
                       <Key className="h-3 w-3" />
                       Project Key
                     </Label>
-                    <div className="flex gap-2">
-                      <Input
-                        readOnly
-                        value={project.project_key}
-                        className="font-mono text-xs"
-                      />
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleCopyKey(project.project_key)
-                        }}
-                      >
-                        {copiedKey === project.project_key ? (
-                          <Check className="h-4 w-4" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
+                    <div className="flex gap-2 min-w-0">
+                      <div className="flex-1 min-w-0 relative">
+                        <Input
+                          readOnly
+                          value={project.project_key}
+                          className="font-mono text-xs pr-10 truncate"
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-0 top-0 h-full"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleCopyKey(project.project_key)
+                          }}
+                        >
+                          {copiedKey === project.project_key ? (
+                            <Check className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
@@ -248,8 +251,8 @@ export default function ProjectsPage() {
                   <div className="space-y-2">
                     <Label className="text-xs text-muted-foreground">{t('projects.pixelCode')}</Label>
                     <div className="relative">
-                      <pre className="bg-neutral-900 text-neutral-100 p-3 rounded-lg overflow-x-auto text-xs">
-                        <code>{pixelCode(project.project_key)}</code>
+                      <pre className="bg-neutral-900 text-neutral-100 p-3 rounded-lg text-xs overflow-hidden max-h-24 md:max-h-none md:overflow-x-auto">
+                        <code className="break-all md:break-normal whitespace-pre-wrap md:whitespace-pre">{pixelCode(project.project_key)}</code>
                       </pre>
                       <Button
                         size="sm"

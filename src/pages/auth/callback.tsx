@@ -12,9 +12,6 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        console.log('🔍 [AuthCallback] Processando callback...')
-        console.log('🔍 [AuthCallback] URL:', window.location.href)
-        
         // Verificar tokens na URL (hash ou search params)
         const hashParams = new URLSearchParams(window.location.hash.substring(1))
         const searchParams = new URLSearchParams(window.location.search)
@@ -24,8 +21,6 @@ export default function AuthCallback() {
         const errorDescription = hashParams.get('error_description') || searchParams.get('error_description')
         
         if (errorCode) {
-          console.error('❌ [AuthCallback] Erro na URL:', errorCode, errorDescription)
-          
           let userMessage = 'Erro ao autenticar. Tente novamente.'
           
           if (errorCode === 'access_denied') {
@@ -47,18 +42,12 @@ export default function AuthCallback() {
         
         const accessToken = hashParams.get('access_token') || searchParams.get('access_token')
         const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token')
-        const tokenType = hashParams.get('type') || searchParams.get('type')
-        
-        console.log('🔍 [AuthCallback] Token type:', tokenType)
-        console.log('🔍 [AuthCallback] Access token:', !!accessToken)
-        console.log('🔍 [AuthCallback] Refresh token:', !!refreshToken)
         
         let session = null
         let error = null
         
         if (accessToken && refreshToken) {
           // Definir sessão a partir dos tokens
-          console.log('🔄 [AuthCallback] Definindo sessão a partir dos tokens...')
           const result = await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
@@ -67,22 +56,16 @@ export default function AuthCallback() {
           error = result.error
         } else {
           // Tentar obter sessão existente (pode ter sido setada pelo Supabase automaticamente)
-          console.log('🔄 [AuthCallback] Verificando sessão existente...')
           const result = await supabase.auth.getSession()
           session = result.data.session
           error = result.error
         }
         
         if (error) {
-          console.error('❌ [AuthCallback] Erro ao processar sessão:', error)
           throw error
         }
 
         if (session) {
-          console.log('✅ [AuthCallback] Sessão obtida com sucesso!')
-          console.log('✅ [AuthCallback] Usuário:', session.user.email)
-          console.log('✅ [AuthCallback] Provider:', session.user.app_metadata.provider)
-          
           // Verificar se é novo usuário (criado nos últimos 5 minutos)
           const userCreatedAt = new Date(session.user.created_at)
           const now = new Date()
@@ -90,7 +73,6 @@ export default function AuthCallback() {
           const isNewUser = diffMinutes < 5
           
           if (isNewUser) {
-            console.log('✨ [AuthCallback] Novo usuário detectado, redirecionando para onboarding...')
             setStatus('success')
             setMessage('Conta criada! Vamos começar o setup.')
             
@@ -98,7 +80,6 @@ export default function AuthCallback() {
               navigate('/onboarding', { replace: true })
             }, 1500)
           } else {
-            console.log('👤 [AuthCallback] Usuário existente, redirecionando para dashboard...')
             setStatus('success')
             setMessage('Login realizado com sucesso!')
             
@@ -107,9 +88,6 @@ export default function AuthCallback() {
             }, 1500)
           }
         } else {
-          console.warn('⚠️ [AuthCallback] Nenhuma sessão encontrada')
-          console.warn('⚠️ [AuthCallback] Tokens no hash:', { accessToken: !!accessToken, refreshToken: !!refreshToken })
-          
           setStatus('error')
           setMessage('Nenhuma sessão encontrada. Verifique as configurações do Google OAuth.')
           
@@ -118,13 +96,6 @@ export default function AuthCallback() {
           }, 3000)
         }
       } catch (error: any) {
-        console.error('❌ [AuthCallback] Erro no callback:', error)
-        console.error('❌ [AuthCallback] Detalhes:', {
-          message: error.message,
-          status: error.status,
-          name: error.name,
-        })
-        
         setStatus('error')
         setMessage(error.message || 'Erro ao autenticar. Tente novamente.')
         

@@ -212,10 +212,6 @@ export function AuthFormMinimal({
 
       } else if (authMode === 'signup') {
         // Sign up with Supabase
-        console.log('🔄 [AuthForm] Iniciando cadastro...')
-        console.log('📧 [AuthForm] Email:', formData.email)
-        console.log('👤 [AuthForm] Nome:', formData.name)
-        
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -227,12 +223,6 @@ export function AuthFormMinimal({
         });
 
         if (error) {
-          console.error('❌ [AuthForm] Erro no cadastro:', {
-            message: error.message,
-            status: error.status,
-            name: error.name,
-          })
-          
           // Mensagens de erro mais amigáveis
           let errorMessage = error.message
           if (error.message.includes('already registered')) {
@@ -249,16 +239,8 @@ export function AuthFormMinimal({
           return;
         }
 
-        console.log('✅ [AuthForm] Cadastro realizado!')
-        console.log('📊 [AuthForm] Dados:', {
-          userId: data.user?.id,
-          email: data.user?.email,
-          hasSession: !!data.session,
-        })
-
         if (data.user && !data.session) {
           // Email confirmation required
-          console.log('📧 [AuthForm] Confirmação de email necessária')
           setErrors({ 
             general: 'Conta criada! Verifique seu email para confirmar o cadastro.' 
           });

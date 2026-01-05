@@ -1,7 +1,18 @@
+/**
+ * @deprecated Este hook está DEPRECADO. Use o SubscriptionContext em vez disso.
+ * 
+ * Migração:
+ * - import { useSubscription } from '@/contexts/subscription-context'
+ * - const { subscription, loading, canCreateProject } = useSubscription()
+ * 
+ * Este arquivo será removido em uma versão futura.
+ */
+
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 
+/** @deprecated Use Subscription from '@/types/subscription' */
 export interface SubscriptionLimits {
   projects_limit: number
   whiteboards_per_project_limit: number

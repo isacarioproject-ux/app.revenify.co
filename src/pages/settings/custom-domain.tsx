@@ -69,7 +69,7 @@ export default function CustomDomainPage() {
       if (data.Answer && data.Answer.length > 0) {
         // Verificar se aponta para nosso domínio
         const cnameTarget = data.Answer[0].data?.toLowerCase()
-        if (cnameTarget?.includes('revenify') || cnameTarget?.includes('supabase')) {
+        if (cnameTarget?.includes('supabase') || cnameTarget?.includes('revenify') || cnameTarget?.includes(domain)) {
           setDnsStatus('valid')
           toast.success(t('customDomain.dnsValid'))
         } else {
@@ -147,7 +147,7 @@ export default function CustomDomainPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const cnameTarget = 'links.revenify.co'
+  const cnameTarget = 'gyqohtqfyzzifxjkuuiz.supabase.co'
 
   // Loading skeleton
   if (subscriptionLoading) {
@@ -289,38 +289,42 @@ export default function CustomDomainPage() {
             )}
 
             {/* DNS Instructions */}
-            <div className="rounded-lg border bg-muted/30 p-4 space-y-4">
+            <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
               <h4 className="font-medium flex items-center gap-2">
                 <Shield className="h-4 w-4" />
                 {t('customDomain.dnsInstructions')}
               </h4>
               <p className="text-sm text-muted-foreground">
-                {t('customDomain.dnsInstructionsDesc')}
+                Configure seu domínio para redirecionar para nossa Edge Function.
               </p>
               
-              <div className="bg-background rounded-md border p-4">
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-muted-foreground mb-1">{t('customDomain.recordType')}</p>
-                    <p className="font-mono font-medium">CNAME</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground mb-1">{t('customDomain.recordName')}</p>
-                    <p className="font-mono font-medium">links</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground mb-1">{t('customDomain.recordValue')}</p>
-                    <div className="flex items-center gap-2">
-                      <p className="font-mono font-medium">{cnameTarget}</p>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6"
-                        onClick={() => copyToClipboard(cnameTarget)}
-                      >
-                        {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                      </Button>
-                    </div>
+              {/* Opções lado a lado */}
+              <div className="grid md:grid-cols-2 gap-3">
+                {/* Opção 1: Cloudflare */}
+                <div className="bg-background rounded-md border p-3">
+                  <p className="font-medium text-sm mb-2">Cloudflare (Recomendado)</p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Crie um Worker que redireciona para:
+                  </p>
+                  <code className="text-[10px] bg-muted/50 rounded px-1 py-0.5 break-all">
+                    /functions/v1/redirect-short-link
+                  </code>
+                </div>
+
+                {/* Opção 2: CNAME */}
+                <div className="bg-background rounded-md border p-3">
+                  <p className="font-medium text-sm mb-2">CNAME</p>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-muted-foreground">Valor:</span>
+                    <code className="bg-muted/50 rounded px-1 py-0.5">{cnameTarget}</code>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5"
+                      onClick={() => copyToClipboard(cnameTarget)}
+                    >
+                      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -331,7 +335,7 @@ export default function CustomDomainPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4 border-t">
+            <div className="flex justify-end gap-3 pt-4 border-t">
               {currentDomain && (
                 <Button 
                   variant="outline" 
@@ -350,7 +354,6 @@ export default function CustomDomainPage() {
               <Button 
                 onClick={saveDomain}
                 disabled={saving || !domain || !validateDomain(domain)}
-                className="flex-1"
               >
                 {saving ? (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -374,7 +377,7 @@ export default function CustomDomainPage() {
             </p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" asChild>
-                <a href="https://docs.revenify.co/custom-domain" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   {t('customDomain.viewDocs')}
                 </a>

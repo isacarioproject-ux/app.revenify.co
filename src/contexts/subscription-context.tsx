@@ -3,25 +3,9 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/auth-context'
 import { toast } from 'sonner'
 import { PLANS, getPlanLimits } from '@/lib/stripe/plans'
+import { Subscription, DEFAULT_SUBSCRIPTION, createTempSubscription } from '@/types/subscription'
 
-export interface Subscription {
-  id: string
-  user_id: string
-  plan: 'free' | 'starter' | 'pro' | 'business'
-  status: 'active' | 'canceled' | 'past_due' | 'trialing'
-  max_monthly_events: number
-  current_monthly_events: number
-  stripe_customer_id: string | null
-  stripe_subscription_id: string | null
-  custom_short_domain: string | null
-  is_trial: boolean
-  trial_started_at: string | null
-  trial_ends_at: string | null
-  max_projects: number
-  max_short_links: number
-  created_at: string
-  updated_at: string
-}
+export type { Subscription } from '@/types/subscription'
 
 interface SubscriptionContextType {
   subscription: Subscription | null
@@ -33,22 +17,6 @@ interface SubscriptionContextType {
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined)
-
-// Subscription padrão para usuários sem subscription no banco
-const DEFAULT_SUBSCRIPTION: Omit<Subscription, 'id' | 'user_id' | 'created_at' | 'updated_at'> = {
-  plan: 'free',
-  status: 'active',
-  max_monthly_events: 1000,
-  current_monthly_events: 0,
-  stripe_customer_id: null,
-  stripe_subscription_id: null,
-  custom_short_domain: null,
-  is_trial: false,
-  trial_started_at: null,
-  trial_ends_at: null,
-  max_projects: 1,
-  max_short_links: 25,
-}
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth()
@@ -88,13 +56,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         setSubscription(data as Subscription)
       } else {
         // Criar subscription default em memória (trigger no banco cria automaticamente)
-        setSubscription({
-          id: 'temp',
-          user_id: user.id,
-          ...DEFAULT_SUBSCRIPTION,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
+        setSubscription(createTempSubscription(user.id))
       }
       hasLoadedOnce.current = true
     } catch (err: any) {

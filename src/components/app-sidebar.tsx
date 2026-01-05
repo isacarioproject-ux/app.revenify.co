@@ -145,7 +145,6 @@ export function AppSidebar() {
 
     // Listener customizado para atualizações de perfil
     const handleUserUpdate = () => {
-      console.log('🔄 Atualizando dados do usuário no sidebar...')
       loadUser()
     }
 

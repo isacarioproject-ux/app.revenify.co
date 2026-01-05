@@ -1,8 +1,7 @@
 // Configurações centralizadas do Revenify
 
-// Supabase
-export const SUPABASE_URL = 'https://gyqohtqfyzzifxjkuuiz.supabase.co'
-export const SUPABASE_PROJECT_ID = 'gyqohtqfyzzifxjkuuiz'
+// Supabase - from environment variables
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || ''
 
 // =============================================
 // DOMÍNIOS REVENIFY
@@ -32,7 +31,8 @@ export const API_ENDPOINTS = {
 // Domínio padrão do Revenify (quando comprar, mudar DOMAIN_CONFIGURED para true)
 export const DEFAULT_SHORT_DOMAIN = 'revenify.co'
 
-// IMPORTANTE: Mude para true quando o domínio estiver configurado
+// IMPORTANTE: Mude para true quando o domínio estiver configurado com proxy para Edge Function
+// O domínio revenify.co precisa redirecionar /{code} para a Edge Function redirect-short-link
 export const DOMAIN_CONFIGURED = true
 
 // URL da Edge Function (fallback enquanto domínio não está configurado)
