@@ -4,6 +4,17 @@ import { supabase } from '@/lib/supabase'
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
+// Função para rastrear eventos no Revenify
+const trackRevenifyEvent = (eventType: string, data: Record<string, any> = {}) => {
+  if (typeof window !== 'undefined' && (window as any).revenify) {
+    if (eventType === 'signup') {
+      (window as any).revenify.trackLead(data)
+    } else {
+      (window as any).revenify.track(eventType, data)
+    }
+  }
+}
+
 export default function AuthCallback() {
   const navigate = useNavigate()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -73,6 +84,13 @@ export default function AuthCallback() {
           const isNewUser = diffMinutes < 5
           
           if (isNewUser) {
+            // Rastrear novo cadastro (signup)
+            trackRevenifyEvent('signup', {
+              email: session.user.email,
+              name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || null,
+              provider: session.user.app_metadata?.provider || 'email'
+            })
+            
             setStatus('success')
             setMessage('Conta criada! Vamos começar o setup.')
             
@@ -80,6 +98,12 @@ export default function AuthCallback() {
               navigate('/onboarding', { replace: true })
             }, 1500)
           } else {
+            // Rastrear login
+            trackRevenifyEvent('login', {
+              email: session.user.email,
+              provider: session.user.app_metadata?.provider || 'email'
+            })
+            
             setStatus('success')
             setMessage('Login realizado com sucesso!')
             
