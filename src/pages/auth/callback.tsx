@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { Loader2, CheckCircle2, XCircle } from 'lucide-react'
+import { XCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Spinner } from '@/components/ui/spinner'
 
 // Função para rastrear eventos no Revenify
 const trackRevenifyEvent = (eventType: string, data: Record<string, any> = {}) => {
@@ -140,19 +141,10 @@ export default function AuthCallback() {
         transition={{ duration: 0.3 }}
         className="text-center space-y-4"
       >
-        {/* Ícone animado */}
+        {/* Spinner minimalista */}
         <div className="flex justify-center">
-          {status === 'loading' && (
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          )}
-          {status === 'success' && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 10 }}
-            >
-              <CheckCircle2 className="h-12 w-12 text-green-500" />
-            </motion.div>
+          {(status === 'loading' || status === 'success') && (
+            <Spinner size="xl" />
           )}
           {status === 'error' && (
             <motion.div
@@ -160,7 +152,7 @@ export default function AuthCallback() {
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 10 }}
             >
-              <XCircle className="h-12 w-12 text-red-500" />
+              <XCircle className="h-12 w-12 text-destructive" />
             </motion.div>
           )}
         </div>
@@ -172,38 +164,12 @@ export default function AuthCallback() {
           transition={{ delay: 0.1 }}
         >
           <p className="text-lg font-medium">{message}</p>
-          {status === 'loading' && (
-            <p className="text-sm text-muted-foreground mt-2">
-              Isso pode levar alguns segundos...
-            </p>
-          )}
           {status === 'error' && (
             <p className="text-sm text-muted-foreground mt-2">
               Redirecionando para a página de login...
             </p>
           )}
         </motion.div>
-
-        {/* Loading dots animados */}
-        {status === 'loading' && (
-          <div className="flex justify-center gap-1 mt-4">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="h-2 w-2 rounded-full bg-primary"
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                }}
-              />
-            ))}
-          </div>
-        )}
       </motion.div>
     </div>
   )

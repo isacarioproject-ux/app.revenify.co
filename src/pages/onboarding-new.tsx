@@ -8,18 +8,14 @@ import {
   Check, 
   ArrowRight, 
   ArrowLeft,
-  Sparkles,
   BarChart3, 
   Zap, 
   Target,
   Copy,
   CheckCircle2,
-  Globe,
-  Code2,
-  Loader2,
   X
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Spinner } from '@/components/ui/spinner'
 import { useAuth } from '@/contexts/auth-context'
 import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
@@ -33,37 +29,12 @@ const STEPS = [
   { id: 'success', title: 'Done!' },
 ]
 
-// Animações
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
-  transition: { duration: 0.3, ease: 'easeOut' }
-}
-
-const staggerChildren = {
-  animate: {
-    transition: {
-      staggerChildren: 0.15
-    }
-  }
-}
-
-// Animação flutuante para os cards
-const floatingAnimation = {
-  initial: { opacity: 0, y: 30, scale: 0.95 },
-  animate: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1,
-    transition: { duration: 0.5, ease: 'easeOut' }
-  },
-  whileHover: { 
-    y: -4, 
-    scale: 1.02,
-    boxShadow: '0 10px 40px -10px rgba(99, 102, 241, 0.3)',
-    transition: { duration: 0.2 }
-  }
+// Animações minimalistas
+const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.2 }
 }
 
 export default function OnboardingPage() {
@@ -186,17 +157,12 @@ export default function OnboardingPage() {
             {currentStep === 0 && (
               <motion.div
                 key="welcome"
-                {...fadeInUp}
+                {...fadeIn}
                 className="text-center"
               >
-                <motion.div
-                  initial={{ scale: 0, rotate: -10 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                  className="mx-auto mb-6"
-                >
-                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
-                </motion.div>
+                <div className="mx-auto mb-6">
+                  <img src="/logo.png" alt="Revenify" className="h-16 w-16 object-contain mx-auto" />
+                </div>
 
                 <h1 className="text-3xl font-bold mb-3">
                   {t('onboarding.welcomeTitle')}
@@ -205,37 +171,26 @@ export default function OnboardingPage() {
                   {t('onboarding.welcomeDesc')}
                 </p>
 
-                <motion.div 
-                  variants={staggerChildren}
-                  initial="initial"
-                  animate="animate"
-                  className="grid gap-4 mb-8"
-                >
+                <div className="grid gap-3 mb-8">
                   {[
-                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc'), iconColor: 'text-indigo-500', bgColor: 'bg-indigo-500/10' },
-                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), iconColor: 'text-emerald-500', bgColor: 'bg-emerald-500/10' },
-                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), iconColor: 'text-amber-500', bgColor: 'bg-amber-500/10' },
+                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc') },
+                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc') },
+                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc') },
                   ].map((feature, i) => (
-                    <motion.div
+                    <div
                       key={i}
-                      variants={floatingAnimation}
-                      whileHover="whileHover"
-                      className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer hover:bg-muted/30 transition-colors"
+                      className="flex items-start gap-4 p-4 rounded-lg bg-muted/30 border border-border/50 text-left"
                     >
-                      <motion.div 
-                        className={cn('p-3 rounded-xl', feature.bgColor)}
-                        animate={{ y: [0, -3, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                      >
-                        <feature.icon className={cn('h-6 w-6', feature.iconColor)} />
-                      </motion.div>
-                      <div>
-                        <h3 className="font-semibold text-base">{feature.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">{feature.desc}</p>
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <feature.icon className="h-5 w-5 text-primary" />
                       </div>
-                    </motion.div>
+                      <div>
+                        <h3 className="font-medium text-sm">{feature.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">{feature.desc}</p>
+                      </div>
+                    </div>
                   ))}
-                </motion.div>
+                </div>
 
                 <Button size="lg" className="w-full" onClick={handleNext}>
                   {t('onboarding.getStarted')}
@@ -248,7 +203,7 @@ export default function OnboardingPage() {
             {currentStep === 1 && (
               <motion.div
                 key="project"
-                {...fadeInUp}
+                {...fadeIn}
               >
                 <div className="text-center mb-8">
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.createProjectTitle')}</h1>
@@ -296,7 +251,7 @@ export default function OnboardingPage() {
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Spinner size="sm" color="white" className="mr-2" />
                         {t('common.creating')}
                       </>
                     ) : (
@@ -314,7 +269,7 @@ export default function OnboardingPage() {
             {currentStep === 2 && (
               <motion.div
                 key="pixel"
-                {...fadeInUp}
+                {...fadeIn}
               >
                 <div className="text-center mb-6">
                   <h1 className="text-2xl font-bold mb-2">{t('onboarding.installPixelTitle')}</h1>
@@ -396,42 +351,22 @@ export default function OnboardingPage() {
             {currentStep === 3 && (
               <motion.div
                 key="success"
-                {...fadeInUp}
+                {...fadeIn}
                 className="text-center"
               >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                  className="mx-auto mb-6"
-                >
-                  <img src="/logo.png" alt="Revenify" className="h-20 w-20 object-contain mx-auto" />
-                </motion.div>
+                <div className="mx-auto mb-6">
+                  <img src="/logo.png" alt="Revenify" className="h-16 w-16 object-contain mx-auto" />
+                </div>
 
-                <motion.h1 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-3xl font-bold mb-3"
-                >
+                <h1 className="text-2xl font-bold mb-2">
                   {t('onboarding.allSet')}
-                </motion.h1>
+                </h1>
                 
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-muted-foreground text-lg mb-8"
-                >
+                <p className="text-muted-foreground mb-6">
                   {t('onboarding.readyToTrack')}
-                </motion.p>
+                </p>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="bg-muted/50 rounded-xl p-6 mb-8 border border-border/50 text-left"
-                >
+                <div className="bg-muted/30 rounded-lg p-4 mb-6 border border-border/50 text-left">
                   <h3 className="font-semibold mb-4">{t('onboarding.nextSteps')}</h3>
                   <ul className="space-y-3">
                     {[
@@ -448,18 +383,12 @@ export default function OnboardingPage() {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <Button size="lg" className="w-full" onClick={handleNext}>
-                    {t('onboarding.goToDashboard')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </motion.div>
+                <Button size="lg" className="w-full" onClick={handleNext}>
+                  {t('onboarding.goToDashboard')}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>
