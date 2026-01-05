@@ -27,8 +27,6 @@ export function useOnboarding() {
 
     const initOnboarding = async () => {
       try {
-        console.log('🎯 Inicializando onboarding para user:', user.id)
-        
         // Verificar se já existe registro
         const { data: existing, error: selectError } = await supabase
           .from('onboarding_analytics')
@@ -37,13 +35,10 @@ export function useOnboarding() {
           .maybeSingle()
 
         if (selectError) {
-          console.error('❌ Erro ao buscar onboarding existente:', selectError.message)
-          console.error('💡 A tabela onboarding_analytics pode não existir. Execute o SQL no Supabase!')
           return
         }
 
         if (existing) {
-          console.log('📊 Onboarding existente encontrado, restaurando estado')
           // Restaurar estado
           setAnalyticsId(existing.id)
           setData({
@@ -61,7 +56,6 @@ export function useOnboarding() {
             lastActiveAt: new Date(existing.last_active_at)
           })
         } else {
-          console.log('➕ Criando novo registro de onboarding')
           // Usar upsert para evitar conflitos
           const { data: newRecord, error } = await supabase
             .from('onboarding_analytics')
@@ -83,19 +77,15 @@ export function useOnboarding() {
             .single()
 
           if (error) {
-            console.error('❌ Erro ao criar registro:', error.message, error)
-            console.error('💡 A tabela onboarding_analytics pode não existir. Execute o SQL no Supabase!')
             throw error
           }
           
-          console.log('✅ Registro criado com sucesso:', newRecord?.id || 'ID não disponível')
           if (newRecord) {
             setAnalyticsId(newRecord.id)
           }
         }
       } catch (error) {
-        console.error('❌ Erro ao inicializar onboarding:', error)
-        console.error('💡 Certifique-se de que executou o SQL no Supabase para criar a tabela onboarding_analytics')
+        // Silently fail - table may not exist
       }
     }
 
@@ -105,7 +95,6 @@ export function useOnboarding() {
   // Atualizar analytics no backend
   const updateAnalytics = useCallback(async (updates: Record<string, any>) => {
     if (!analyticsId) {
-      console.warn('⚠️ analyticsId não definido, não é possível atualizar')
       return
     }
 
@@ -121,21 +110,16 @@ export function useOnboarding() {
         updateData[key] = updates[key]
       })
 
-      console.log('📝 Atualizando analytics:', updateData)
-
       const { error } = await supabase
         .from('onboarding_analytics')
         .update(updateData)
         .eq('id', analyticsId)
 
       if (error) {
-        console.error('❌ Erro ao atualizar:', error.message, error)
         throw error
       }
-
-      console.log('✅ Analytics atualizado com sucesso')
     } catch (error) {
-      console.error('❌ Erro ao atualizar analytics:', error)
+      // Silently fail
     }
   }, [analyticsId, data.startedAt])
 

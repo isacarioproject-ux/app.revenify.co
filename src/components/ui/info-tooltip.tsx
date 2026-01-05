@@ -1,7 +1,9 @@
 import * as React from 'react'
 import * as TooltipPrimitive from '@radix-ui/react-tooltip'
-import { Info, HelpCircle, Lightbulb, AlertCircle } from 'lucide-react'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
+import { Info, HelpCircle, Lightbulb, AlertCircle, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 interface InfoTooltipProps {
   content: React.ReactNode
@@ -20,6 +22,9 @@ export function InfoTooltip({
   children,
   maxWidth = 300,
 }: InfoTooltipProps) {
+  const isMobile = useIsMobile()
+  const [open, setOpen] = React.useState(false)
+  
   const icons = {
     info: Info,
     help: HelpCircle,
@@ -29,23 +34,69 @@ export function InfoTooltip({
 
   const Icon = icons[icon]
 
+  const triggerButton = children || (
+    <button
+      type="button"
+      className={cn(
+        'inline-flex items-center justify-center',
+        'text-muted-foreground hover:text-foreground',
+        'transition-colors',
+        className
+      )}
+    >
+      <Icon className="h-4 w-4" />
+    </button>
+  )
+
+  const contentElement = (
+    <div className="space-y-1.5">
+      {typeof content === 'string' ? (
+        <p className="text-foreground font-medium">{content}</p>
+      ) : (
+        content
+      )}
+    </div>
+  )
+
+  // Mobile: Use Popover (tap to open, tap to close)
+  if (isMobile) {
+    return (
+      <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+        <PopoverPrimitive.Trigger asChild>
+          {triggerButton}
+        </PopoverPrimitive.Trigger>
+        <PopoverPrimitive.Portal>
+          <PopoverPrimitive.Content
+            side={side}
+            sideOffset={8}
+            className={cn(
+              'z-50 overflow-hidden rounded-lg border bg-popover px-4 py-3 text-sm shadow-xl',
+              'animate-in fade-in-0 zoom-in-95',
+              'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95'
+            )}
+            style={{ maxWidth: `${maxWidth}px` }}
+          >
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-2 right-2 p-1 rounded-full hover:bg-muted transition-colors"
+              aria-label="Fechar"
+            >
+              <X className="h-3 w-3 text-muted-foreground" />
+            </button>
+            {contentElement}
+            <PopoverPrimitive.Arrow className="fill-border" />
+          </PopoverPrimitive.Content>
+        </PopoverPrimitive.Portal>
+      </PopoverPrimitive.Root>
+    )
+  }
+
+  // Desktop: Use Tooltip (hover)
   return (
     <TooltipPrimitive.Provider delayDuration={200}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>
-          {children || (
-            <button
-              type="button"
-              className={cn(
-                'inline-flex items-center justify-center',
-                'text-muted-foreground hover:text-foreground',
-                'transition-colors',
-                className
-              )}
-            >
-              <Icon className="h-4 w-4" />
-            </button>
-          )}
+          {triggerButton}
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Content
@@ -62,13 +113,7 @@ export function InfoTooltip({
             )}
             style={{ maxWidth: `${maxWidth}px` }}
           >
-            <div className="space-y-1.5">
-              {typeof content === 'string' ? (
-                <p className="text-foreground font-medium">{content}</p>
-              ) : (
-                content
-              )}
-            </div>
+            {contentElement}
             <TooltipPrimitive.Arrow className="fill-border" />
           </TooltipPrimitive.Content>
         </TooltipPrimitive.Portal>

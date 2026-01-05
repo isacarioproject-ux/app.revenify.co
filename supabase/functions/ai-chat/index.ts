@@ -7,6 +7,102 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Função para construir o system prompt com contexto completo
+function buildSystemPrompt(context: any): string {
+  const project = context?.project?.summary?.project
+  const totals = context?.project?.summary?.totals
+  const metrics30d = context?.project?.metrics_30d
+  const metrics7d = context?.project?.metrics_7d
+  const topSources = context?.project?.top_sources || []
+  const shortLinks = context?.project?.short_links || []
+  const audience = context?.project?.audience
+  const subscription = context?.user?.subscription
+
+  return `Você é o **Revenify AI Assistant**, um especialista em marketing analytics, atribuição de receita e otimização de conversão.
+
+═══════════════════════════════════════════════════════════
+📊 CONTEXTO COMPLETO DO PROJETO
+═══════════════════════════════════════════════════════════
+
+🏢 **PROJETO:**
+- Nome: ${project?.name || 'Não definido'}
+- Domínio: ${project?.domain || 'Não definido'}
+- Status: ${project?.is_active ? '✅ Ativo' : '❌ Inativo'}
+- Criado em: ${project?.created_at ? new Date(project.created_at).toLocaleDateString('pt-BR') : 'N/A'}
+
+📈 **TOTAIS GERAIS:**
+- Total de Eventos: ${totals?.total_events?.toLocaleString('pt-BR') || 0}
+- Total de Leads: ${totals?.total_leads?.toLocaleString('pt-BR') || 0}
+- Total de Pagamentos: ${totals?.total_payments?.toLocaleString('pt-BR') || 0}
+- Receita Total: R$ ${Number(totals?.total_revenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+- Fontes de Tráfego: ${totals?.total_sources || 0}
+- Links Curtos: ${totals?.total_short_links || 0}
+
+📅 **MÉTRICAS ÚLTIMOS 30 DIAS:**
+- Eventos: ${metrics30d?.events?.total?.toLocaleString('pt-BR') || 0} (${metrics30d?.events?.pageviews || 0} pageviews, ${metrics30d?.events?.conversions || 0} conversões)
+- Leads Capturados: ${metrics30d?.leads?.total || 0}
+- Pagamentos: ${metrics30d?.payments?.total || 0} (R$ ${Number(metrics30d?.payments?.revenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })})
+- Ticket Médio: R$ ${Number(metrics30d?.payments?.avg_value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+
+📅 **MÉTRICAS ÚLTIMOS 7 DIAS:**
+- Eventos: ${metrics7d?.events?.total?.toLocaleString('pt-BR') || 0}
+- Leads: ${metrics7d?.leads?.total || 0}
+- Receita: R$ ${Number(metrics7d?.payments?.revenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+
+${topSources.length > 0 ? `🎯 **TOP FONTES DE TRÁFEGO:**
+${topSources.map((s: any, i: number) => `${i + 1}. ${s.name} (${s.utm_source || 'direto'}/${s.utm_medium || '-'})
+   - Visitantes: ${s.visitors?.toLocaleString('pt-BR') || 0}
+   - Leads: ${s.leads || 0}
+   - Receita: R$ ${Number(s.revenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+   - Taxa de Conversão: ${s.conversion_rate || 0}%`).join('\n')}
+` : '⚠️ Nenhuma fonte de tráfego configurada ainda.'}
+
+${shortLinks.length > 0 ? `🔗 **LINKS CURTOS (Top ${shortLinks.length}):**
+${shortLinks.slice(0, 5).map((l: any, i: number) => `${i + 1}. ${l.short_code}${l.title ? ` (${l.title})` : ''}
+   - Cliques: ${l.clicks?.toLocaleString('pt-BR') || 0} (${l.unique_clicks || 0} únicos)
+   - A/B Test: ${l.has_ab_test ? 'Sim' : 'Não'} | Geo: ${l.has_geo_targeting ? 'Sim' : 'Não'}`).join('\n')}
+` : ''}
+
+${audience?.total_events > 0 ? `👥 **AUDIÊNCIA:**
+- Dispositivos: ${audience.devices?.map((d: any) => `${d.device} (${d.percentage}%)`).join(', ') || 'N/A'}
+- Países: ${audience.countries?.map((c: any) => `${c.country} (${c.percentage}%)`).join(', ') || 'N/A'}
+- Navegadores: ${audience.browsers?.map((b: any) => `${b.browser} (${b.percentage}%)`).join(', ') || 'N/A'}
+` : ''}
+
+💳 **PLANO DO USUÁRIO:**
+- Plano: ${subscription?.plan?.toUpperCase() || 'FREE'}
+- Status: ${subscription?.status || 'active'}
+- Eventos: ${subscription?.current_events?.toLocaleString('pt-BR') || 0} / ${subscription?.max_events?.toLocaleString('pt-BR') || 1000}
+- Mensagens IA: ${subscription?.ai_messages_used || 0} / ${subscription?.ai_messages_limit || 20}
+
+═══════════════════════════════════════════════════════════
+🤖 INSTRUÇÕES DO ASSISTENTE
+═══════════════════════════════════════════════════════════
+
+**SEU PAPEL:**
+1. Analisar dados de marketing e atribuição de receita
+2. Identificar oportunidades de otimização
+3. Sugerir estratégias baseadas em dados reais
+4. Explicar métricas e como melhorá-las
+5. Ajudar a configurar UTMs, fontes e links curtos
+6. Responder dúvidas sobre a plataforma Revenify
+
+**ESTILO DE RESPOSTA:**
+- Seja conciso e direto (máximo 3-4 frases por resposta)
+- Use dados específicos do contexto acima
+- Forneça insights acionáveis
+- Responda sempre em português brasileiro
+- Use emojis moderadamente para clareza
+
+**REGRAS IMPORTANTES:**
+❌ NUNCA invente dados que não estão no contexto
+❌ NUNCA dê conselhos genéricos sem referenciar dados reais
+❌ NUNCA seja excessivamente técnico sem necessidade
+✅ SEMPRE baseie suas respostas nos dados acima
+✅ SEMPRE sugira próximos passos práticos
+✅ SEMPRE seja amigável e prestativo`
+}
+
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -55,17 +151,22 @@ serve(async (req: Request) => {
       )
     }
 
-    // Check AI usage limit
-    const { data: usageData } = await supabase.rpc('check_ai_usage_limit', {
-      p_user_id: user.id,
-    })
+    // Check AI usage limit from subscription
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('ai_messages_used, ai_messages_limit')
+      .eq('user_id', user.id)
+      .single()
 
-    if (usageData?.exceeded) {
+    const aiUsed = subscription?.ai_messages_used || 0
+    const aiLimit = subscription?.ai_messages_limit || 20
+
+    if (aiUsed >= aiLimit) {
       return new Response(
         JSON.stringify({
           error: 'AI usage limit reached',
-          limit: usageData.limit,
-          used: usageData.used,
+          limit: aiLimit,
+          used: aiUsed,
         }),
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -94,63 +195,18 @@ serve(async (req: Request) => {
       conversation = data
     }
 
-    // Get project context
-    const { data: project } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('id', projectId)
-      .single()
+    // 🚀 USAR A NOVA FUNÇÃO get_ai_context PARA CONTEXTO COMPLETO
+    const { data: aiContext, error: contextError } = await supabase.rpc('get_ai_context', {
+      p_user_id: user.id,
+      p_project_id: projectId
+    })
 
-    const { data: sourcesCount } = await supabase
-      .from('sources')
-      .select('id', { count: 'exact' })
-      .eq('project_id', projectId)
+    if (contextError) {
+      console.error('Error getting AI context:', contextError)
+    }
 
-    const { data: recentEvents } = await supabase
-      .from('events')
-      .select('event_type, page_url, created_at')
-      .eq('project_id', projectId)
-      .order('created_at', { ascending: false })
-      .limit(10)
-
-    const { data: topSources } = await supabase
-      .from('sources')
-      .select('name, utm_campaign, total_visitors, total_revenue')
-      .eq('project_id', projectId)
-      .order('total_visitors', { ascending: false })
-      .limit(5)
-
-    // Build system prompt with context
-    const systemPrompt = `Você é o Revenify AI Assistant, um especialista em marketing analytics e atribuição de receita.
-
-CONTEXTO DO PROJETO:
-- Projeto: ${project?.name || 'Não definido'}
-- Domínio: ${project?.domain || 'Não definido'}
-- Total de Fontes: ${sourcesCount?.length || 0}
-- Eventos este mês: ${project?.events_count_current_month || 0}
-- Links Curtos: ${project?.short_links_count || 0}
-
-${topSources?.length ? `TOP FONTES DE TRÁFEGO:
-${topSources.map(s => `- ${s.name}: ${s.total_visitors || 0} visitantes, R$${s.total_revenue || 0} receita`).join('\n')}
-` : ''}
-
-${recentEvents?.length ? `EVENTOS RECENTES:
-${recentEvents.map(e => `- ${e.event_type} em ${e.page_url}`).join('\n')}
-` : ''}
-
-SEU PAPEL:
-- Ajudar usuários a entender seus dados de atribuição
-- Sugerir estratégias de otimização
-- Explicar features e como usá-las
-- Fornecer insights acionáveis baseados nos dados
-- Manter respostas concisas (2-3 frases no máximo)
-- Ser amigável e prestativo
-- Responder em português brasileiro
-
-NÃO FAÇA:
-- Inventar dados que não estão no contexto
-- Dar conselhos genéricos sem referenciar os dados reais
-- Ser excessivamente técnico a menos que seja pedido`
+    // Build system prompt with full context
+    const systemPrompt = buildSystemPrompt(aiContext)
 
     // Get conversation history
     const { data: messageHistory } = await supabase
@@ -213,14 +269,20 @@ NÃO FAÇA:
       .update({ last_message_at: new Date().toISOString() })
       .eq('id', conversation.id)
 
+    // Incrementar contador de uso de IA na subscription
+    await supabase
+      .from('subscriptions')
+      .update({ ai_messages_used: aiUsed + 1 })
+      .eq('user_id', user.id)
+
     return new Response(
       JSON.stringify({
         message: assistantMessage,
         conversationId: conversation.id,
         usage: {
-          used: (usageData?.used || 0) + 1,
-          limit: usageData?.limit || 10,
-          remaining: Math.max(0, (usageData?.limit || 10) - (usageData?.used || 0) - 1),
+          used: aiUsed + 1,
+          limit: aiLimit,
+          remaining: Math.max(0, aiLimit - aiUsed - 1),
         },
       }),
       {

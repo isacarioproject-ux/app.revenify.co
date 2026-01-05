@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
@@ -11,57 +11,81 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { InfoTooltipRich } from '@/components/ui/info-tooltip'
-import { Globe, Megaphone, Tag, Search, FileText, Link2 } from 'lucide-react'
+import { Globe, Megaphone, Tag, Search, FileText } from 'lucide-react'
 import { TOOLTIPS } from '@/lib/tooltips'
+
+interface TemplateData {
+  id?: string
+  name: string
+  description: string | null
+  utm_source: string
+  utm_medium: string
+  utm_campaign: string | null
+  utm_term: string | null
+  utm_content: string | null
+}
 
 interface CreateTemplateDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCreate: (data: {
-    name: string
-    description: string
-    utm_source: string
-    utm_medium: string
-    utm_campaign: string
-    utm_term: string
-    utm_content: string
-  }) => Promise<void>
+  onCreate: (data: TemplateData) => Promise<void>
+  onUpdate?: (id: string, data: TemplateData) => Promise<void>
+  editingTemplate?: TemplateData | null
+}
+
+const emptyFormData: TemplateData = {
+  name: '',
+  description: '',
+  utm_source: '',
+  utm_medium: '',
+  utm_campaign: '',
+  utm_term: '',
+  utm_content: '',
 }
 
 export function CreateTemplateDialog({
   open,
   onOpenChange,
   onCreate,
+  onUpdate,
+  editingTemplate,
 }: CreateTemplateDialogProps) {
   const { t } = useI18n()
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    utm_source: '',
-    utm_medium: '',
-    utm_campaign: '',
-    utm_term: '',
-    utm_content: '',
-  })
+  const [formData, setFormData] = useState<TemplateData>(emptyFormData)
   const [isLoading, setIsLoading] = useState(false)
+
+  const isEditing = !!editingTemplate?.id
+
+  useEffect(() => {
+    if (editingTemplate) {
+      setFormData({
+        id: editingTemplate.id,
+        name: editingTemplate.name || '',
+        description: editingTemplate.description || '',
+        utm_source: editingTemplate.utm_source || '',
+        utm_medium: editingTemplate.utm_medium || '',
+        utm_campaign: editingTemplate.utm_campaign || '',
+        utm_term: editingTemplate.utm_term || '',
+        utm_content: editingTemplate.utm_content || '',
+      })
+    } else {
+      setFormData(emptyFormData)
+    }
+  }, [editingTemplate, open])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     
     try {
-      await onCreate(formData)
-      setFormData({
-        name: '',
-        description: '',
-        utm_source: '',
-        utm_medium: '',
-        utm_campaign: '',
-        utm_term: '',
-        utm_content: '',
-      })
+      if (isEditing && onUpdate && formData.id) {
+        await onUpdate(formData.id, formData)
+      } else {
+        await onCreate(formData)
+      }
+      setFormData(emptyFormData)
     } catch (error) {
-      console.error('Failed to create template:', error)
+      console.error('Failed to save template:', error)
     } finally {
       setIsLoading(false)
     }
@@ -71,7 +95,7 @@ export function CreateTemplateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t('templates.createTemplate')}</DialogTitle>
+          <DialogTitle>{isEditing ? t('templates.editTemplate') : t('templates.createTemplate')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">
@@ -100,7 +124,7 @@ export function CreateTemplateDialog({
             <Textarea
               id="description"
               placeholder={t('templates.descriptionPlaceholder')}
-              value={formData.description}
+              value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
             />
@@ -165,7 +189,7 @@ export function CreateTemplateDialog({
             <Input
               id="utm_campaign"
               placeholder="black-friday-2025"
-              value={formData.utm_campaign}
+              value={formData.utm_campaign || ''}
               onChange={(e) => setFormData({ ...formData, utm_campaign: e.target.value })}
             />
           </div>
@@ -184,7 +208,7 @@ export function CreateTemplateDialog({
             <Input
               id="utm_term"
               placeholder="palavras-chave"
-              value={formData.utm_term}
+              value={formData.utm_term || ''}
               onChange={(e) => setFormData({ ...formData, utm_term: e.target.value })}
             />
           </div>
@@ -203,7 +227,7 @@ export function CreateTemplateDialog({
             <Input
               id="utm_content"
               placeholder="banner-topo, link-rodape"
-              value={formData.utm_content}
+              value={formData.utm_content || ''}
               onChange={(e) => setFormData({ ...formData, utm_content: e.target.value })}
             />
           </div>
@@ -224,7 +248,7 @@ export function CreateTemplateDialog({
               className="flex-1"
               disabled={isLoading || !formData.name || !formData.utm_source || !formData.utm_medium}
             >
-              {isLoading ? t('common.creating') : t('templates.createTemplate')}
+              {isLoading ? (isEditing ? t('common.saving') : t('common.creating')) : (isEditing ? t('common.save') : t('templates.createTemplate'))}
             </Button>
           </div>
         </form>

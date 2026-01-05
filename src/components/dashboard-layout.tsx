@@ -81,7 +81,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
       <div className="flex h-screen w-full">
         {loading ? <SidebarSkeleton /> : <AppSidebar />}
-        <main className="flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out">
+        <main className="flex flex-1 flex-col min-h-0 transition-all duration-300 ease-in-out">
           {loading ? (
             <HeaderSkeleton />
           ) : (
@@ -106,7 +106,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </header>
           )}
-          <div className="relative flex-1 overflow-y-auto">
+          <div className="relative flex-1 overflow-y-auto overflow-x-hidden">
             <div className="p-4 pb-0">
               <TrialBanner />
             </div>
