@@ -43,12 +43,14 @@ BLOG-SETUP.md
 EXECUTAR-AGORA.md
 CHECKLIST*.md
 PRD*.md
-!PRD-PRODUCAO-CHECKLIST.md
-!PRD-FRONTEND-FIXES.md
 *.md.bak
 SUPABASE-REFERENCE.md
+DOCS-UPDATE-CHANGELOG.md
+ANALISE-MERCADO.md
+ATUALIZACOES-SITE.txt
 
-# Migrations SQL (estrutura do banco - sensível)
+# Arquivos SQL (estrutura do banco - sensível)
+*.sql
 supabase/migrations/
 
 # Supabase config local
