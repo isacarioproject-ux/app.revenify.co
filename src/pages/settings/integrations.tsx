@@ -607,7 +607,7 @@ export default function IntegrationsPage() {
                     {/* Botões */}
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" asChild>
-                        <a href="https://docs.revenify.co/payments" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
                           <BookOpen className="h-4 w-4 mr-2" />
                           {t('integrations.payments.viewDocs')}
                         </a>

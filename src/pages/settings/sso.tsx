@@ -14,7 +14,6 @@ import {
   Copy, 
   Check, 
   ExternalLink, 
-  AlertCircle,
   Building2,
   Users,
   FileText,
@@ -34,6 +33,7 @@ import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useI18n } from '@/hooks/use-i18n'
 import { HeaderSkeleton, CardSkeleton } from '@/components/page-skeleton'
+import { usePageToast } from '@/hooks/use-page-toast'
 
 interface SSOConfig {
   id?: string
@@ -80,6 +80,14 @@ export default function SSOSettingsPage() {
 
   const isBusinessPlan = subscription?.plan === 'business'
   const canUseSSO = isBusinessPlan
+
+  // Toast de aviso importante sobre SSO
+  usePageToast({
+    message: 'Após habilitar o SSO, usuários com emails dos domínios configurados serão redirecionados automaticamente para o provedor de identidade. Certifique-se de testar a configuração antes de ativar.',
+    type: 'warning',
+    duration: 8000,
+    enabled: canUseSSO && !subscriptionLoading
+  })
 
   // Supabase SSO metadata URLs
   const supabaseProjectRef = 'gyqohtqfyzzifxjkuuiz'
@@ -592,7 +600,7 @@ export default function SSOSettingsPage() {
                 </div>
 
                 <Button variant="outline" asChild>
-                  <a href="https://docs.revenify.co/sso" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Ver Documentação Completa
                   </a>
@@ -680,20 +688,6 @@ export default function SSOSettingsPage() {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
-              <div className="flex gap-3">
-                <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-medium text-amber-600">Importante</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Após habilitar o SSO, usuários com emails dos domínios configurados 
-                    serão redirecionados automaticamente para o provedor de identidade.
-                    Certifique-se de testar a configuração antes de ativar.
-                  </p>
-                </div>
-              </div>
-            </div>
 
             <Button onClick={saveConfig} disabled={saving}>
               {saving ? (
