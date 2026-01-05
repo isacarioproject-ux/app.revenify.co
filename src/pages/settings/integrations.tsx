@@ -18,7 +18,6 @@ import {
   Eye,
   EyeOff,
   Lock,
-  Loader2,
   ArrowLeft,
   Code2,
   BookOpen,
@@ -28,6 +27,7 @@ import {
   Terminal,
   CreditCard
 } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 import { useSubscription } from '@/contexts/subscription-context'
 import { supabase } from '@/lib/supabase'
 import { useProjects } from '@/hooks/use-projects'
@@ -543,7 +543,7 @@ export default function IntegrationsPage() {
               <CardContent className="space-y-4">
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <Spinner size="lg" color="muted" />
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -790,7 +790,7 @@ export default function IntegrationsPage() {
                         disabled={testingWebhook || !webhookUrl}
                       >
                         {testingWebhook ? (
-                          <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('integrations.webhooks.testing')}</>
+                          <><Spinner size="sm" color="white" className="mr-2" />{t('integrations.webhooks.testing')}</>
                         ) : (
                           <><Play className="h-4 w-4 mr-2" />{t('integrations.webhooks.test')}</>
                         )}

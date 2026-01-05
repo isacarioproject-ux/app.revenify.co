@@ -18,11 +18,11 @@ import {
   Building2,
   Users,
   FileText,
-  Loader2,
   CheckCircle2,
   XCircle,
   HelpCircle
 } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 import {
   Tooltip,
   TooltipContent,
@@ -512,14 +512,14 @@ export default function SSOSettingsPage() {
             <div className="flex gap-3">
               <Button onClick={saveConfig} disabled={saving}>
                 {saving ? (
-                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Salvando...</>
+                  <><Spinner size="sm" color="white" className="mr-2" />Salvando...</>
                 ) : (
                   'Salvar Configuração'
                 )}
               </Button>
               <Button variant="outline" onClick={testConnection} disabled={testing}>
                 {testing ? (
-                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Testando...</>
+                  <><Spinner size="sm" color="white" className="mr-2" />Testando...</>
                 ) : (
                   'Testar Conexão'
                 )}
@@ -697,7 +697,7 @@ export default function SSOSettingsPage() {
 
             <Button onClick={saveConfig} disabled={saving}>
               {saving ? (
-                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Salvando...</>
+                <><Spinner size="sm" color="white" className="mr-2" />Salvando...</>
               ) : (
                 'Salvar Configurações Avançadas'
               )}

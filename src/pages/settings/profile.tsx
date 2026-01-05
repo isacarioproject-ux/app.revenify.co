@@ -10,7 +10,8 @@ import { toast } from 'sonner'
 import { useAuth } from '@/contexts/auth-context'
 import { supabase } from '@/lib/supabase'
 import { SettingsPageSkeleton } from '@/components/page-skeleton'
-import { Loader2, Upload, Camera } from 'lucide-react'
+import { Upload, Camera } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function ProfilePage() {
   const { t } = useI18n()
@@ -194,7 +195,7 @@ export default function ProfilePage() {
               </Avatar>
               {uploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
-                  <Loader2 className="h-6 w-6 animate-spin text-white" />
+                  <Spinner size="md" color="white" />
                 </div>
               )}
             </div>
@@ -323,7 +324,7 @@ export default function ProfilePage() {
           <Button onClick={handleSave} disabled={saving}>
             {saving ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Spinner size="sm" color="white" className="mr-2" />
                 {t('common.saving')}
               </>
             ) : (
