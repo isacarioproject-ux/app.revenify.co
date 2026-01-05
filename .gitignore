@@ -57,3 +57,6 @@ supabase/migrations/
 supabase/.temp/
 supabase/config.toml
 .vercel
+
+# Claude/AI settings
+.claude/
