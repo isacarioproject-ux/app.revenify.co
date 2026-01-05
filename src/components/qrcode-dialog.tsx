@@ -172,7 +172,7 @@ export function QRCodeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
@@ -180,63 +180,90 @@ export function QRCodeDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 py-4">
-          {/* QR Code Preview */}
-          <div className="flex justify-center">
-            <div className="p-4 bg-white rounded-lg shadow-sm border relative">
-              <img
-                src={qrCodeUrl}
-                alt="QR Code"
-                width={Math.min(size, 256)}
-                height={Math.min(size, 256)}
-                className="max-w-full h-auto"
-              />
-              {logoUrl && (
-                <div 
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ padding: '16px' }}
-                >
-                  <div className="bg-white p-1 rounded-lg shadow-sm" style={{ width: '20%', height: '20%' }}>
-                    <img 
-                      src={logoUrl} 
-                      alt="Logo" 
-                      className="w-full h-full object-contain rounded"
-                    />
-                  </div>
+        <div className="py-4">
+          {/* Layout: QR à esquerda, Formulário à direita em desktop/tablet */}
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Coluna Esquerda - QR Code Preview */}
+            <div className="md:w-[280px] shrink-0 flex flex-col">
+              {/* Container fixo para o QR - altura fixa para não mover o botão */}
+              <div className="flex justify-center items-center h-[200px] mb-4">
+                <div className="p-3 bg-white rounded-lg shadow-sm border relative">
+                  <img
+                    src={qrCodeUrl}
+                    alt="QR Code"
+                    width={Math.min(size, 160)}
+                    height={Math.min(size, 160)}
+                    className="max-w-[160px] max-h-[160px] object-contain"
+                  />
+                  {logoUrl && (
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      style={{ padding: '16px' }}
+                    >
+                      <div className="bg-white p-1 rounded-lg shadow-sm" style={{ width: '20%', height: '20%' }}>
+                        <img 
+                          src={logoUrl} 
+                          alt="Logo" 
+                          className="w-full h-full object-contain rounded"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* URL Display */}
-          <div className="space-y-2">
-            <Label>{t('qrCode.shortLink')}</Label>
-            <div className="flex gap-2">
-              <Input
-                value={fullUrl}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={copyUrl}
-              >
-                {copied ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
+              {/* URL Display */}
+              <div className="space-y-2">
+                <Label>{t('qrCode.shortLink')}</Label>
+                <div className="flex gap-2">
+                  <Input
+                    value={fullUrl}
+                    readOnly
+                    className="font-mono text-xs"
+                  />
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={copyUrl}
+                  >
+                    {copied ? (
+                      <Check className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
 
-          {/* Customization Tabs */}
-          <Tabs defaultValue="style" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="style">{t('qrCode.style')}</TabsTrigger>
-              <TabsTrigger value="logo">{t('qrCode.logo')}</TabsTrigger>
-            </TabsList>
+              {/* Download Button - abaixo da URL em desktop */}
+              <div className="hidden md:block mt-6">
+                <Button
+                  className="w-full"
+                  onClick={downloadQRCode}
+                  disabled={downloading}
+                >
+                  {downloading ? (
+                    <>
+                      <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      {t('qrCode.generating')}
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-4 w-4 mr-2" />
+                      {t('qrCode.download')} ({downloadFormat.toUpperCase()})
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {/* Coluna Direita - Formulário */}
+            <div className="flex-1 space-y-4">
+              <Tabs defaultValue="style" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="style">{t('qrCode.style')}</TabsTrigger>
+                  <TabsTrigger value="logo">{t('qrCode.logo')}</TabsTrigger>
+                </TabsList>
 
             <TabsContent value="style" className="space-y-4 mt-4">
               <div className="grid grid-cols-2 gap-4">
@@ -357,66 +384,70 @@ export function QRCodeDialog({
                 onChange={handleLogoUpload}
                 className="hidden"
               />
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+            </Tabs>
 
-          {/* Title if exists */}
-          {shortLink.title && (
-            <div className="text-center p-3 rounded-lg bg-muted/30">
-              <p className="text-sm font-medium">{shortLink.title}</p>
-              {shortLink.description && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {shortLink.description}
-                </p>
-              )}
+            {/* Title if exists */}
+            {shortLink.title && (
+              <div className="text-center p-3 rounded-lg bg-muted/30">
+                <p className="text-sm font-medium">{shortLink.title}</p>
+                {shortLink.description && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {shortLink.description}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Download Options */}
+            <div className="space-y-3">
+              <Label>{t('qrCode.downloadFormat')}</Label>
+              <div className="flex gap-2">
+                {[
+                  { value: 'png' as const, label: 'PNG', icon: Image, desc: t('qrCode.bestQuality') },
+                  { value: 'jpg' as const, label: 'JPG', icon: FileImage, desc: t('qrCode.smallerSize') },
+                  { value: 'svg' as const, label: 'SVG', icon: FileImage, desc: t('qrCode.vector'), disabled: !!logoUrl },
+                ].map((format) => (
+                  <button
+                    key={format.value}
+                    onClick={() => !format.disabled && setDownloadFormat(format.value)}
+                    disabled={format.disabled}
+                    className={`flex-1 p-2 rounded-lg border text-center transition-colors ${
+                      downloadFormat === format.value 
+                        ? 'border-primary bg-primary/5' 
+                        : 'hover:bg-muted/50'
+                    } ${format.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title={format.disabled ? t('qrCode.svgNoLogo') : format.desc}
+                  >
+                    <format.icon className="h-4 w-4 mx-auto mb-1" />
+                    <p className="text-xs font-medium">{format.label}</p>
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
 
-          {/* Download Options */}
-          <div className="space-y-3">
-            <Label>{t('qrCode.downloadFormat')}</Label>
-            <div className="flex gap-2">
-              {[
-                { value: 'png' as const, label: 'PNG', icon: Image, desc: t('qrCode.bestQuality') },
-                { value: 'jpg' as const, label: 'JPG', icon: FileImage, desc: t('qrCode.smallerSize') },
-                { value: 'svg' as const, label: 'SVG', icon: FileImage, desc: t('qrCode.vector'), disabled: !!logoUrl },
-              ].map((format) => (
-                <button
-                  key={format.value}
-                  onClick={() => !format.disabled && setDownloadFormat(format.value)}
-                  disabled={format.disabled}
-                  className={`flex-1 p-3 rounded-lg border text-center transition-colors ${
-                    downloadFormat === format.value 
-                      ? 'border-primary bg-primary/5' 
-                      : 'hover:bg-muted/50'
-                  } ${format.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title={format.disabled ? t('qrCode.svgNoLogo') : format.desc}
-                >
-                  <format.icon className="h-5 w-5 mx-auto mb-1" />
-                  <p className="text-sm font-medium">{format.label}</p>
-                </button>
-              ))}
+            {/* Download Button - visível apenas no mobile */}
+            <div className="md:hidden">
+              <Button
+                className="w-full"
+                onClick={downloadQRCode}
+                disabled={downloading}
+              >
+                {downloading ? (
+                  <>
+                    <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    {t('qrCode.generating')}
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4 mr-2" />
+                    {t('qrCode.download')} ({downloadFormat.toUpperCase()})
+                  </>
+                )}
+              </Button>
+            </div>
             </div>
           </div>
-
-          {/* Download Button */}
-          <Button
-            className="w-full"
-            onClick={downloadQRCode}
-            disabled={downloading}
-          >
-            {downloading ? (
-              <>
-                <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                {t('qrCode.generating')}
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4 mr-2" />
-                {t('qrCode.download')} ({downloadFormat.toUpperCase()})
-              </>
-            )}
-          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -10,7 +10,16 @@ import {
 } from 'lucide-react'
 import { useAIChat } from '@/hooks/use-ai-chat'
 import { useProjects } from '@/hooks/use-projects'
+import { useAuth } from '@/contexts/auth-context'
 import { cn } from '@/lib/utils'
+
+// Emails autorizados a usar o AI Chat (até Stripe estar ativo)
+const AUTHORIZED_EMAILS = [
+  'revenify.co',
+  'revenify@gmail.com',
+  'admin@revenify.co',
+  'contato@revenify.co',
+]
 
 // Logo do aplicativo
 function RevenifyLogo({ className }: { className?: string }) {
@@ -24,12 +33,18 @@ function RevenifyLogo({ className }: { className?: string }) {
 }
 
 export function AIChatWidget() {
+  const { user } = useAuth()
   const { selectedProject } = useProjects()
   const { messages, isLoading, usage, error, sendMessage, clearChat } = useAIChat(selectedProject?.id || null)
   const [isOpen, setIsOpen] = useState(false)
   const [input, setInput] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Verificar se o usuário está autorizado a usar o AI Chat
+  const isAuthorized = user?.email && AUTHORIZED_EMAILS.some(
+    email => user.email?.toLowerCase().includes(email.toLowerCase())
+  )
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -57,7 +72,8 @@ export function AIChatWidget() {
     'Ver tendências',
   ]
 
-  if (!selectedProject) return null
+  // Não mostrar se não houver projeto selecionado OU se não estiver autorizado
+  if (!selectedProject || !isAuthorized) return null
 
   return (
     <>
@@ -121,7 +137,7 @@ export function AIChatWidget() {
           </div>
 
           {/* Messages Area */}
-          <ScrollArea className="flex-1 px-4 py-3" ref={scrollRef}>
+          <ScrollArea className="flex-1 px-4 py-3">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col justify-center">
                 <div className="text-center space-y-4">
@@ -158,7 +174,7 @@ export function AIChatWidget() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3" ref={scrollRef}>
                 {messages.map((msg) => (
                   <div
                     key={msg.id}

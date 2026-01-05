@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Copy, Trash2, FileText, Check, ExternalLink } from 'lucide-react'
+import { Plus, Copy, Trash2, FileText, Check, Pencil } from 'lucide-react'
 import { useProjects } from '@/hooks/use-projects'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
@@ -40,6 +40,7 @@ export default function TemplatesPage() {
   const [baseUrl, setBaseUrl] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [editingTemplate, setEditingTemplate] = useState<Template | null>(null)
   const hasLoadedTemplates = useRef(false)
 
   // Mostrar skeleton durante loading (inicial ou ao mudar projeto)
@@ -135,10 +136,49 @@ export default function TemplatesPage() {
       setTemplates(prev => [newTemplate, ...prev])
       toast.success(t('templates.created'))
       setDialogOpen(false)
+      setEditingTemplate(null)
     } catch (err) {
       console.error('Error creating template:', err)
       toast.error(t('templates.createError'))
     }
+  }
+
+  const handleUpdateTemplate = async (id: string, data: Partial<Template>) => {
+    try {
+      const { data: updatedTemplate, error } = await supabase
+        .from('utm_templates')
+        .update({
+          name: data.name,
+          description: data.description,
+          utm_source: data.utm_source,
+          utm_medium: data.utm_medium,
+          utm_campaign: data.utm_campaign,
+          utm_term: data.utm_term,
+          utm_content: data.utm_content,
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+      setTemplates(prev => prev.map(t => t.id === id ? updatedTemplate : t))
+      toast.success(t('templates.updated'))
+      setDialogOpen(false)
+      setEditingTemplate(null)
+    } catch (err) {
+      console.error('Error updating template:', err)
+      toast.error(t('templates.updateError'))
+    }
+  }
+
+  const openEditDialog = (template: Template) => {
+    setEditingTemplate(template)
+    setDialogOpen(true)
+  }
+
+  const openCreateDialog = () => {
+    setEditingTemplate(null)
+    setDialogOpen(true)
   }
 
   // Loading State - só na primeira carga
@@ -202,7 +242,7 @@ export default function TemplatesPage() {
             </p>
 
             {/* CTA */}
-            <Button size="lg" onClick={() => setDialogOpen(true)}>
+            <Button size="lg" onClick={openCreateDialog}>
               <Plus className="h-4 w-4 mr-2" />
               {t('templates.createFirst')}
             </Button>
@@ -228,6 +268,8 @@ export default function TemplatesPage() {
             open={dialogOpen}
             onOpenChange={setDialogOpen}
             onCreate={handleCreateTemplate}
+            onUpdate={handleUpdateTemplate}
+            editingTemplate={editingTemplate}
           />
         </div>
       </DashboardLayout>
@@ -264,7 +306,7 @@ export default function TemplatesPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={() => setDialogOpen(true)}>
+            <Button onClick={openCreateDialog}>
               <Plus className="h-4 w-4 mr-2" />
               {t('templates.createTemplate')}
             </Button>
@@ -301,21 +343,32 @@ export default function TemplatesPage() {
                 <div className="space-y-4">
                   {/* Header */}
                   <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{template.name}</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">{template.name}</h3>
                       {template.description && (
                         <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                           {template.description}
                         </p>
                       )}
                     </div>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => deleteTemplate(template.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => openEditDialog(template)}
+                        title={t('common.edit')}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => deleteTemplate(template.id)}
+                        title={t('common.delete')}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
 
                   {/* UTM Parameters */}
@@ -367,6 +420,8 @@ export default function TemplatesPage() {
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           onCreate={handleCreateTemplate}
+          onUpdate={handleUpdateTemplate}
+          editingTemplate={editingTemplate}
         />
       </div>
     </DashboardLayout>

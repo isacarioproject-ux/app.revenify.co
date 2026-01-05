@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
+import { PLANS } from '@/lib/stripe/plans'
 
 interface Usage {
   events: number
@@ -30,7 +31,7 @@ interface UsageData {
   refetch: () => Promise<void>
 }
 
-export function useUsage(projectId: string | null): UsageData {
+export function useUsage(projectId: string | null, userId?: string | null): UsageData {
   const [usage, setUsage] = useState<Usage>({ events: 0, shortLinks: 0, projects: 0 })
   const [limits, setLimits] = useState<Limits>({ plan: 'free', events: 1000, shortLinks: 25, projects: 1 })
   const [trial, setTrial] = useState<TrialInfo>({ isTrial: false, trialEndsAt: null, trialDaysRemaining: 0, isBlocked: false })
@@ -39,7 +40,7 @@ export function useUsage(projectId: string | null): UsageData {
   const hasLoadedOnce = useRef(false)
 
   const fetchUsage = useCallback(async () => {
-    if (!projectId) {
+    if (!projectId && !userId) {
       setIsLoading(false)
       return
     }
@@ -51,18 +52,30 @@ export function useUsage(projectId: string | null): UsageData {
       }
       setError(null)
 
-      // Buscar user_id do projeto
-      const { data: project } = await supabase
-        .from('projects')
-        .select('user_id, events_count_current_month, short_links_count')
-        .eq('id', projectId)
-        .single()
+      const effectiveUserId = (() => {
+        if (userId) return userId
+        return null
+      })()
 
-      if (!project) throw new Error('Project not found')
+      const rpcUserId = await (async () => {
+        if (effectiveUserId) return effectiveUserId
+        if (!projectId) return null
+
+        // Buscar user_id do projeto (fallback)
+        const { data: project } = await supabase
+          .from('projects')
+          .select('user_id')
+          .eq('id', projectId)
+          .single()
+
+        return project?.user_id || null
+      })()
+
+      if (!rpcUserId) throw new Error('User not found')
 
       // Chamar função RPC com user_id
       const { data, error: rpcError } = await supabase
-        .rpc('check_usage_limits', { p_user_id: project.user_id })
+        .rpc('check_usage_limits', { p_user_id: rpcUserId })
 
       if (rpcError) throw rpcError
 
@@ -93,7 +106,7 @@ export function useUsage(projectId: string | null): UsageData {
     } finally {
       setIsLoading(false)
     }
-  }, [projectId])
+  }, [projectId, userId])
 
   useEffect(() => {
     fetchUsage()
@@ -127,45 +140,29 @@ export function useUsage(projectId: string | null): UsageData {
   return { usage, limits, trial, isLoading, error, refetch: fetchUsage }
 }
 
-// Limites por plano (sincronizado com STRIPE-SETUP.md)
-export const PLAN_LIMITS = {
-  free: {
-    name: 'Free',
-    price: 0,
-    events: 1000,
-    links: 25,
-    projects: 1,
-    aiMessages: 10,
-    dataRetentionDays: 7,
-  },
-  starter: {
-    name: 'Starter',
-    price: 8,
-    events: 10000,
-    links: 500,
-    projects: 3,
-    aiMessages: 50,
-    dataRetentionDays: 30,
-  },
-  pro: {
-    name: 'Pro',
-    price: 20,
-    events: 100000,
-    links: 5000,
-    projects: 10,
-    aiMessages: 200,
-    dataRetentionDays: 365,
-  },
-  business: {
-    name: 'Business',
-    price: 50,
-    events: 1000000,
-    links: -1, // Ilimitado
-    projects: -1, // Ilimitado
-    aiMessages: 1000,
-    dataRetentionDays: 1095, // 3 anos
-  },
-}
+// Limites por plano - Derivado de plans.ts para evitar duplicação
+export const PLAN_LIMITS = Object.fromEntries(
+  Object.entries(PLANS).map(([key, plan]) => [
+    key,
+    {
+      name: plan.name,
+      price: plan.price.monthly,
+      events: plan.limits.max_monthly_events,
+      links: plan.limits.max_short_links,
+      projects: plan.limits.max_projects,
+      aiMessages: plan.limits.max_ai_messages,
+      dataRetentionDays: plan.limits.data_retention_days,
+    },
+  ])
+) as Record<string, {
+  name: string
+  price: number
+  events: number
+  links: number
+  projects: number
+  aiMessages: number
+  dataRetentionDays: number
+}>
 
 // Helper para determinar próximo plano
 export function getNextPlan(currentPlan: string, metric: 'events' | 'links' | 'projects') {

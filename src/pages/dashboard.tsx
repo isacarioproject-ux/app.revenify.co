@@ -121,9 +121,7 @@ export default function DashboardPage() {
                   {selectedProject && (
                     <CreateSourceDialog 
                       projectDomain={selectedProject.domain}
-                      onSourceCreated={(source) => {
-                        console.log('Source created:', source)
-                      }}
+                      onSourceCreated={() => {}}
                     />
                   )}
                 </div>
@@ -232,8 +230,7 @@ export default function DashboardPage() {
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
         currentPlan="free"
-        onSelectPlan={(planId) => {
-          console.log('Selected plan:', planId)
+        onSelectPlan={() => {
           setUpgradeOpen(false)
         }}
       />

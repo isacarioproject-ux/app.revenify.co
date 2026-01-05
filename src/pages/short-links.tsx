@@ -210,7 +210,7 @@ export default function ShortLinksPage() {
               {t('shortLinks.subtitle')}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3 flex-wrap">
             <Select
               value={selectedProject?.id || ''}
               onValueChange={(value) => {
@@ -218,7 +218,7 @@ export default function ShortLinksPage() {
                 if (project) setSelectedProject(project)
               }}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-[140px] md:w-[200px]">
                 <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>
@@ -229,7 +229,20 @@ export default function ShortLinksPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={exportToCSV} disabled={shortLinks.length === 0}>
+            {/* Export Button - Icon only on mobile */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={exportToCSV} disabled={shortLinks.length === 0} className="md:hidden">
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('shortLinks.exportCsv')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <Button variant="outline" onClick={exportToCSV} disabled={shortLinks.length === 0} className="hidden md:flex">
               <Download className="h-4 w-4 mr-2" />
               {t('shortLinks.exportCsv')}
             </Button>

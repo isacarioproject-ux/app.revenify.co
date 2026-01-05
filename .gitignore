@@ -43,7 +43,10 @@ BLOG-SETUP.md
 EXECUTAR-AGORA.md
 CHECKLIST*.md
 PRD*.md
+!PRD-PRODUCAO-CHECKLIST.md
+!PRD-FRONTEND-FIXES.md
 *.md.bak
+SUPABASE-REFERENCE.md
 
 # Migrations SQL (estrutura do banco - sensível)
 supabase/migrations/

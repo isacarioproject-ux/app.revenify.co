@@ -28,6 +28,7 @@ import {
 } from '@/lib/supabase/blog-queries'
 import type { BlogCategory, BlogPostFormData, BlogPost } from '@/types/blog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { markdownToSafeHtml } from '@/lib/sanitize'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
@@ -536,10 +537,7 @@ const code = 'example';
                       {formData.content ? (
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: formData.content
-                              .replace(/\n/g, '<br/>')
-                              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                              .replace(/\*(.*?)\*/g, '<em>$1</em>'),
+                            __html: markdownToSafeHtml(formData.content),
                           }}
                         />
                       ) : (
