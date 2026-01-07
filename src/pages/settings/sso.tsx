@@ -226,8 +226,9 @@ export default function SSOSettingsPage() {
   if (subscriptionLoading || loading) {
     return (
       <DashboardLayout>
-        <div className="w-full p-4 md:p-6 space-y-6 max-w-4xl mx-auto">
+        <div className="w-full p-4 md:p-6 space-y-4">
           <HeaderSkeleton />
+          <CardSkeleton />
           <CardSkeleton />
         </div>
       </DashboardLayout>
@@ -237,7 +238,7 @@ export default function SSOSettingsPage() {
   if (!canUseSSO) {
     return (
       <DashboardLayout>
-        <div className="w-full p-4 md:p-6 max-w-4xl mx-auto">
+        <div className="w-full p-4 md:p-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold tracking-tight">{t('sso.title')}</h1>
             <p className="text-muted-foreground text-sm">
@@ -275,17 +276,17 @@ export default function SSOSettingsPage() {
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {config.enabled ? (
-              <Badge variant="outline" className="gap-1 text-xs sm:text-sm">
+              <Badge className="gap-1 text-xs sm:text-sm bg-green-600 text-white">
                 <CheckCircle2 className="h-3 w-3" />
                 {t('sso.enabled')}
               </Badge>
             ) : (
-              <Badge variant="outline" className="gap-1 text-xs sm:text-sm">
+              <Badge variant="secondary" className="gap-1 text-xs sm:text-sm">
                 <XCircle className="h-3 w-3" />
                 {t('sso.disabled')}
               </Badge>
             )}
-            <Badge className="bg-emerald-600 gap-1 text-xs sm:text-sm">
+            <Badge className="bg-emerald-600 text-white gap-1 text-xs sm:text-sm">
               <Shield className="h-3 w-3" />
               Business
             </Badge>
@@ -297,20 +298,20 @@ export default function SSOSettingsPage() {
           <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
             <TabsTrigger 
               value="config" 
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
               {t('common.configuration')}
             </TabsTrigger>
             <TabsTrigger 
               value="metadata"
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
               <span className="hidden sm:inline">{t('sso.spMetadata')}</span>
               <span className="sm:hidden">Metadados</span>
             </TabsTrigger>
             <TabsTrigger 
               value="advanced"
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
               {t('common.advanced')}
             </TabsTrigger>

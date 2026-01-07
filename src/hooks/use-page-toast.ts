@@ -12,6 +12,7 @@ interface PageToastOptions {
 /**
  * Hook para mostrar um toast quando o usuário entra na página
  * O toast aparece uma vez por sessão de página (reaparece se o usuário sair e voltar)
+ * Toast usa tema neutro (sem cores) para seguir o tema dark/light
  */
 export function usePageToast(options: PageToastOptions | null) {
   const hasShown = useRef(false)
@@ -21,14 +22,8 @@ export function usePageToast(options: PageToastOptions | null) {
 
     // Pequeno delay para não aparecer imediatamente
     const timer = setTimeout(() => {
-      const toastFn = {
-        info: toast.info,
-        warning: toast.warning,
-        success: toast.success,
-        error: toast.error,
-      }[options.type || 'info']
-
-      toastFn(options.title, {
+      // Usar toast padrão (neutro) para seguir o tema dark/light
+      toast(options.title, {
         description: options.description,
         duration: options.duration || 5000,
         id: options.id,
