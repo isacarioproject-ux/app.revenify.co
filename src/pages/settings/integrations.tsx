@@ -476,11 +476,11 @@ export default function IntegrationsPage() {
 
   return (
     <DashboardLayout>
-      <div className="w-full p-4 md:p-6 max-w-5xl mx-auto">
+      <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header compacto */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{t('integrations.title')}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{t('integrations.title')}</h1>
             <p className="text-muted-foreground text-sm">
               {t('integrations.description')}
             </p>
@@ -493,7 +493,7 @@ export default function IntegrationsPage() {
               if (project) setSelectedProject(project)
             }}
           >
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder={t('integrations.selectProjectPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -506,18 +506,27 @@ export default function IntegrationsPage() {
           </Select>
         </div>
 
-        {/* Tabs principais */}
-        <Tabs defaultValue="payments" className="w-full">
-          <TabsList variant="default" className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="payments" className="gap-2">
+        {/* Tabs */}
+        <Tabs defaultValue="payments" className="space-y-6">
+          <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
+            <TabsTrigger 
+              value="payments" 
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+            >
               <DollarSign className="h-4 w-4" />
               <span className="hidden sm:inline">{t('integrations.payments.title')}</span>
             </TabsTrigger>
-            <TabsTrigger value="api" className="gap-2">
+            <TabsTrigger 
+              value="api"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+            >
               <Key className="h-4 w-4" />
               <span className="hidden sm:inline">{t('integrations.api.title')}</span>
             </TabsTrigger>
-            <TabsTrigger value="webhooks" className="gap-2">
+            <TabsTrigger 
+              value="webhooks"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+            >
               <Webhook className="h-4 w-4" />
               <span className="hidden sm:inline">{t('integrations.webhooks.title')}</span>
             </TabsTrigger>
@@ -525,7 +534,7 @@ export default function IntegrationsPage() {
 
           {/* Tab Pagamentos */}
           <TabsContent value="payments" className="space-y-4">
-            <Card>
+            <Card className="transition-all duration-200 hover:shadow-md">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -619,7 +628,7 @@ export default function IntegrationsPage() {
             </Card>
 
             {/* Como funciona */}
-            <Card>
+            <Card className="transition-all duration-200 hover:shadow-md">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">{t('integrations.payments.howItWorks')}</CardTitle>
               </CardHeader>
@@ -647,7 +656,7 @@ export default function IntegrationsPage() {
 
           {/* Tab API */}
           <TabsContent value="api" className="space-y-4">
-            <Card className={!hasApiAccess ? 'opacity-60' : ''}>
+            <Card className={`transition-all duration-200 hover:shadow-md ${!hasApiAccess ? 'opacity-60' : ''}`}>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -711,10 +720,13 @@ export default function IntegrationsPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="text-center py-6">
-                    <Lock className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {t('integrations.api.proRequired')}
+                  <div className="text-center py-8">
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
+                      <Lock className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h4 className="font-medium mb-1">{t('integrations.api.proRequired')}</h4>
+                    <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
+                      Acesse a API para integrar o Revenify com seus sistemas
                     </p>
                     <Button size="sm" asChild>
                       <a href="/pricing">{t('integrations.api.upgrade')}</a>
@@ -727,7 +739,7 @@ export default function IntegrationsPage() {
 
           {/* Tab Webhooks */}
           <TabsContent value="webhooks" className="space-y-4">
-            <Card className={!hasWebhooksAccess ? 'opacity-60' : ''}>
+            <Card className={`transition-all duration-200 hover:shadow-md ${!hasWebhooksAccess ? 'opacity-60' : ''}`}>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -840,10 +852,13 @@ Body:
                     </div>
                   </>
                 ) : (
-                  <div className="text-center py-6">
-                    <Lock className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {t('integrations.api.proRequired')}
+                  <div className="text-center py-8">
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
+                      <Lock className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h4 className="font-medium mb-1">{t('integrations.api.proRequired')}</h4>
+                    <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
+                      Configure webhooks para receber notificações em tempo real
                     </p>
                     <Button size="sm" asChild>
                       <a href="/pricing">{t('integrations.api.upgrade')}</a>

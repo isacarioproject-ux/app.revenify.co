@@ -82,12 +82,13 @@ export default function SSOSettingsPage() {
   const canUseSSO = isBusinessPlan
 
   // Toast de aviso importante sobre SSO
-  usePageToast({
-    message: 'Após habilitar o SSO, usuários com emails dos domínios configurados serão redirecionados automaticamente para o provedor de identidade. Certifique-se de testar a configuração antes de ativar.',
+  usePageToast(canUseSSO && !subscriptionLoading ? {
+    id: 'sso-warning',
+    title: 'Importante',
+    description: 'Após habilitar o SSO, usuários com emails dos domínios configurados serão redirecionados automaticamente para o provedor de identidade. Certifique-se de testar a configuração antes de ativar.',
     type: 'warning',
-    duration: 8000,
-    enabled: canUseSSO && !subscriptionLoading
-  })
+    duration: 8000
+  } : null)
 
   // Supabase SSO metadata URLs
   const supabaseProjectRef = 'gyqohtqfyzzifxjkuuiz'
@@ -263,103 +264,56 @@ export default function SSOSettingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="w-full p-4 md:p-6 max-w-4xl mx-auto">
+      <div className="w-full p-4 md:p-6 space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{t('sso.title')}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{t('sso.title')}</h1>
             <p className="text-muted-foreground text-sm">
               {t('sso.subtitle')}
             </p>
           </div>
-          <Badge className="bg-emerald-600 gap-1">
-            <Shield className="h-3 w-3" />
-            Business
-          </Badge>
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            {config.enabled ? (
+              <Badge variant="outline" className="gap-1 text-xs sm:text-sm">
+                <CheckCircle2 className="h-3 w-3" />
+                {t('sso.enabled')}
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="gap-1 text-xs sm:text-sm">
+                <XCircle className="h-3 w-3" />
+                {t('sso.disabled')}
+              </Badge>
+            )}
+            <Badge className="bg-emerald-600 gap-1 text-xs sm:text-sm">
+              <Shield className="h-3 w-3" />
+              Business
+            </Badge>
+          </div>
         </div>
 
-        {/* Status Card */}
-        <Card className="mb-6">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-primary/10">
-                  <Shield className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <CardTitle>Single Sign-On</CardTitle>
-                  <CardDescription>
-                    Permita que usuários façam login com seu provedor de identidade corporativo
-                  </CardDescription>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                {config.enabled ? (
-                  <Badge className="bg-green-600 gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
-                    {t('sso.enabled')}
-                  </Badge>
-                ) : (
-                  <Badge variant="secondary" className="gap-1">
-                    <XCircle className="h-3 w-3" />
-                    {t('sso.disabled')}
-                  </Badge>
-                )}
-                <Switch
-                  checked={config.enabled}
-                  onCheckedChange={async (enabled) => {
-                    setConfig(prev => ({ ...prev, enabled }))
-                    // Auto-save when toggling SSO
-                    try {
-                      const { data: { user } } = await supabase.auth.getUser()
-                      if (!user) return
-                      
-                      if (config.id) {
-                        await supabase
-                          .from('sso_configs')
-                          .update({ enabled, updated_at: new Date().toISOString() })
-                          .eq('id', config.id)
-                        toast.success(enabled ? t('sso.enabled') : t('sso.disabled'))
-                      } else {
-                        // Create new config if doesn't exist
-                        const { data, error } = await supabase
-                          .from('sso_configs')
-                          .insert({
-                            user_id: user.id,
-                            enabled,
-                            provider: config.provider,
-                            entity_id: config.entity_id || '',
-                            sso_url: config.sso_url || '',
-                            certificate: config.certificate || '',
-                            attribute_mapping: config.attribute_mapping,
-                            allowed_domains: config.allowed_domains,
-                            auto_provision: config.auto_provision,
-                            default_role: config.default_role
-                          })
-                          .select()
-                          .single()
-                        
-                        if (!error && data) {
-                          setConfig(prev => ({ ...prev, id: data.id }))
-                          toast.success(enabled ? t('sso.enabled') : t('sso.disabled'))
-                        }
-                      }
-                    } catch (err) {
-                      console.error('Error toggling SSO:', err)
-                      toast.error(t('sso.error'))
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
-
+        {/* Tabs */}
         <Tabs defaultValue="config" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="config">{t('common.configuration')}</TabsTrigger>
-            <TabsTrigger value="metadata">{t('sso.spMetadata')}</TabsTrigger>
-            <TabsTrigger value="advanced">{t('common.advanced')}</TabsTrigger>
+          <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
+            <TabsTrigger 
+              value="config" 
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+            >
+              {t('common.configuration')}
+            </TabsTrigger>
+            <TabsTrigger 
+              value="metadata"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+            >
+              <span className="hidden sm:inline">{t('sso.spMetadata')}</span>
+              <span className="sm:hidden">Metadados</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="advanced"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-foreground data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
+            >
+              {t('common.advanced')}
+            </TabsTrigger>
           </TabsList>
 
           {/* Configuration Tab */}
@@ -475,7 +429,7 @@ export default function SSOSettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="attr_email">Atributo de Email</Label>
                     <Input
