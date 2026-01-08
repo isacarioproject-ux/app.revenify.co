@@ -494,7 +494,7 @@ export default function IntegrationsPage() {
               if (project) setSelectedProject(project)
             }}
           >
-            <SelectTrigger className="w-full sm:w-[200px]">
+            <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={t('integrations.selectProjectPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -507,13 +507,10 @@ export default function IntegrationsPage() {
           </Select>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="payments" className="space-y-6">
-          <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
-            <TabsTrigger 
-              value="payments" 
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
-            >
+        {/* Tabs principais */}
+        <Tabs defaultValue="payments" className="w-full">
+          <TabsList variant="default" className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="payments" className="gap-2">
               <DollarSign className="h-4 w-4" />
               <span className="hidden sm:inline">{t('integrations.payments.title')}</span>
             </TabsTrigger>
@@ -535,7 +532,7 @@ export default function IntegrationsPage() {
 
           {/* Tab Pagamentos */}
           <TabsContent value="payments" className="space-y-4">
-            <Card className="transition-all duration-200 hover:shadow-md">
+            <Card>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -553,7 +550,7 @@ export default function IntegrationsPage() {
               <CardContent className="space-y-4">
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Spinner size="lg" color="muted" />
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -617,7 +614,7 @@ export default function IntegrationsPage() {
                     {/* Botões */}
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" asChild>
-                        <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
+                        <a href="https://docs.revenify.co/payments" target="_blank" rel="noopener noreferrer">
                           <BookOpen className="h-4 w-4 mr-2" />
                           {t('integrations.payments.viewDocs')}
                         </a>

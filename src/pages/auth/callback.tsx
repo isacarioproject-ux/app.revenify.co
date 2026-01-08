@@ -99,12 +99,6 @@ export default function AuthCallback() {
               navigate('/onboarding', { replace: true })
             }, 1500)
           } else {
-            // Rastrear login
-            trackRevenifyEvent('login', {
-              email: session.user.email,
-              provider: session.user.app_metadata?.provider || 'email'
-            })
-            
             setStatus('success')
             setMessage('Login realizado com sucesso!')
             

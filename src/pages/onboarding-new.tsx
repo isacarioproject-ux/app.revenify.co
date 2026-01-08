@@ -173,17 +173,23 @@ export default function OnboardingPage() {
 
                 <div className="grid gap-3 mb-8">
                   {[
-                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc') },
-                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc') },
-                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc') },
+                    { icon: Target, title: t('onboarding.feature1Title'), desc: t('onboarding.feature1Desc'), iconColor: 'text-indigo-500', bgColor: 'bg-indigo-500/10' },
+                    { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), iconColor: 'text-emerald-500', bgColor: 'bg-emerald-500/10' },
+                    { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), iconColor: 'text-amber-500', bgColor: 'bg-amber-500/10' },
                   ].map((feature, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-4 p-4 rounded-lg bg-muted/30 border border-border/50 text-left"
+                      variants={floatingAnimation}
+                      whileHover="whileHover"
+                      className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer hover:bg-muted/30 transition-colors"
                     >
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <feature.icon className="h-5 w-5 text-primary" />
-                      </div>
+                      <motion.div 
+                        className={cn('p-3 rounded-xl', feature.bgColor)}
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                      >
+                        <feature.icon className={cn('h-6 w-6', feature.iconColor)} />
+                      </motion.div>
                       <div>
                         <h3 className="font-medium text-sm">{feature.title}</h3>
                         <p className="text-xs text-muted-foreground mt-0.5">{feature.desc}</p>
