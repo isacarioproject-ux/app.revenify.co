@@ -9,10 +9,10 @@ import {
   Percent,
   Plus,
   FolderOpen,
-  AlertCircle,
   DollarSign
 } from 'lucide-react'
 import { useProjects } from '@/hooks/use-projects'
+import { usePageToast } from '@/hooks/use-page-toast'
 import { useDashboardData } from '@/hooks/use-dashboard-data'
 import { 
   MetricCard, 
@@ -42,6 +42,18 @@ export default function DashboardPage() {
   const { metrics, chartData, sources, recentEvents, funnel, loading: dataLoading } = useDashboardData(selectedProject?.id || null)
   const [upgradeOpen, setUpgradeOpen] = useState(false)
   const hasLoadedOnce = useRef(false)
+
+  // Toast de aviso quando não há projeto selecionado
+  usePageToast(
+    !selectedProject && projects.length > 0
+      ? {
+          id: 'select-project-warning',
+          title: t('dashboard.selectProjectAlert'),
+          type: 'warning',
+          duration: 6000,
+        }
+      : null
+  )
 
   // Marcar como carregado após primeira carga
   if (!projectsLoading && !dataLoading && !hasLoadedOnce.current) {
@@ -129,15 +141,6 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Alert if no project selected */}
-        {!selectedProject && projects.length > 0 && (
-          <Card className="border-yellow-500/50 bg-yellow-500/10">
-            <CardContent className="flex items-center gap-3 py-4">
-              <AlertCircle className="h-5 w-5 text-yellow-500" />
-              <p className="text-sm">{t('dashboard.selectProjectAlert')}</p>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Stats Grid */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">

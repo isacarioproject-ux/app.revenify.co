@@ -48,10 +48,14 @@ PRD*.md
 *.md.bak
 SUPABASE-REFERENCE.md
 
-# Migrations SQL (estrutura do banco - sensível)
+# Arquivos SQL (estrutura do banco - sensível)
+*.sql
 supabase/migrations/
 
 # Supabase config local
 supabase/.temp/
 supabase/config.toml
 .vercel
+
+# Claude/AI settings
+.claude/

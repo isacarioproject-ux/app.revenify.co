@@ -428,8 +428,8 @@ export default function CustomerJourneyPage() {
             </Select>
 
             <Select value={dateFilter} onValueChange={setDateFilter}>
-              <SelectTrigger className="w-[130px]">
-                <Calendar className="h-4 w-4 mr-2" />
+              <SelectTrigger className="w-[160px]">
+                <Calendar className="h-4 w-4 mr-2 shrink-0" />
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

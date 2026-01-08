@@ -11,13 +11,13 @@ import {
   Globe, 
   Check, 
   X, 
-  Loader2, 
   AlertTriangle, 
   Copy, 
   ExternalLink,
   Shield,
   Zap
 } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 import { useI18n } from '@/hooks/use-i18n'
 import { useSubscription } from '@/contexts/subscription-context'
 import { useAuth } from '@/contexts/auth-context'
@@ -254,7 +254,7 @@ export default function CustomDomainPage() {
                   disabled={!domain || dnsStatus === 'checking'}
                 >
                   {dnsStatus === 'checking' ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner size="sm" />
                   ) : (
                     t('customDomain.verifyDns')
                   )}
@@ -344,7 +344,7 @@ export default function CustomDomainPage() {
                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
                 >
                   {removing ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Spinner size="sm" color="white" className="mr-2" />
                   ) : (
                     <X className="h-4 w-4 mr-2" />
                   )}
@@ -356,7 +356,7 @@ export default function CustomDomainPage() {
                 disabled={saving || !domain || !validateDomain(domain)}
               >
                 {saving ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Spinner size="sm" color="white" className="mr-2" />
                 ) : (
                   <Check className="h-4 w-4 mr-2" />
                 )}

@@ -29,7 +29,7 @@
     return;
   }
 
-  const API_URL = config.apiUrl || 'https://ckfvgwdzpelurwhnhbpz.supabase.co/functions/v1/track-event';
+  const API_URL = config.apiUrl || 'https://gyqohtqfyzzifxjkuuiz.supabase.co/functions/v1/track-event';
   const CONSENT_KEY = 'rv_consent';
   const VISITOR_KEY = 'rv_visitor_id';
   
