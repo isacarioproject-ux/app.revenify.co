@@ -518,24 +518,24 @@ export default function IntegrationsPage() {
           <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
             <TabsTrigger 
               value="payments" 
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-xs sm:text-sm whitespace-nowrap"
             >
               <DollarSign className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('integrations.payments.title')}</span>
+              {t('integrations.payments.title')}
             </TabsTrigger>
             <TabsTrigger 
               value="api"
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-xs sm:text-sm whitespace-nowrap"
             >
               <Key className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('integrations.api.title')}</span>
+              {t('integrations.api.title')}
             </TabsTrigger>
             <TabsTrigger 
               value="webhooks"
-              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-sm sm:text-base whitespace-nowrap"
+              className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors gap-2 text-xs sm:text-sm whitespace-nowrap"
             >
               <Webhook className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('integrations.webhooks.title')}</span>
+              {t('integrations.webhooks.title')}
             </TabsTrigger>
           </TabsList>
 

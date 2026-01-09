@@ -96,14 +96,14 @@ export default function AuthCallback() {
             
             setTimeout(() => {
               navigate('/onboarding', { replace: true })
-            }, 1500)
+            }, 3000)
           } else {
             setStatus('success')
             setMessage('Login realizado com sucesso!')
             
             setTimeout(() => {
               navigate('/dashboard', { replace: true })
-            }, 1500)
+            }, 3000)
           }
         } else {
           setStatus('error')
@@ -137,24 +137,24 @@ export default function AuthCallback() {
         {/* Preloader minimalista */}
         <div className="flex justify-center">
           {status === 'loading' && (
-            <div className="relative">
-              {/* Logo ou ícone central */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32">
+              {/* Logo central */}
               <motion.div
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center"
+                className="w-full h-full rounded-2xl sm:rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center"
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <span className="text-2xl font-bold text-primary">R</span>
+                <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">R</span>
               </motion.div>
               {/* Barra de progresso circular */}
-              <svg className="absolute inset-0 w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+              <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">
                 <motion.circle
                   cx="32"
                   cy="32"
                   r="28"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   className="text-primary/20"
                 />
                 <motion.circle
@@ -163,12 +163,12 @@ export default function AuthCallback() {
                   r="28"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   className="text-primary"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                   style={{ strokeDasharray: '176', strokeDashoffset: '0' }}
                 />
               </svg>
@@ -179,9 +179,9 @@ export default function AuthCallback() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-              className="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center"
+              className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-2xl sm:rounded-3xl bg-green-500/10 flex items-center justify-center"
             >
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 text-green-500" />
             </motion.div>
           )}
           {status === 'error' && (
@@ -189,9 +189,9 @@ export default function AuthCallback() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-              className="w-16 h-16 rounded-2xl bg-destructive/10 flex items-center justify-center"
+              className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-2xl sm:rounded-3xl bg-destructive/10 flex items-center justify-center"
             >
-              <XCircle className="h-8 w-8 text-destructive" />
+              <XCircle className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 text-destructive" />
             </motion.div>
           )}
         </div>
