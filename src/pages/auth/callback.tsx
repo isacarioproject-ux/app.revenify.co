@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { Spinner } from '@/components/ui/spinner'
 
 // Função para rastrear eventos no Revenify
 const trackRevenifyEvent = (eventType: string, data: Record<string, any> = {}) => {
@@ -129,11 +128,11 @@ export default function AuthCallback() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
-          <Spinner size="xl" className="text-primary" />
+          <div className="h-16 w-16 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
           <img
             src="/logo.png"
             alt="Revenify"
-            className="absolute inset-0 m-auto h-8 w-8 object-contain"
+            className="absolute inset-0 m-auto h-10 w-10 object-contain"
           />
         </div>
         <p className="text-sm text-muted-foreground">Carregando...</p>
