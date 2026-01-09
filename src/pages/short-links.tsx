@@ -321,8 +321,9 @@ export default function ShortLinksPage() {
 
         {/* Links Table */}
         <Card className="overflow-hidden">
-          <CardContent className="p-0 overflow-x-auto max-w-full">
-            <Table className="min-w-[700px] w-full">
+          <CardContent className="p-0">
+            <div className="w-full overflow-x-auto">
+              <Table className="min-w-[700px] w-full">
               <TableHeader>
                 <TableRow>
                   <TableHead>
@@ -478,7 +479,8 @@ export default function ShortLinksPage() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
 
