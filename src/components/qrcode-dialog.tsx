@@ -414,20 +414,8 @@ export function QRCodeDialog({
               </TabsContent>
             </Tabs>
 
-            {/* Title if exists */}
-            {shortLink.title && (
-              <div className="text-center p-3 rounded-lg bg-muted/30">
-                <p className="text-sm font-medium">{shortLink.title}</p>
-                {shortLink.description && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {shortLink.description}
-                  </p>
-                )}
-              </div>
-            )}
-
             {/* Download Format Options */}
-            <div className="space-y-2">
+            <div className="space-y-2 md:mt-0">
               <Label className="text-sm">{t('qrCode.downloadFormat')}</Label>
               <div className="flex gap-2">
                 {[
@@ -452,6 +440,18 @@ export function QRCodeDialog({
                 ))}
               </div>
             </div>
+
+            {/* Title if exists */}
+            {shortLink.title && (
+              <div className="text-center p-3 rounded-lg bg-muted/30 mt-4">
+                <p className="text-sm font-medium">{shortLink.title}</p>
+                {shortLink.description && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {shortLink.description}
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Download Button - mobile only (no final da coluna direita) */}
             <div className="md:hidden">
