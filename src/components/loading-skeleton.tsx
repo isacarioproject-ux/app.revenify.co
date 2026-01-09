@@ -148,10 +148,38 @@ export const HeaderSkeleton = () => (
   </header>
 )
 
-// Preload inicial - MUITO simples (apenas spinner cinza pequeno)
+// Preload inicial - Logo R animada igual ao callback
 export const InitialPreload = () => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
-    <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600 dark:border-gray-700 dark:border-t-gray-400" />
+    <div className="relative w-16 h-16">
+      {/* Logo central */}
+      <div className="w-full h-full rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center animate-pulse">
+        <span className="text-2xl font-bold text-primary">R</span>
+      </div>
+      {/* Barra de progresso circular */}
+      <svg className="absolute inset-0 w-full h-full -rotate-90 animate-spin" style={{ animationDuration: '2s' }} viewBox="0 0 64 64">
+        <circle
+          cx="32"
+          cy="32"
+          r="28"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="text-primary/20"
+        />
+        <circle
+          cx="32"
+          cy="32"
+          r="28"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          className="text-primary"
+          strokeDasharray="44 132"
+        />
+      </svg>
+    </div>
   </div>
 )
 

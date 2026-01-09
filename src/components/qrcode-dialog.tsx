@@ -292,7 +292,7 @@ export function QRCodeDialog({
                   </TabsTrigger>
                 </TabsList>
 
-            <TabsContent value="style" className="space-y-3 mt-0">
+            <TabsContent value="style" className="space-y-3 mt-0 min-h-[280px]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="size">{t('qrCode.size')}</Label>
@@ -395,7 +395,7 @@ export function QRCodeDialog({
               </div>
             </TabsContent>
 
-            <TabsContent value="logo" className="space-y-3 mt-0">
+            <TabsContent value="logo" className="space-y-3 mt-0 min-h-[280px]">
               <div className="space-y-2">
                 <Label>{t('qrCode.logoOptional')}</Label>
                 <p className="text-xs text-muted-foreground">
