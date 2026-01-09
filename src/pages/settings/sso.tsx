@@ -34,6 +34,7 @@ import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useI18n } from '@/hooks/use-i18n'
 import { HeaderSkeleton, CardSkeleton } from '@/components/page-skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface SSOConfig {
   id?: string
@@ -217,9 +218,21 @@ export default function SSOSettingsPage() {
   if (subscriptionLoading || loading) {
     return (
       <DashboardLayout>
-        <div className="w-full p-4 md:p-6 space-y-6 max-w-4xl mx-auto">
-          <HeaderSkeleton />
-          <CardSkeleton />
+        <div className="w-full p-4 md:p-6 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <HeaderSkeleton />
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-6 w-16 rounded-full bg-muted/40" />
+              <Skeleton className="h-6 w-20 rounded-full bg-muted/40" />
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <Skeleton className="h-8 w-28 bg-muted/30" />
+            <Skeleton className="h-8 w-28 bg-muted/30" />
+            <Skeleton className="h-8 w-28 bg-muted/30" />
+          </div>
+          <CardSkeleton lines={6} />
+          <CardSkeleton lines={4} />
         </div>
       </DashboardLayout>
     )

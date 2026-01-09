@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { HeaderSkeleton, SelectSkeleton, IntegrationCardSkeleton } from '@/components/page-skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface Integration {
   id: string
@@ -456,6 +457,11 @@ export default function IntegrationsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <HeaderSkeleton />
             <SelectSkeleton />
+          </div>
+          <div className="flex gap-4">
+            <Skeleton className="h-8 w-28 bg-muted/30" />
+            <Skeleton className="h-8 w-20 bg-muted/30" />
+            <Skeleton className="h-8 w-24 bg-muted/30" />
           </div>
           <IntegrationCardSkeleton />
           <IntegrationCardSkeleton />
