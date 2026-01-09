@@ -126,16 +126,13 @@ export default function AuthCallback() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          <div className="h-16 w-16 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
-          <img
-            src="/logo.png"
-            alt="Revenify"
-            className="absolute inset-0 m-auto h-10 w-10 object-contain"
-          />
-        </div>
-        <p className="text-sm text-muted-foreground">Carregando...</p>
+      <div className="relative">
+        <div className="h-16 w-16 md:h-32 md:w-32 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
+        <img
+          src="/logo.png"
+          alt="Revenify"
+          className="absolute inset-0 m-auto h-10 w-10 md:h-20 md:w-20 object-contain"
+        />
       </div>
     </div>
   )
