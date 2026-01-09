@@ -9,11 +9,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Download, Copy, Check, QrCode, Image, FileImage, Upload, X } from 'lucide-react'
+import { Download, Copy, Check, QrCode, Image, FileImage, Upload, X, Palette, ImageIcon, FileCode } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ShortLink } from '@/hooks/use-short-links'
 import { getShortLinkUrl } from '@/lib/config'
 import { useI18n } from '@/hooks/use-i18n'
+import { cn } from '@/lib/utils'
 
 interface QRCodeDialogProps {
   open: boolean
@@ -172,7 +173,7 @@ export function QRCodeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[700px] lg:max-w-[750px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
@@ -180,20 +181,20 @@ export function QRCodeDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="py-4">
+        <div className="py-6">
           {/* Layout: QR à esquerda, Formulário à direita em desktop/tablet */}
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col md:flex-row gap-8">
             {/* Coluna Esquerda - QR Code Preview */}
-            <div className="md:w-[280px] shrink-0 flex flex-col">
+            <div className="md:w-[260px] shrink-0 flex flex-col gap-6">
               {/* Container fixo para o QR - altura fixa para não mover o botão */}
-              <div className="flex justify-center items-center h-[200px] mb-4">
+              <div className="flex justify-center items-center h-[180px]">
                 <div className="p-3 bg-white rounded-lg shadow-sm border relative">
                   <img
                     src={qrCodeUrl}
                     alt="QR Code"
-                    width={Math.min(size, 160)}
-                    height={Math.min(size, 160)}
-                    className="max-w-[160px] max-h-[160px] object-contain"
+                    width={Math.min(size, 140)}
+                    height={Math.min(size, 140)}
+                    className="max-w-[140px] max-h-[140px] object-contain"
                   />
                   {logoUrl && (
                     <div 
@@ -258,14 +259,40 @@ export function QRCodeDialog({
             </div>
 
             {/* Coluna Direita - Formulário */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-5">
               <Tabs defaultValue="style" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="style">{t('qrCode.style')}</TabsTrigger>
-                  <TabsTrigger value="logo">{t('qrCode.logo')}</TabsTrigger>
+                <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 border-b mb-6">
+                  <TabsTrigger
+                    value="style"
+                    className="rounded-none border-0 border-b-[3px] border-transparent
+                               data-[state=active]:border-b-primary
+                               data-[state=active]:!bg-transparent
+                               !bg-transparent px-0 pb-2 pt-0
+                               text-muted-foreground
+                               data-[state=active]:text-foreground
+                               hover:text-foreground transition-colors
+                               gap-2 text-sm font-medium"
+                  >
+                    <Palette className="h-4 w-4" />
+                    {t('qrCode.style')}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="logo"
+                    className="rounded-none border-0 border-b-[3px] border-transparent
+                               data-[state=active]:border-b-primary
+                               data-[state=active]:!bg-transparent
+                               !bg-transparent px-0 pb-2 pt-0
+                               text-muted-foreground
+                               data-[state=active]:text-foreground
+                               hover:text-foreground transition-colors
+                               gap-2 text-sm font-medium"
+                  >
+                    <ImageIcon className="h-4 w-4" />
+                    {t('qrCode.logo')}
+                  </TabsTrigger>
                 </TabsList>
 
-            <TabsContent value="style" className="space-y-4 mt-4">
+            <TabsContent value="style" className="space-y-4 mt-0">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="size">{t('qrCode.size')}</Label>
@@ -283,27 +310,35 @@ export function QRCodeDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>{t('qrCode.colors')}</Label>
-                  <div className="flex gap-2">
-                    <div className="flex-1">
-                      <Input
-                        type="color"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                        className="w-full h-9 p-1 cursor-pointer"
-                        title={t('qrCode.qrColor')}
-                      />
-                      <p className="text-[10px] text-muted-foreground text-center mt-1">{t('qrCode.qrColor')}</p>
+                  <Label className="text-sm font-medium">{t('qrCode.colors')}</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <Input
+                          type="color"
+                          value={color}
+                          onChange={(e) => setColor(e.target.value)}
+                          className="w-full h-12 p-1 cursor-pointer border-2 rounded-lg hover:border-primary/50 transition-colors"
+                          title={t('qrCode.qrColor')}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground text-center font-medium">
+                        {t('qrCode.qrColor')}
+                      </p>
                     </div>
-                    <div className="flex-1">
-                      <Input
-                        type="color"
-                        value={bgColor}
-                        onChange={(e) => setBgColor(e.target.value)}
-                        className="w-full h-9 p-1 cursor-pointer"
-                        title={t('qrCode.bgColor')}
-                      />
-                      <p className="text-[10px] text-muted-foreground text-center mt-1">{t('qrCode.bgColor')}</p>
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <Input
+                          type="color"
+                          value={bgColor}
+                          onChange={(e) => setBgColor(e.target.value)}
+                          className="w-full h-12 p-1 cursor-pointer border-2 rounded-lg hover:border-primary/50 transition-colors"
+                          title={t('qrCode.bgColor')}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground text-center font-medium">
+                        {t('qrCode.bgColor')}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -311,8 +346,8 @@ export function QRCodeDialog({
 
               {/* Preset Colors */}
               <div className="space-y-2">
-                <Label>{t('qrCode.quickColors')}</Label>
-                <div className="flex gap-2 flex-wrap">
+                <Label className="text-sm font-medium">{t('qrCode.quickColors')}</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {[
                     { qr: '#000000', bg: '#ffffff', name: t('qrCode.classic') },
                     { qr: '#1a1a2e', bg: '#eaeaea', name: t('qrCode.dark') },
@@ -327,21 +362,25 @@ export function QRCodeDialog({
                         setColor(preset.qr)
                         setBgColor(preset.bg)
                       }}
-                      className="flex items-center gap-1.5 px-2 py-1 rounded-md border text-xs hover:bg-muted transition-colors"
+                      className={cn(
+                        'flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all',
+                        'hover:border-primary/50 hover:bg-muted/50',
+                        color === preset.qr && bgColor === preset.bg && 'border-primary bg-primary/5 shadow-sm'
+                      )}
                       title={preset.name}
                     >
-                      <div 
-                        className="w-3 h-3 rounded-full border"
+                      <div
+                        className="w-4 h-4 rounded-full border-2 border-background shadow-sm flex-shrink-0"
                         style={{ backgroundColor: preset.qr }}
                       />
-                      {preset.name}
+                      <span className="text-xs font-medium truncate">{preset.name}</span>
                     </button>
                   ))}
                 </div>
               </div>
             </TabsContent>
 
-            <TabsContent value="logo" className="space-y-4 mt-4">
+            <TabsContent value="logo" className="space-y-4 mt-0">
               <div className="space-y-2">
                 <Label>{t('qrCode.logoOptional')}</Label>
                 <p className="text-xs text-muted-foreground">
@@ -401,26 +440,76 @@ export function QRCodeDialog({
 
             {/* Download Options */}
             <div className="space-y-3">
-              <Label>{t('qrCode.downloadFormat')}</Label>
-              <div className="flex gap-2">
+              <Label className="text-sm font-medium">{t('qrCode.downloadFormat')}</Label>
+              <div className="grid grid-cols-3 gap-3">
                 {[
-                  { value: 'png' as const, label: 'PNG', icon: Image, desc: t('qrCode.bestQuality') },
-                  { value: 'jpg' as const, label: 'JPG', icon: FileImage, desc: t('qrCode.smallerSize') },
-                  { value: 'svg' as const, label: 'SVG', icon: FileImage, desc: t('qrCode.vector'), disabled: !!logoUrl },
+                  {
+                    value: 'png' as const,
+                    label: 'PNG',
+                    icon: Image,
+                    desc: t('qrCode.bestQuality'),
+                    gradient: 'from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 border-blue-200 dark:border-blue-800'
+                  },
+                  {
+                    value: 'jpg' as const,
+                    label: 'JPG',
+                    icon: FileImage,
+                    desc: t('qrCode.smallerSize'),
+                    gradient: 'from-green-500/10 to-green-600/10 hover:from-green-500/20 hover:to-green-600/20 border-green-200 dark:border-green-800'
+                  },
+                  {
+                    value: 'svg' as const,
+                    label: 'SVG',
+                    icon: FileCode,
+                    desc: t('qrCode.vector'),
+                    disabled: !!logoUrl,
+                    gradient: 'from-purple-500/10 to-purple-600/10 hover:from-purple-500/20 hover:to-purple-600/20 border-purple-200 dark:border-purple-800'
+                  },
                 ].map((format) => (
                   <button
                     key={format.value}
                     onClick={() => !format.disabled && setDownloadFormat(format.value)}
                     disabled={format.disabled}
-                    className={`flex-1 p-2 rounded-lg border text-center transition-colors ${
-                      downloadFormat === format.value 
-                        ? 'border-primary bg-primary/5' 
-                        : 'hover:bg-muted/50'
-                    } ${format.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={cn(
+                      'group relative p-4 rounded-xl border-2 transition-all duration-200',
+                      'flex flex-col items-center justify-center gap-2',
+                      downloadFormat === format.value
+                        ? `bg-gradient-to-br ${format.gradient} ring-2 ring-primary/20 shadow-md`
+                        : `bg-gradient-to-br ${format.gradient} hover:shadow-md`,
+                      format.disabled && 'opacity-40 cursor-not-allowed hover:shadow-none'
+                    )}
                     title={format.disabled ? t('qrCode.svgNoLogo') : format.desc}
                   >
-                    <format.icon className="h-4 w-4 mx-auto mb-1" />
-                    <p className="text-xs font-medium">{format.label}</p>
+                    {/* Icon Container */}
+                    <div className={cn(
+                      'p-2 rounded-lg transition-colors',
+                      downloadFormat === format.value ? 'bg-primary/10' : 'bg-background/50'
+                    )}>
+                      <format.icon className={cn(
+                        'h-5 w-5 transition-colors',
+                        downloadFormat === format.value ? 'text-primary' : 'text-muted-foreground'
+                      )} />
+                    </div>
+
+                    {/* Label */}
+                    <div className="text-center">
+                      <p className={cn(
+                        'text-sm font-semibold transition-colors',
+                        downloadFormat === format.value ? 'text-foreground' : 'text-muted-foreground'
+                      )}>
+                        {format.label}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5 leading-tight">
+                        {format.desc}
+                      </p>
+                    </div>
+
+                    {/* Selected Indicator */}
+                    {downloadFormat === format.value && (
+                      <div className="absolute top-2 right-2">
+                        <div className="h-2 w-2 rounded-full bg-primary ring-2 ring-primary/20" />
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
