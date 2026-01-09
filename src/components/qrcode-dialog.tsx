@@ -173,7 +173,7 @@ export function QRCodeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] lg:max-w-[750px]">
+      <DialogContent className="sm:max-w-[700px] lg:max-w-[750px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
@@ -181,11 +181,11 @@ export function QRCodeDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="py-6">
+        <div className="py-4 md:py-6">
           {/* Layout: QR à esquerda, Formulário à direita em desktop/tablet */}
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-8">
             {/* Coluna Esquerda - QR Code Preview */}
-            <div className="md:w-[260px] shrink-0 flex flex-col gap-6">
+            <div className="md:w-[260px] shrink-0 flex flex-col gap-4 md:gap-6">
               {/* Container fixo para o QR - altura fixa para não mover o botão */}
               <div className="flex justify-center items-center h-[180px]">
                 <div className="p-3 bg-white rounded-lg shadow-sm border relative">
@@ -237,7 +237,7 @@ export function QRCodeDialog({
               </div>
 
               {/* Download Button - abaixo da URL em desktop */}
-              <div className="hidden md:block mt-2">
+              <div className="hidden md:block">
                 <Button
                   className="w-full"
                   onClick={downloadQRCode}
@@ -259,7 +259,7 @@ export function QRCodeDialog({
             </div>
 
             {/* Coluna Direita - Formulário */}
-            <div className="flex-1 space-y-5">
+            <div className="flex-1 space-y-4">
               <Tabs defaultValue="style" className="w-full">
                 <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 border-b mb-4">
                   <TabsTrigger
@@ -292,8 +292,8 @@ export function QRCodeDialog({
                   </TabsTrigger>
                 </TabsList>
 
-            <TabsContent value="style" className="space-y-4 mt-0 min-h-[280px]">
-              <div className="grid grid-cols-2 gap-4">
+            <TabsContent value="style" className="space-y-3 mt-0 min-h-[280px]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="size">{t('qrCode.size')}</Label>
                   <select
@@ -368,7 +368,7 @@ export function QRCodeDialog({
               </div>
             </TabsContent>
 
-            <TabsContent value="logo" className="space-y-4 mt-0 min-h-[280px]">
+            <TabsContent value="logo" className="space-y-3 mt-0 min-h-[280px]">
               <div className="space-y-2">
                 <Label>{t('qrCode.logoOptional')}</Label>
                 <p className="text-xs text-muted-foreground">

@@ -127,11 +127,11 @@ export default function AuthCallback() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="relative">
-        <div className="h-16 w-16 md:h-32 md:w-32 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
+        <div className="h-20 w-20 md:h-32 md:w-32 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
         <img
           src="/logo.png"
           alt="Revenify"
-          className="absolute inset-0 m-auto h-10 w-10 md:h-20 md:w-20 object-contain"
+          className="absolute inset-0 m-auto h-12 w-12 md:h-20 md:w-20 object-contain"
         />
       </div>
     </div>
