@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run type-check:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(supabase:*)"
     ]
   }
 }

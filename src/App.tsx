@@ -8,7 +8,7 @@ import { AuthProvider } from '@/contexts/auth-context'
 import { ProtectedRoute } from '@/components/protected-route'
 
 // Import direto do onboarding (SEM lazy) para não mostrar preload
-import OnboardingPage from '@/pages/onboarding-new'
+import OnboardingPage from '@/pages/onboarding-v2'
 
 // Lazy load pages for code splitting
 const AuthPage = lazy(() => import('@/pages/auth'))

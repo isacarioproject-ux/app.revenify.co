@@ -1,0 +1,83 @@
+import { useI18n } from '@/hooks/use-i18n'
+import { useTheme } from 'next-themes'
+import { Button } from '@/components/ui/button'
+import { Moon, Sun, Globe } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+interface OnboardingHeaderProps {
+  showToggles?: boolean
+}
+
+export function OnboardingHeader({ showToggles = true }: OnboardingHeaderProps) {
+  const { locale, changeLocale } = useI18n()
+  const { theme, setTheme } = useTheme()
+
+  const languages = [
+    { code: 'pt-BR', label: 'Português', flag: '🇧🇷' },
+    { code: 'en', label: 'English', flag: '🇺🇸' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+  ]
+
+  const currentLanguage = languages.find(lang => lang.code === locale) || languages[0]
+
+  return (
+    <div className="flex items-center justify-center mb-8 relative">
+      {/* Logo Centralizada */}
+      <div className="flex items-center gap-3">
+        <img
+          src="/logo.png"
+          alt="Revenify"
+          className="h-10 w-10 object-contain"
+        />
+        <span className="text-2xl font-bold">Revenify</span>
+      </div>
+
+      {/* Toggles no canto superior direito */}
+      {showToggles && (
+        <div className="absolute right-0 flex items-center gap-2">
+          {/* Language Toggle */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Globe className="h-4 w-4" />
+                <span className="sr-only">Mudar idioma</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {languages.map((lang) => (
+                <DropdownMenuItem
+                  key={lang.code}
+                  onClick={() => changeLocale(lang.code as any)}
+                  className="gap-2"
+                >
+                  <span>{lang.flag}</span>
+                  <span>{lang.label}</span>
+                  {locale === lang.code && (
+                    <span className="ml-auto text-primary">✓</span>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="h-9 w-9"
+          >
+            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Alternar tema</span>
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
