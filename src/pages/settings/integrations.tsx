@@ -553,7 +553,7 @@ export default function IntegrationsPage() {
               <CardContent className="space-y-4">
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <Spinner size="md" />
                   </div>
                 ) : (
                   <div className="space-y-4">
