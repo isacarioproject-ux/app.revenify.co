@@ -32,15 +32,6 @@ export default function OnboardingV2() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Progress bar (except on first and last step) */}
-      {currentStep > 1 && currentStep < totalSteps && (
-        <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
-          <div className="container max-w-4xl mx-auto py-4">
-            <WizardProgress currentStep={currentStep} totalSteps={totalSteps} />
-          </div>
-        </div>
-      )}
-
       {/* Main content */}
       <div className="container max-w-4xl mx-auto px-4 py-12">
         <AnimatePresence mode="wait">

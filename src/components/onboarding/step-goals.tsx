@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { WizardStepWrapper } from './wizard-step-wrapper'
+import { OnboardingHeader } from './onboarding-header'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Check } from 'lucide-react'
@@ -70,15 +71,18 @@ export function StepGoals({ onNext, onBack, onSkip, initialData }: StepGoalsProp
   }
 
   return (
-    <WizardStepWrapper
-      title="Quais seus objetivos?"
-      description="Selecione até 3 objetivos principais (opcional)"
-      onNext={handleNext}
-      onBack={onBack}
-      onSkip={onSkip}
-      showSkip
-      nextDisabled={selectedGoals.length === 0}
-    >
+    <div className="space-y-8">
+      <OnboardingHeader showToggles={true} />
+
+      <WizardStepWrapper
+        title="Quais seus objetivos?"
+        description="Selecione até 3 objetivos principais (opcional)"
+        onNext={handleNext}
+        onBack={onBack}
+        onSkip={onSkip}
+        showSkip
+        nextDisabled={selectedGoals.length === 0}
+      >
       <div className="space-y-3">
         {goalOptions.map((goal) => {
           const isSelected = selectedGoals.includes(goal.id)
@@ -126,6 +130,7 @@ export function StepGoals({ onNext, onBack, onSkip, initialData }: StepGoalsProp
       <div className="text-center text-sm text-muted-foreground">
         {selectedGoals.length} de 3 objetivos selecionados
       </div>
-    </WizardStepWrapper>
+      </WizardStepWrapper>
+    </div>
   )
 }

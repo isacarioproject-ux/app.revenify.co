@@ -23,23 +23,11 @@ export function OnboardingHeader({ showToggles = true }: OnboardingHeaderProps) 
     { code: 'es', label: 'Español', flag: '🇪🇸' },
   ]
 
-  const currentLanguage = languages.find(lang => lang.code === locale) || languages[0]
-
   return (
-    <div className="flex items-center justify-center mb-8 relative">
-      {/* Logo Centralizada */}
-      <div className="flex items-center gap-3">
-        <img
-          src="/logo.png"
-          alt="Revenify"
-          className="h-10 w-10 object-contain"
-        />
-        <span className="text-2xl font-bold">Revenify</span>
-      </div>
-
-      {/* Toggles no canto superior direito */}
+    <div className="relative w-full">
+      {/* Toggles fixos no top-right */}
       {showToggles && (
-        <div className="absolute right-0 flex items-center gap-2">
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
           {/* Language Toggle */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -78,6 +66,15 @@ export function OnboardingHeader({ showToggles = true }: OnboardingHeaderProps) 
           </Button>
         </div>
       )}
+
+      {/* Logo centralizada - APENAS IMAGEM, SEM TEXTO */}
+      <div className="flex justify-center mb-12">
+        <img
+          src="/logo.png"
+          alt="Revenify"
+          className="h-20 w-20 object-contain"
+        />
+      </div>
     </div>
   )
 }

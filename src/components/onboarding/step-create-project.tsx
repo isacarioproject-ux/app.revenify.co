@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { WizardStepWrapper } from './wizard-step-wrapper'
+import { OnboardingHeader } from './onboarding-header'
 import { projectSchema, type ProjectFormData } from '@/lib/validations/onboarding-schemas'
 import {
   Form,
@@ -57,15 +58,18 @@ export function StepCreateProject({ onNext, onBack, initialData }: StepCreatePro
   }
 
   return (
-    <WizardStepWrapper
-      title="Crie seu primeiro projeto"
-      description="Configure um projeto para começar a rastrear conversões"
-      onNext={form.handleSubmit(handleSubmit)}
-      onBack={onBack}
-      nextLabel="Criar projeto"
-      nextDisabled={!form.formState.isValid}
-      loading={loading}
-    >
+    <div className="space-y-8">
+      <OnboardingHeader showToggles={true} />
+
+      <WizardStepWrapper
+        title="Crie seu primeiro projeto"
+        description="Configure um projeto para começar a rastrear conversões"
+        onNext={form.handleSubmit(handleSubmit)}
+        onBack={onBack}
+        nextLabel="Criar projeto"
+        nextDisabled={!form.formState.isValid}
+        loading={loading}
+      >
       <Form {...form}>
         <form className="space-y-6">
           <FormField
@@ -103,6 +107,7 @@ export function StepCreateProject({ onNext, onBack, initialData }: StepCreatePro
           />
         </form>
       </Form>
-    </WizardStepWrapper>
+      </WizardStepWrapper>
+    </div>
   )
 }

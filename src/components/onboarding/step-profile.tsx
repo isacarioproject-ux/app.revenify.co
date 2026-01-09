@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { WizardStepWrapper } from './wizard-step-wrapper'
+import { OnboardingHeader } from './onboarding-header'
 import { profileSchema, type ProfileFormData } from '@/lib/validations/onboarding-schemas'
 import {
   Form,
@@ -58,14 +59,17 @@ export function StepProfile({ onNext, onBack, initialData }: StepProfileProps) {
   }
 
   return (
-    <WizardStepWrapper
-      title="Conte-nos sobre você"
-      description="Personalize sua experiência no Revenify"
-      onNext={form.handleSubmit(handleSubmit)}
-      onBack={onBack}
-      nextDisabled={!form.formState.isValid}
-      loading={loading}
-    >
+    <div className="space-y-8">
+      <OnboardingHeader showToggles={true} />
+
+      <WizardStepWrapper
+        title="Conte-nos sobre você"
+        description="Personalize sua experiência no Revenify"
+        onNext={form.handleSubmit(handleSubmit)}
+        onBack={onBack}
+        nextDisabled={!form.formState.isValid}
+        loading={loading}
+      >
       <Form {...form}>
         <form className="space-y-6">
           <FormField
@@ -122,6 +126,7 @@ export function StepProfile({ onNext, onBack, initialData }: StepProfileProps) {
           />
         </form>
       </Form>
-    </WizardStepWrapper>
+      </WizardStepWrapper>
+    </div>
   )
 }

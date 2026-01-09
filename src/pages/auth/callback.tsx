@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { motion } from 'framer-motion'
+import { Spinner } from '@/components/ui/spinner'
 
 // Função para rastrear eventos no Revenify
 const trackRevenifyEvent = (eventType: string, data: Record<string, any> = {}) => {
@@ -127,23 +127,16 @@ export default function AuthCallback() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      {/* Loader ultra minimalista - apenas 3 pontos pulsando */}
-      <div className="flex items-center gap-1">
-        <motion.div
-          className="w-2 h-2 rounded-full bg-foreground/40"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
-        />
-        <motion.div
-          className="w-2 h-2 rounded-full bg-foreground/40"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-        />
-        <motion.div
-          className="w-2 h-2 rounded-full bg-foreground/40"
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-        />
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative">
+          <Spinner size="xl" className="text-primary" />
+          <img
+            src="/logo.png"
+            alt="Revenify"
+            className="absolute inset-0 m-auto h-8 w-8 object-contain"
+          />
+        </div>
+        <p className="text-sm text-muted-foreground">Carregando...</p>
       </div>
     </div>
   )

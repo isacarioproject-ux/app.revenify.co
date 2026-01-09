@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
 import { WizardStepWrapper } from './wizard-step-wrapper'
+import { OnboardingHeader } from './onboarding-header'
 import { Card } from '@/components/ui/card'
 import { CheckCircle2, TrendingUp, Link2, BarChart3, Settings } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -42,35 +42,18 @@ const nextSteps = [
   },
 ]
 
-const confettiVariants = {
-  initial: { scale: 0, rotate: 0 },
-  animate: {
-    scale: [0, 1.2, 1],
-    rotate: [0, 360],
-    transition: { duration: 0.6, ease: 'backOut' },
-  },
-}
-
 export function StepSuccess({ onComplete, data }: StepSuccessProps) {
   return (
-    <WizardStepWrapper
-      title="Tudo configurado!"
-      description="Você está pronto para começar a rastrear suas conversões"
-      onNext={onComplete}
-      nextLabel="Ir para Dashboard"
-      showBack={false}
-    >
-      {/* Confetti Icon */}
-      <div className="flex justify-center">
-        <motion.div
-          variants={confettiVariants}
-          initial="initial"
-          animate="animate"
-          className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
-        >
-          <CheckCircle2 className="h-10 w-10 text-primary" />
-        </motion.div>
-      </div>
+    <div className="space-y-8">
+      <OnboardingHeader showToggles={true} />
+
+      <WizardStepWrapper
+        title="Tudo configurado!"
+        description="Você está pronto para começar a rastrear suas conversões"
+        onNext={onComplete}
+        nextLabel="Ir para Dashboard"
+        showBack={false}
+      >
 
       {/* Summary */}
       <Card className="p-6 bg-muted/50">
@@ -129,6 +112,7 @@ export function StepSuccess({ onComplete, data }: StepSuccessProps) {
           })}
         </div>
       </div>
-    </WizardStepWrapper>
+      </WizardStepWrapper>
+    </div>
   )
 }
