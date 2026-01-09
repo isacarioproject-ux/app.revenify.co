@@ -173,7 +173,7 @@ export function QRCodeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] lg:max-w-[750px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[700px] lg:max-w-[750px] max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
@@ -181,7 +181,7 @@ export function QRCodeDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="py-4 md:py-6">
+        <div className="py-4 md:py-6 px-1">
           {/* Layout: QR à esquerda, Formulário à direita em desktop/tablet */}
           <div className="flex flex-col md:flex-row gap-4 md:gap-8">
             {/* Coluna Esquerda - QR Code Preview */}
