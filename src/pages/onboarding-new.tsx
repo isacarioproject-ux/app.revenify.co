@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -177,10 +178,12 @@ export default function OnboardingPage() {
                     { icon: BarChart3, title: t('onboarding.feature2Title'), desc: t('onboarding.feature2Desc'), iconColor: 'text-emerald-500', bgColor: 'bg-emerald-500/10' },
                     { icon: Zap, title: t('onboarding.feature3Title'), desc: t('onboarding.feature3Desc'), iconColor: 'text-amber-500', bgColor: 'bg-amber-500/10' },
                   ].map((feature, i) => (
-                    <div
+                    <motion.div
                       key={i}
-                      variants={floatingAnimation}
-                      whileHover="whileHover"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
                       className="flex items-start gap-4 p-5 rounded-2xl bg-card border border-border/50 text-left cursor-pointer hover:bg-muted/30 transition-colors"
                     >
                       <motion.div 
@@ -194,7 +197,7 @@ export default function OnboardingPage() {
                         <h3 className="font-medium text-sm">{feature.title}</h3>
                         <p className="text-xs text-muted-foreground mt-0.5">{feature.desc}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
 

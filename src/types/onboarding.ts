@@ -20,28 +20,50 @@ export interface OnboardingStepProps {
   isLast?: boolean
 }
 
+// New types for V2 onboarding
+export type JobRole = 'founder' | 'marketing' | 'developer' | 'product' | 'other'
+
 export interface OnboardingData {
+  // V2 Professional Onboarding Fields
   // Perfil
+  fullName?: string
+  company?: string
+  jobRole?: JobRole
+
+  // Objetivos
+  primaryGoals?: string[]
+
+  // Projeto
+  projectId?: string
+  projectKey?: string
+  projectName?: string
+  projectDomain?: string
+
+  // Source
+  sourceId?: string
+
+  // Metadata
+  pixelInstalled?: boolean
+  sourceCreated?: boolean
+
+  // Progresso
+  currentStep: number
+  stepsCompleted: number[]
+  totalSteps: number
+
+  // Timing
+  startedAt: Date
+  lastActiveAt: Date
+
+  // Legacy fields (deprecated but kept for backwards compatibility)
   userType?: UserType
   industry?: string
   teamSize?: TeamSize
   companyName?: string
-  
-  // Objetivos
   primaryGoal?: PrimaryGoal
   secondaryGoals?: string[]
-  
-  // Workspace
   workspaceName?: string
   workspaceId?: string
-  
-  // Progresso
-  currentStep: number
-  stepsCompleted: number[]
-  
-  // Timing
-  startedAt: Date
-  lastActiveAt: Date
 }
 
 export interface OnboardingAnalytics extends OnboardingData {

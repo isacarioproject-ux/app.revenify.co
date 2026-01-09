@@ -77,15 +77,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
 
-    // Verificar onboarding via localStorage (simples e funcional)
-    const onboardingKey = `onboarding_completed_${user.id}`
-    const onboardingCompleted = localStorage.getItem(onboardingKey) === 'true'
+    // Verificar onboarding via Supabase (mais confiável)
+    // Também verifica localStorage como fallback para melhor UX
+    const checkOnboarding = async () => {
+      const onboardingKey = `onboarding_completed_${user.id}`
+      const localOnboardingCompleted = localStorage.getItem(onboardingKey) === 'true'
 
-    if (!onboardingCompleted && location.pathname !== '/onboarding') {
-      navigate('/onboarding', { replace: true })
-    } else if (onboardingCompleted && location.pathname === '/onboarding') {
-      navigate('/dashboard', { replace: true })
+      // Se localStorage diz que está completo, confia (otimista)
+      if (localOnboardingCompleted) {
+        if (location.pathname === '/onboarding') {
+          navigate('/dashboard', { replace: true })
+        }
+        return
+      }
+
+      // Se não, verifica no Supabase
+      try {
+        const { checkOnboardingStatus } = await import('@/lib/supabase/onboarding-queries')
+        const isCompleted = await checkOnboardingStatus(user.id)
+
+        if (isCompleted) {
+          localStorage.setItem(onboardingKey, 'true')
+          if (location.pathname === '/onboarding') {
+            navigate('/dashboard', { replace: true })
+          }
+        } else if (!isCompleted && location.pathname !== '/onboarding') {
+          navigate('/onboarding', { replace: true })
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error)
+        // Em caso de erro, permite navegação normal
+      }
     }
+
+    checkOnboarding()
   }, [user, loading, location.pathname, navigate])
 
   return (

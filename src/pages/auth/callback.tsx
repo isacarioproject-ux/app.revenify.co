@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { XCircle, CheckCircle2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // Função para rastrear eventos no Revenify
@@ -128,89 +127,24 @@ export default function AuthCallback() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="text-center space-y-6"
-      >
-        {/* Preloader minimalista */}
-        <div className="flex justify-center">
-          {status === 'loading' && (
-            <div className="relative">
-              {/* Logo ou ícone central */}
-              <motion.div
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center"
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <span className="text-2xl font-bold text-primary">R</span>
-              </motion.div>
-              {/* Barra de progresso circular */}
-              <svg className="absolute inset-0 w-16 h-16 -rotate-90" viewBox="0 0 64 64">
-                <motion.circle
-                  cx="32"
-                  cy="32"
-                  r="28"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-primary/20"
-                />
-                <motion.circle
-                  cx="32"
-                  cy="32"
-                  r="28"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  className="text-primary"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{ strokeDasharray: '176', strokeDashoffset: '0' }}
-                />
-              </svg>
-            </div>
-          )}
-          {status === 'success' && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-              className="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center"
-            >
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
-            </motion.div>
-          )}
-          {status === 'error' && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-              className="w-16 h-16 rounded-2xl bg-destructive/10 flex items-center justify-center"
-            >
-              <XCircle className="h-8 w-8 text-destructive" />
-            </motion.div>
-          )}
-        </div>
-
-        {/* Mensagem */}
+      {/* Loader ultra minimalista - apenas 3 pontos pulsando */}
+      <div className="flex items-center gap-1">
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.3 }}
-          className="space-y-1"
-        >
-          <p className="text-base font-medium text-foreground">{message}</p>
-          {status === 'error' && (
-            <p className="text-sm text-muted-foreground">
-              Redirecionando para a página de login...
-            </p>
-          )}
-        </motion.div>
-      </motion.div>
+          className="w-2 h-2 rounded-full bg-foreground/40"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
+        />
+        <motion.div
+          className="w-2 h-2 rounded-full bg-foreground/40"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+        />
+        <motion.div
+          className="w-2 h-2 rounded-full bg-foreground/40"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+        />
+      </div>
     </div>
   )
 }
