@@ -609,7 +609,7 @@ export default function IntegrationsPage() {
                     <div className="p-3 rounded-lg bg-muted/50">
                       <p className="text-sm font-medium mb-2">{t('integrations.payments.gateways')}</p>
                       <div className="flex flex-wrap gap-2">
-                        {['Stripe', 'Hotmart', 'Kiwify', 'Eduzz', 'PagSeguro', 'Mercado Pago', 'PayPal', 'WooCommerce'].map((gateway) => (
+                        {['Stripe', 'Hotmart', 'Kiwify', 'Eduzz', 'PagSeguro', 'PayPal', 'WooCommerce'].map((gateway) => (
                           <Badge key={gateway} variant="secondary" className="text-xs">
                             {gateway}
                           </Badge>
