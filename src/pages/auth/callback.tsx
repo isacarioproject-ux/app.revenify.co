@@ -94,14 +94,14 @@ export default function AuthCallback() {
             
             setTimeout(() => {
               navigate('/onboarding', { replace: true })
-            }, 1500)
+            }, 3000)
           } else {
             setStatus('success')
             setMessage('Login realizado com sucesso!')
             
             setTimeout(() => {
               navigate('/dashboard', { replace: true })
-            }, 1500)
+            }, 3000)
           }
         } else {
           setStatus('error')
@@ -126,12 +126,14 @@ export default function AuthCallback() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="relative">
-        <div className="h-16 w-16 md:h-32 md:w-32 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
+      <div className="relative h-28 w-28 sm:h-32 sm:w-32 md:h-40 md:w-40">
+        {/* Spinner fino cinza */}
+        <div className="absolute inset-0 animate-spin rounded-full border border-muted-foreground/20 border-t-muted-foreground/40" />
+        {/* Logo centralizada */}
         <img
           src="/logo.png"
           alt="Revenify"
-          className="absolute inset-0 m-auto h-10 w-10 md:h-20 md:w-20 object-contain"
+          className="absolute inset-0 m-auto h-16 w-16 sm:h-[72px] sm:w-[72px] md:h-24 md:w-24 object-contain"
         />
       </div>
     </div>

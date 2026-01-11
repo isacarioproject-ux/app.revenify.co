@@ -201,7 +201,7 @@ export default function ShortLinksPage() {
 
   return (
     <DashboardLayout>
-      <div className="w-full p-4 md:p-6 space-y-6">
+      <div className="w-full p-4 md:p-6 space-y-6 overflow-x-hidden">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -320,9 +320,9 @@ export default function ShortLinksPage() {
         </div>
 
         {/* Links Table */}
-        <Card>
-          <CardContent className="p-0">
-            <Table>
+        <Card className="overflow-hidden">
+          <CardContent className="p-0 overflow-x-auto">
+            <Table className="min-w-[700px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>

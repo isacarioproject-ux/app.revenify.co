@@ -2,11 +2,20 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://app.revenify.co',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Credentials': 'true',
+const ALLOWED_ORIGINS = new Set([
+  'https://app.revenify.co',
+  'http://localhost:5173',
+])
+
+const getCorsHeaders = (req: Request) => {
+  const origin = req.headers.get('origin') || ''
+  const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : 'https://app.revenify.co'
+  return {
+    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Credentials': 'true',
+  }
 }
 
 interface TrackingPayload {
@@ -37,7 +46,7 @@ interface TrackingPayload {
 serve(async (req) => {
   // Handle CORS
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req) })
   }
 
   try {
@@ -58,10 +67,10 @@ serve(async (req) => {
       .single()
 
     if (projectError || !project) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid project key' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid project key' }), {
+        status: 401,
+        headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+      })
     }
 
     // Verificar limites do plano
@@ -73,10 +82,10 @@ serve(async (req) => {
 
     if (subscription) {
       if (subscription.current_monthly_events >= subscription.max_monthly_events) {
-        return new Response(
-          JSON.stringify({ error: 'Monthly event limit reached' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
+        return new Response(JSON.stringify({ error: 'Monthly event limit reached' }), {
+          status: 429,
+          headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+        })
       }
     }
 
@@ -156,17 +165,16 @@ serve(async (req) => {
         .eq('user_id', project.user_id)
     }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+    })
 
   } catch (error) {
     console.error('Error:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req), 'Content-Type': 'application/json' },
+    })
   }
 })
 

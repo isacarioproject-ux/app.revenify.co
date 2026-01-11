@@ -3,9 +3,23 @@ import type { OnboardingData } from '@/types/onboarding'
 
 /**
  * Check if user has completed onboarding
+ * Retorna true (completado) em caso de erro para não bloquear o usuário
  */
 export async function checkOnboardingStatus(userId: string): Promise<boolean> {
   try {
+    // Primeiro verifica se usuário já tem projetos (mais confiável)
+    const { data: projects, error: projectsError } = await supabase
+      .from('projects')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1)
+
+    // Se tem projetos, onboarding está completo
+    if (!projectsError && projects && projects.length > 0) {
+      return true
+    }
+
+    // Verifica na tabela de onboarding
     const { data, error } = await supabase
       .from('onboarding_analytics')
       .select('completed')
@@ -14,13 +28,15 @@ export async function checkOnboardingStatus(userId: string): Promise<boolean> {
 
     if (error) {
       console.error('Error checking onboarding status:', error)
-      return false
+      // Em caso de erro, assume completado para não bloquear usuário
+      return true
     }
 
     return data?.completed === true
   } catch (error) {
     console.error('Error in checkOnboardingStatus:', error)
-    return false
+    // Em caso de erro, assume completado para não bloquear usuário
+    return true
   }
 }
 

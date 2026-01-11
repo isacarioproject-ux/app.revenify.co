@@ -148,12 +148,8 @@ export const HeaderSkeleton = () => (
   </header>
 )
 
-// Preload inicial - MUITO simples (apenas spinner cinza pequeno)
-export const InitialPreload = () => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
-    <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600 dark:border-gray-700 dark:border-t-gray-400" />
-  </div>
-)
+// Preload inicial removido (evitar spinner extra)
+export const InitialPreload = () => null
 
 // Skeleton para cards da Dashboard - Leve e elegante
 export const DashboardCardSkeleton = () => (

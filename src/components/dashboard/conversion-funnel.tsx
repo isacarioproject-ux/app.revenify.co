@@ -78,7 +78,7 @@ export function ConversionFunnel({ data, loading = false }: ConversionFunnelProp
   ]
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>{t('funnel.title')}</CardTitle>
       </CardHeader>

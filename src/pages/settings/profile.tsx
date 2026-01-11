@@ -28,12 +28,37 @@ export default function ProfilePage() {
 
   // Load user data
   useEffect(() => {
-    if (user) {
+    const loadUserData = async () => {
+      if (!user) return
+      
       setEmail(user.email || '')
       setName(user.user_metadata?.full_name || user.user_metadata?.name || '')
       setCompany(user.user_metadata?.company || '')
-      setAvatarUrl(user.user_metadata?.avatar_url || '')
+      
+      // Try to get avatar from user metadata first
+      let avatar = user.user_metadata?.avatar_url || ''
+      
+      // Also check profiles table for avatar
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('avatar_url, full_name, company')
+          .eq('id', user.id)
+          .single()
+        
+        if (profile) {
+          if (profile.avatar_url) avatar = profile.avatar_url
+          if (profile.full_name && !name) setName(profile.full_name)
+          if (profile.company && !company) setCompany(profile.company)
+        }
+      } catch (e) {
+        // Profile table might not exist, ignore
+      }
+      
+      setAvatarUrl(avatar)
     }
+    
+    loadUserData()
   }, [user])
 
   const getInitials = (name: string, email: string) => {
@@ -90,6 +115,15 @@ export default function ProfilePage() {
       })
 
       if (updateError) throw updateError
+
+      // Also update profile table
+      await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' })
 
       setAvatarUrl(publicUrl)
       toast.success('Foto atualizada com sucesso!')
