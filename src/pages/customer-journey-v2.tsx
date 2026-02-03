@@ -812,10 +812,19 @@ export default function CustomerJourneyPage() {
                             tp => tp.utm_source || tp.referrer
                           )
                           const uniqueSources = [...new Map(
-                            touchpointsWithSource.map(tp => [
-                              tp.utm_source || (tp.referrer ? new URL(tp.referrer).hostname : 'direct'),
-                              tp
-                            ])
+                            touchpointsWithSource.map(tp => {
+                              let source = 'direct'
+                              if (tp.utm_source) {
+                                source = tp.utm_source
+                              } else if (tp.referrer) {
+                                try {
+                                  source = new URL(tp.referrer).hostname
+                                } catch {
+                                  source = tp.referrer
+                                }
+                              }
+                              return [source, tp]
+                            })
                           ).entries()]
 
                           const totalRevenue = selectedJourney.total_revenue
@@ -827,7 +836,13 @@ export default function CustomerJourneyPage() {
                           // Last-Touch: 100% to last with UTM
                           const lastTouchpoint = [...touchpointsWithSource].reverse()[0]
                           const lastTouch = lastTouchpoint ? {
-                            utm_source: lastTouchpoint.utm_source || (lastTouchpoint.referrer ? new URL(lastTouchpoint.referrer).hostname : null),
+                            utm_source: lastTouchpoint.utm_source || (lastTouchpoint.referrer ? (() => {
+                              try {
+                                return new URL(lastTouchpoint.referrer).hostname
+                              } catch {
+                                return lastTouchpoint.referrer
+                              }
+                            })() : null),
                             utm_medium: lastTouchpoint.utm_medium,
                             utm_campaign: lastTouchpoint.utm_campaign
                           } : firstTouch

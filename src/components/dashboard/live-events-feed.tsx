@@ -120,7 +120,13 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
                     </div>
                     {event.page_url && (
                       <p className="text-xs text-muted-foreground truncate mt-1">
-                        {new URL(event.page_url).pathname}
+                        {(() => {
+                          try {
+                            return new URL(event.page_url).pathname
+                          } catch {
+                            return event.page_url
+                          }
+                        })()}
                       </p>
                     )}
                   </div>
