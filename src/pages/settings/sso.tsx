@@ -256,8 +256,8 @@ export default function SSOSettingsPage() {
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 {t('sso.upgradeDesc')}
               </p>
-              <Button asChild>
-                <a href="/pricing">{t('sso.upgradeToBusiness')}</a>
+              <Button>
+                <a href="/pricing" className="flex items-center">{t('sso.upgradeToBusiness')}</a>
               </Button>
             </CardContent>
           </Card>
