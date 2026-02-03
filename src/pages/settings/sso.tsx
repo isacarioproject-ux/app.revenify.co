@@ -557,8 +557,8 @@ export default function SSOSettingsPage() {
                   </div>
                 </div>
 
-                <Button variant="outline" asChild>
-                  <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">
+                  <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer" className="flex items-center">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Ver Documentação Completa
                   </a>

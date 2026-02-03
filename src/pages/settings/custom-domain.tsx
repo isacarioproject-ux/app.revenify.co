@@ -179,8 +179,8 @@ export default function CustomDomainPage() {
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 {t('customDomain.upgradeDesc')}
               </p>
-              <Button asChild>
-                <a href="/settings/billing?upgrade=pro">
+              <Button>
+                <a href="/settings/billing?upgrade=pro" className="flex items-center">
                   <Zap className="mr-2 h-4 w-4" />
                   {t('customDomain.upgradeToPro')}
                 </a>
@@ -365,8 +365,8 @@ export default function CustomDomainPage() {
               {t('customDomain.helpDesc')}
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer" className="flex items-center">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   {t('customDomain.viewDocs')}
                 </a>
