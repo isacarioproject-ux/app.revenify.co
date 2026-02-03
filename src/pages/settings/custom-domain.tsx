@@ -365,8 +365,8 @@ export default function CustomDomainPage() {
               {t('customDomain.helpDesc')}
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer" className="flex items-center">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   {t('customDomain.viewDocs')}
                 </a>
