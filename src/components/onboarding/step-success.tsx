@@ -37,7 +37,7 @@ const nextSteps = [
     icon: Link2,
     title: 'Ver documentação',
     description: 'Aprenda tudo sobre o Revenify',
-    link: 'https://docs.revenify.co',
+    link: 'https://www.revenify.co/docs',
     external: true,
   },
 ]

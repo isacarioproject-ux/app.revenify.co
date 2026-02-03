@@ -11,7 +11,6 @@ import { useAuth } from '@/contexts/auth-context'
 import { supabase } from '@/lib/supabase'
 import { SettingsPageSkeleton } from '@/components/page-skeleton'
 import { Upload, Camera } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
 
 export default function ProfilePage() {
   const { t } = useI18n()
@@ -245,7 +244,7 @@ export default function ProfilePage() {
                 variant="outline" 
                 size="sm" 
                 onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
+                loading={uploading}
               >
                 <Camera className="h-4 w-4 mr-2" />
                 {uploading ? t('common.uploading') : t('profile.changePhoto')}
@@ -355,15 +354,8 @@ export default function ProfilePage() {
 
         {/* Save Button */}
         <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? (
-              <>
-                <Spinner size="sm" color="white" className="mr-2" />
-                {t('common.saving')}
-              </>
-            ) : (
-              t('common.saveChanges')
-            )}
+          <Button onClick={handleSave} loading={saving}>
+            {saving ? t('common.saving') : t('common.saveChanges')}
           </Button>
         </div>
       </div>

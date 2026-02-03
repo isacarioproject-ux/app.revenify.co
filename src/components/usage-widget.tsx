@@ -24,12 +24,34 @@ function formatLimit(value: number): string {
 export function UsageWidget({ projectId, userId, compact = false }: UsageWidgetProps) {
   const { usage, limits, isLoading } = useUsage(projectId || null, userId)
   const navigate = useNavigate()
-
-  // Só esconde durante loading inicial, não quando não tem projectId
-  if (isLoading) return null
   
   // Se não tem nem projectId nem userId, não mostra
   if (!projectId && !userId) return null
+
+  // Mostrar skeleton durante loading para evitar flashing
+  if (isLoading) {
+    if (compact) {
+      return (
+        <div className="px-2 py-2 space-y-2.5 rounded-lg bg-muted/30 animate-pulse">
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <div className="h-3 w-16 bg-muted rounded" />
+              <div className="h-3 w-12 bg-muted rounded" />
+            </div>
+            <div className="h-1 w-full bg-muted rounded" />
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <div className="h-3 w-12 bg-muted rounded" />
+              <div className="h-3 w-12 bg-muted rounded" />
+            </div>
+            <div className="h-1 w-full bg-muted rounded" />
+          </div>
+        </div>
+      )
+    }
+    return null
+  }
 
   // Links ilimitados = não mostrar porcentagem
   const isLinksUnlimited = limits.shortLinks === -1 || limits.shortLinks >= 999999

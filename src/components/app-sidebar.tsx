@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Logo } from '@/components/logo'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -26,7 +26,6 @@ import {
   User,
   LogOut,
   ChevronUp,
-  Settings,
   Bell,
   CreditCard,
   Palette,
@@ -44,26 +43,18 @@ import {
   AnimatedLink2,
   AnimatedGlobe,
   AnimatedShield,
-  AnimatedSettings,
-  AnimatedCreditCard,
-  AnimatedBell,
-  AnimatedPalette,
-  AnimatedUser,
-  AnimatedPlug,
 } from '@/components/animated-icons'
 import { supabase } from '@/lib/supabase'
-import { useEffect, useState } from 'react'
-import type { User as SupabaseUser } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
 import { useProjects } from '@/hooks/use-projects'
 import { UsageWidget } from '@/components/usage-widget'
+import { useAuth } from '@/contexts/auth-context'
 
 export function AppSidebar() {
   const { t } = useI18n()
   const location = useLocation()
-  const navigate = useNavigate()
   const { isMobile } = useSidebar()
-  const [user, setUser] = useState<SupabaseUser | null>(null)
+  const { user } = useAuth()
   const { selectedProject } = useProjects()
 
   const menuItems = [
@@ -119,46 +110,9 @@ export function AppSidebar() {
     },
   ]
 
-  useEffect(() => {
-    // Carregar usuário inicial
-    const loadUser = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession()
-        if (error) {
-          console.warn('Erro ao carregar sessão no sidebar:', error)
-          setUser(null)
-          return
-        }
-        setUser(session?.user || null)
-      } catch (err) {
-        console.warn('Erro de conexão ao carregar usuário:', err)
-        setUser(null)
-      }
-    }
-    
-    loadUser()
-
-    // Listener para mudanças de autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null)
-    })
-
-    // Listener customizado para atualizações de perfil
-    const handleUserUpdate = () => {
-      loadUser()
-    }
-
-    window.addEventListener('user-updated', handleUserUpdate)
-
-    return () => {
-      subscription.unsubscribe()
-      window.removeEventListener('user-updated', handleUserUpdate)
-    }
-  }, [])
-
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    navigate('/auth')
+    window.location.href = '/auth'
   }
 
   const getUserInitials = () => {
@@ -359,33 +313,45 @@ export function AppSidebar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/settings/profile')}>
-                  <User className="mr-2 h-4 w-4" />
-                  {t('settings.profile')}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    {t('settings.profile')}
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/settings/notifications')}>
-                  <Bell className="mr-2 h-4 w-4" />
-                  {t('settings.notifications')}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings/notifications">
+                    <Bell className="mr-2 h-4 w-4" />
+                    {t('settings.notifications')}
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/settings/preferences')}>
-                  <Palette className="mr-2 h-4 w-4" />
-                  {t('settings.preferences')}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings/preferences">
+                    <Palette className="mr-2 h-4 w-4" />
+                    {t('settings.preferences')}
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/settings/billing')}>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  {t('settings.billing')}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings/billing">
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    {t('settings.billing')}
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/settings/integrations')}>
-                  <Plug className="mr-2 h-4 w-4" />
-                  {t('settings.integrations')}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings/integrations">
+                    <Plug className="mr-2 h-4 w-4" />
+                    {t('settings.integrations')}
+                  </Link>
                 </DropdownMenuItem>
                 {/* Blog - apenas para admin */}
                 {user?.email === 'revenify.co@gmail.com' && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate('/blog/create')}>
-                      <PenSquare className="mr-2 h-4 w-4" />
-                      Blog Admin
+                    <DropdownMenuItem asChild>
+                      <Link to="/blog/create">
+                        <PenSquare className="mr-2 h-4 w-4" />
+                        Blog Admin
+                      </Link>
                     </DropdownMenuItem>
                   </>
                 )}

@@ -623,7 +623,7 @@ export default function IntegrationsPage() {
                     {/* Botões */}
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" asChild>
-                        <a href="https://docs.revenify.co/payments" target="_blank" rel="noopener noreferrer">
+                        <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
                           <BookOpen className="h-4 w-4 mr-2" />
                           {t('integrations.payments.viewDocs')}
                         </a>
@@ -806,13 +806,11 @@ export default function IntegrationsPage() {
                         variant="secondary" 
                         size="sm" 
                         onClick={testWebhook}
-                        disabled={testingWebhook || !webhookUrl}
+                        disabled={!webhookUrl}
+                        loading={testingWebhook}
                       >
-                        {testingWebhook ? (
-                          <><Spinner size="sm" color="white" className="mr-2" />{t('integrations.webhooks.testing')}</>
-                        ) : (
-                          <><Play className="h-4 w-4 mr-2" />{t('integrations.webhooks.test')}</>
-                        )}
+                        <Play className="h-4 w-4 mr-2" />
+                        {testingWebhook ? t('integrations.webhooks.testing') : t('integrations.webhooks.test')}
                       </Button>
                     </div>
                     <div className="p-3 rounded-lg bg-muted/50">

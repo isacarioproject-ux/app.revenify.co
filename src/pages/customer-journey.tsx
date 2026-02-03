@@ -271,7 +271,7 @@ export default function CustomerJourneyPage() {
                   className="pl-9"
                 />
               </div>
-              <Button onClick={searchJourneys} disabled={loading}>
+              <Button onClick={searchJourneys} loading={loading}>
                 {loading ? t('journey.searching') : t('journey.search')}
               </Button>
             </div>
