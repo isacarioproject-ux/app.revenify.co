@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { GlobalSearch } from '@/components/global-search'
@@ -11,9 +10,9 @@ import { AIChatWidget } from '@/components/ai-chat-widget'
 import { TrialBanner } from '@/components/trial-banner'
 import { TrialExpiredModal } from '@/components/trial-expired-modal'
 import { Search } from 'lucide-react'
-import { User } from '@supabase/supabase-js'
 import { useI18n } from '@/hooks/use-i18n'
 import { SidebarSkeleton, HeaderSkeleton } from '@/components/loading-skeleton'
+import { useAuth } from '@/contexts/auth-context'
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -21,9 +20,8 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate()
-  const [user, setUser] = useState<User | null>(null)
+  const { user, loading } = useAuth()
   const [searchOpen, setSearchOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
   const { t } = useI18n()
 
   // Global search shortcut (Cmd+K / Ctrl+K)
@@ -38,42 +36,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     return () => document.removeEventListener('keydown', down)
   }, [])
 
+  // Redireciona para auth se não estiver logado
   useEffect(() => {
-    // Verificar sessão em background - NÃO bloqueia
-    supabase.auth.getSession()
-      .then(({ data: { session }, error }) => {
-        if (error) {
-          console.warn('Erro de conexão ao verificar sessão:', error)
-          // Não redireciona em caso de erro de rede
-          setLoading(false)
-          return
-        }
-        if (!session) {
-          navigate('/auth')
-        } else {
-          setUser(session.user)
-          setLoading(false)
-        }
-      })
-      .catch((err) => {
-        console.warn('Erro de rede ao verificar sessão:', err)
-        // Mantém na página atual em caso de erro
-        setLoading(false)
-      })
-
-    // Escutar mudanças na autenticação
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        navigate('/auth')
-      } else {
-        setUser(session.user)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [navigate])
+    if (!loading && !user) {
+      navigate('/auth')
+    }
+  }, [loading, user, navigate])
 
   // Renderiza imediatamente - sem bloqueio
   return (

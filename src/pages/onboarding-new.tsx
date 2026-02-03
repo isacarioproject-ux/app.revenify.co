@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   X
 } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
 import { useAuth } from '@/contexts/auth-context'
 import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
@@ -255,20 +254,12 @@ export default function OnboardingPage() {
                   </Button>
                   <Button 
                     onClick={handleNext} 
-                    disabled={isLoading || !projectName.trim() || !projectDomain.trim()}
+                    disabled={!projectName.trim() || !projectDomain.trim()}
+                    loading={isLoading}
                     className="flex-1"
                   >
-                    {isLoading ? (
-                      <>
-                        <Spinner size="sm" color="white" className="mr-2" />
-                        {t('common.creating')}
-                      </>
-                    ) : (
-                      <>
-                        {t('onboarding.createProject')}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
-                    )}
+                    {isLoading ? t('common.creating') : t('onboarding.createProject')}
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </motion.div>

@@ -224,10 +224,11 @@ export default function BillingPage() {
                       <Button 
                         className="w-full mt-auto" 
                         variant={isCurrentPlan ? 'outline' : plan.popular ? 'default' : 'outline'}
-                        disabled={isCurrentPlan || loading === plan.id}
+                        disabled={isCurrentPlan}
+                        loading={loading === plan.id}
                         onClick={() => handleUpgrade(plan.id)}
                       >
-                        {loading === plan.id ? t('common.processing') : isCurrentPlan ? t('billing.currentPlan') : t('billing.upgrade')}
+                        {isCurrentPlan ? t('billing.currentPlan') : t('billing.upgrade')}
                       </Button>
                     ) : isCurrentPlan ? (
                       <div className="text-center text-sm text-muted-foreground mt-auto py-2">

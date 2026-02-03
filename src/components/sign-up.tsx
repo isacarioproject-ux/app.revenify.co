@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { Mail, CheckCircle2 } from 'lucide-react'
-import { Spinner } from '@/components/ui/spinner'
 
 export default function SignUpPage() {
     const [email, setEmail] = useState('')
@@ -155,18 +154,9 @@ export default function SignUpPage() {
                             />
                         </div>
 
-                        <Button className="w-full" disabled={loading}>
-                            {loading ? (
-                                <>
-                                    <Spinner size="sm" color="white" className="mr-2" />
-                                    Sending...
-                                </>
-                            ) : (
-                                <>
-                                    <Mail className="mr-2 h-4 w-4" />
-                                    Sign up with magic link
-                                </>
-                            )}
+                        <Button className="w-full" loading={loading}>
+                            <Mail className="mr-2 h-4 w-4" />
+                            {loading ? 'Sending...' : 'Sign up with magic link'}
                         </Button>
                     </div>
 

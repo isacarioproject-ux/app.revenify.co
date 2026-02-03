@@ -439,8 +439,8 @@ export default function CustomerJourneyPage() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline" size="icon" onClick={fetchJourneys} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <Button variant="outline" size="icon" onClick={fetchJourneys} loading={loading}>
+              <RefreshCw className="h-4 w-4" />
             </Button>
 
             <Button variant="outline" onClick={exportToCSV}>
@@ -554,8 +554,8 @@ export default function CustomerJourneyPage() {
                   </SelectContent>
                 </Select>
 
-                <Button onClick={fetchJourneys} disabled={loading}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.search')}
+                <Button onClick={fetchJourneys} loading={loading}>
+                  {t('common.search')}
                 </Button>
               </div>
             </div>
