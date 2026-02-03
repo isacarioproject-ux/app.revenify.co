@@ -330,12 +330,6 @@ export default function IntegrationsPage() {
   const apiKey = integration ? `rev_${(integration as any).api_key?.slice(0, 12) || '***'}...` : ''
   const fullApiKey = (integration as any)?.api_key || ''
 
-  useEffect(() => {
-    if (selectedProject?.id) {
-      loadIntegration()
-    }
-  }, [selectedProject?.id, loadIntegration])
-
   const loadIntegration = useCallback(async () => {
     if (!selectedProject?.id) return
     
@@ -384,6 +378,12 @@ export default function IntegrationsPage() {
       setLoading(false)
     }
   }, [selectedProject?.id])
+
+  useEffect(() => {
+    if (selectedProject?.id) {
+      loadIntegration()
+    }
+  }, [selectedProject?.id, loadIntegration])
 
   const handleConnectStripe = async () => {
     if (!selectedProject?.id) {

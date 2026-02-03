@@ -44,9 +44,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading = false, children, disabled, ...props }, ref) => {
-    // When loading is true, we can't use asChild because Slot requires exactly one child
-    // and loading adds a spinner element as a second child
-    const Comp = (asChild && !loading) ? Slot : "button"
+    const Comp = asChild ? Slot : "button"
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -54,8 +52,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-        {children}
+        <span className="inline-flex items-center gap-2">
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {children}
+        </span>
       </Comp>
     )
   }
