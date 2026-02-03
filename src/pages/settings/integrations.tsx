@@ -622,8 +622,8 @@ export default function IntegrationsPage() {
 
                     {/* Botões */}
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" asChild>
-                        <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="sm">
+                        <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer" className="flex items-center">
                           <BookOpen className="h-4 w-4 mr-2" />
                           {t('integrations.payments.viewDocs')}
                         </a>
@@ -735,8 +735,8 @@ export default function IntegrationsPage() {
                     <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
                       Acesse a API para integrar o Revenify com seus sistemas
                     </p>
-                    <Button size="sm" asChild>
-                      <a href="/pricing">{t('integrations.api.upgrade')}</a>
+                    <Button size="sm">
+                      <a href="/pricing" className="flex items-center">{t('integrations.api.upgrade')}</a>
                     </Button>
                   </div>
                 )}
@@ -865,8 +865,8 @@ Body:
                     <p className="text-sm text-muted-foreground mb-4 max-w-xs mx-auto">
                       Configure webhooks para receber notificações em tempo real
                     </p>
-                    <Button size="sm" asChild>
-                      <a href="/pricing">{t('integrations.api.upgrade')}</a>
+                    <Button size="sm">
+                      <a href="/pricing" className="flex items-center">{t('integrations.api.upgrade')}</a>
                     </Button>
                   </div>
                 )}
