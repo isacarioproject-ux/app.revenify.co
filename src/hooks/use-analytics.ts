@@ -310,7 +310,9 @@ export function useAnalytics(): UseAnalyticsReturn {
       const completionRate = totalProjects > 0 ? (completedProjects / totalProjects) * 100 : 0
 
       // Most active day
-      const maxDay = activityByDay.reduce((max, day) => day.count > max.count ? day : max, activityByDay[0])
+      const maxDay = activityByDay.length > 0 
+        ? activityByDay.reduce((max, day) => day.count > max.count ? day : max, activityByDay[0])
+        : null
       const mostActiveDay = maxDay?.day || 'N/A'
 
       setAnalytics({
