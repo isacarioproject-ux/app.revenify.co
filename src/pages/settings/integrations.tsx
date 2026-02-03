@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useI18n } from '@/hooks/use-i18n'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -334,9 +334,9 @@ export default function IntegrationsPage() {
     if (selectedProject?.id) {
       loadIntegration()
     }
-  }, [selectedProject?.id])
+  }, [selectedProject?.id, loadIntegration])
 
-  const loadIntegration = async () => {
+  const loadIntegration = useCallback(async () => {
     if (!selectedProject?.id) return
     
     setLoading(true)
@@ -383,7 +383,7 @@ export default function IntegrationsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedProject?.id])
 
   const handleConnectStripe = async () => {
     if (!selectedProject?.id) {
@@ -447,7 +447,7 @@ export default function IntegrationsPage() {
       // Clean URL
       window.history.replaceState({}, '', '/settings/integrations')
     }
-  }, [])
+  }, [loadIntegration, t])
 
   // Loading inicial
   if (projectsLoading) {
