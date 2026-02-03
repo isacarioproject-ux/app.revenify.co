@@ -179,8 +179,8 @@ export default function CustomDomainPage() {
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 {t('customDomain.upgradeDesc')}
               </p>
-              <Button asChild>
-                <a href="/settings/billing?upgrade=pro">
+              <Button>
+                <a href="/settings/billing?upgrade=pro" className="flex items-center">
                   <Zap className="mr-2 h-4 w-4" />
                   {t('customDomain.upgradeToPro')}
                 </a>
