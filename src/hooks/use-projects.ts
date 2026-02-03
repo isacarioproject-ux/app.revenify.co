@@ -44,7 +44,7 @@ export function useProjects() {
 
   useEffect(() => {
     fetchProjects()
-  }, [])
+  }, [fetchProjects])
 
   const addProject = async (project: { name: string; domain: string }) => {
     try {
