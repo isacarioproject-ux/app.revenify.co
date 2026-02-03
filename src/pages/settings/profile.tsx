@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { supabase } from '@/lib/supabase'
 import { SettingsPageSkeleton } from '@/components/page-skeleton'
 import { Upload, Camera } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function ProfilePage() {
   const { t } = useI18n()
@@ -34,26 +35,8 @@ export default function ProfilePage() {
       setName(user.user_metadata?.full_name || user.user_metadata?.name || '')
       setCompany(user.user_metadata?.company || '')
       
-      // Try to get avatar from user metadata first
-      let avatar = user.user_metadata?.avatar_url || ''
-      
-      // Also check profiles table for avatar
-      try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('avatar_url, full_name, company')
-          .eq('id', user.id)
-          .single()
-        
-        if (profile) {
-          if (profile.avatar_url) avatar = profile.avatar_url
-          if (profile.full_name && !name) setName(profile.full_name)
-          if (profile.company && !company) setCompany(profile.company)
-        }
-      } catch (e) {
-        // Profile table might not exist, ignore
-      }
-      
+      // Get avatar from user metadata
+      const avatar = user.user_metadata?.avatar_url || ''
       setAvatarUrl(avatar)
     }
     
@@ -115,15 +98,6 @@ export default function ProfilePage() {
 
       if (updateError) throw updateError
 
-      // Also update profile table
-      await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          avatar_url: publicUrl,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' })
-
       setAvatarUrl(publicUrl)
       toast.success('Foto atualizada com sucesso!')
     } catch (error: any) {
@@ -150,17 +124,6 @@ export default function ProfilePage() {
       })
 
       if (error) throw error
-
-      // Also update profile table if exists
-      await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          full_name: name,
-          company: company,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' })
-        .select()
 
       toast.success('Perfil atualizado com sucesso!')
     } catch (error: any) {
