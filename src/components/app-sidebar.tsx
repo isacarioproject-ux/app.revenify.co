@@ -178,45 +178,31 @@ export function AppSidebar() {
               const isActive = location.pathname === item.href
 
               return (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ 
-                    delay: index * 0.1, 
-                    duration: 0.3, 
-                    ease: "easeOut" 
-                  }}
-                >
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      tooltip={item.title}
-                      className="group transition-all duration-200 hover:bg-sidebar-accent/50"
-                    >
-                      <Link to={item.href} className="gap-3 flex items-center">
-                        <div
-                          className={`transition-colors duration-200 ${
-                            isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
-                          }`}
-                        >
-                          <Icon isActive={isActive} />
-                        </div>
-                        <motion.span
-                          initial={{ opacity: 0.8 }}
-                          whileHover={{ opacity: 1 }}
-                          transition={{ duration: 0.2 }}
-                          className={`transition-colors duration-200 ${
-                            isActive ? 'text-sidebar-accent-foreground font-medium' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground'
-                          }`}
-                        >
-                          {item.title}
-                        </motion.span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </motion.div>
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive}
+                    tooltip={item.title}
+                    className="group transition-all duration-200 hover:bg-sidebar-accent/50"
+                  >
+                    <Link to={item.href} className="gap-3 flex items-center">
+                      <div
+                        className={`transition-colors duration-200 ${
+                          isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
+                        }`}
+                      >
+                        <Icon isActive={isActive} />
+                      </div>
+                      <span
+                        className={`transition-colors duration-200 ${
+                          isActive ? 'text-sidebar-accent-foreground font-medium' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground'
+                        }`}
+                      >
+                        {item.title}
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               )
             })}
             
