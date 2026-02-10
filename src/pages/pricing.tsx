@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -70,7 +69,7 @@ export default function PricingPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="space-y-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center">
@@ -290,6 +289,6 @@ export default function PricingPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

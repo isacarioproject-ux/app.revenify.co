@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -122,7 +121,7 @@ export default function ShortLinksPage() {
   // Loading State - só na primeira carga
   if (showInitialSkeleton) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <HeaderSkeleton />
@@ -141,14 +140,14 @@ export default function ShortLinksPage() {
             <TableSkeleton rows={5} cols={6} />
           </div>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   // Empty State - só depois de carregar
   if (shortLinks.length === 0 && selectedProject) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex items-center justify-center min-h-[600px]">
           <div className="text-center max-w-md">
             {/* Icon Circle */}
@@ -195,12 +194,12 @@ export default function ShortLinksPage() {
             onCreate={createShortLink}
           />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6 overflow-x-hidden">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -497,6 +496,6 @@ export default function ShortLinksPage() {
           />
         )}
       </div>
-    </DashboardLayout>
+    </>
   )
 }

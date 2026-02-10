@@ -94,7 +94,7 @@ const translations: Translations = {
   'onboarding.configRequired': { 'pt-BR': 'Configuração Necessária', 'en': 'Configuration Required', 'es': 'Configuración Requerida' },
   'onboarding.tableNotFound': { 'pt-BR': 'A tabela de onboarding não foi encontrada no banco de dados', 'en': 'Onboarding table not found in database', 'es': 'La tabla de onboarding no fue encontrada en la base de datos' },
   'onboarding.reloadPage': { 'pt-BR': 'Recarregar Página', 'en': 'Reload Page', 'es': 'Recargar Página' },
-  
+
   // Onboarding Revenify
   'onboarding.welcomeTitle': { 'pt-BR': 'Bem-vindo ao Revenify', 'en': 'Welcome to Revenify', 'es': 'Bienvenido a Revenify' },
   'onboarding.welcomeDesc': { 'pt-BR': 'Rastreie a origem de cada real de receita do seu negócio', 'en': 'Track the origin of every dollar of revenue in your business', 'es': 'Rastrea el origen de cada dólar de ingresos de tu negocio' },
@@ -336,6 +336,10 @@ const translations: Translations = {
   'search.integrationsDesc': { 'pt-BR': 'Stripe, API e Webhooks', 'en': 'Stripe, API and Webhooks', 'es': 'Stripe, API y Webhooks' },
   'search.pricing': { 'pt-BR': 'Preços', 'en': 'Pricing', 'es': 'Precios' },
   'search.pricingDesc': { 'pt-BR': 'Ver planos disponíveis', 'en': 'View available plans', 'es': 'Ver planes disponibles' },
+  'search.sso': { 'pt-BR': 'SSO / SAML', 'en': 'SSO / SAML', 'es': 'SSO / SAML' },
+  'search.ssoDesc': { 'pt-BR': 'Single Sign-On corporativo', 'en': 'Enterprise Single Sign-On', 'es': 'Single Sign-On empresarial' },
+  'search.customDomain': { 'pt-BR': 'Domínio Personalizado', 'en': 'Custom Domain', 'es': 'Dominio Personalizado' },
+  'search.customDomainDesc': { 'pt-BR': 'Configurar domínio para links curtos', 'en': 'Configure domain for short links', 'es': 'Configurar dominio para enlaces cortos' },
 
   // ===== DASHBOARD =====
   'dashboard.title': { 'pt-BR': 'Dashboard', 'en': 'Dashboard', 'es': 'Panel' },
@@ -491,14 +495,14 @@ const translations: Translations = {
   'shortLinks.expired': { 'pt-BR': 'Expirado', 'en': 'Expired', 'es': 'Expirado' },
   'shortLinks.expires': { 'pt-BR': 'Expira', 'en': 'Expires', 'es': 'Expira' },
   'shortLinks.expiresIn': { 'pt-BR': 'Expira', 'en': 'Expires', 'es': 'Expira' },
-  
+
   // Password Protection
   'shortLinks.password': { 'pt-BR': 'Senha de Proteção', 'en': 'Password Protection', 'es': 'Protección con Contraseña' },
   'shortLinks.passwordDesc': { 'pt-BR': 'Exija uma senha para acessar o link de destino.', 'en': 'Require a password to access the destination link.', 'es': 'Requiere una contraseña para acceder al enlace de destino.' },
   'shortLinks.passwordPlaceholder': { 'pt-BR': 'Digite uma senha...', 'en': 'Enter a password...', 'es': 'Ingresa una contraseña...' },
   'shortLinks.passwordHint': { 'pt-BR': 'Visitantes precisarão digitar esta senha para acessar o link.', 'en': 'Visitors will need to enter this password to access the link.', 'es': 'Los visitantes deberán ingresar esta contraseña para acceder al enlace.' },
   'shortLinks.protected': { 'pt-BR': 'Protegido', 'en': 'Protected', 'es': 'Protegido' },
-  
+
   // A/B Testing
   'shortLinks.abTesting': { 'pt-BR': 'Teste A/B', 'en': 'A/B Testing', 'es': 'Prueba A/B' },
   'shortLinks.enableAbTest': { 'pt-BR': 'Ativar Teste A/B', 'en': 'Enable A/B Test', 'es': 'Activar Prueba A/B' },
@@ -508,14 +512,14 @@ const translations: Translations = {
   'shortLinks.originalUrl': { 'pt-BR': 'URL Original (A)', 'en': 'Original URL (A)', 'es': 'URL Original (A)' },
   'shortLinks.variantUrl': { 'pt-BR': 'Variante (B)', 'en': 'Variant (B)', 'es': 'Variante (B)' },
   'shortLinks.abTest': { 'pt-BR': 'A/B', 'en': 'A/B', 'es': 'A/B' },
-  
+
   // Geo Targeting
   'shortLinks.geoTargeting': { 'pt-BR': 'Geo Targeting', 'en': 'Geo Targeting', 'es': 'Geo Targeting' },
   'shortLinks.geoTargetingDesc': { 'pt-BR': 'Redirecione visitantes para URLs diferentes baseado no país de origem.', 'en': 'Redirect visitors to different URLs based on their country.', 'es': 'Redirige visitantes a diferentes URLs según su país de origen.' },
   'shortLinks.selectCountry': { 'pt-BR': 'Selecionar país', 'en': 'Select country', 'es': 'Seleccionar país' },
   'shortLinks.addGeoRule': { 'pt-BR': 'Adicionar Regra de País', 'en': 'Add Country Rule', 'es': 'Agregar Regla de País' },
   'shortLinks.geoRules': { 'pt-BR': 'Regras Geo', 'en': 'Geo Rules', 'es': 'Reglas Geo' },
-  
+
   // Device Targeting
   'shortLinks.deviceTargeting': { 'pt-BR': 'Device Targeting', 'en': 'Device Targeting', 'es': 'Segmentación por Dispositivo' },
   'shortLinks.enableDeviceTargeting': { 'pt-BR': 'Ativar Device Targeting', 'en': 'Enable Device Targeting', 'es': 'Activar Device Targeting' },
@@ -527,7 +531,7 @@ const translations: Translations = {
   'shortLinks.tabletUrl': { 'pt-BR': 'URL Tablet', 'en': 'Tablet URL', 'es': 'URL Tablet' },
   'shortLinks.tabletUrlDesc': { 'pt-BR': 'URL para visitantes usando tablets.', 'en': 'URL for visitors using tablets.', 'es': 'URL para visitantes usando tablets.' },
   'shortLinks.deviceRules': { 'pt-BR': 'Device', 'en': 'Device', 'es': 'Dispositivo' },
-  
+
   // Deep Links
   'shortLinks.deepLinks': { 'pt-BR': 'Deep Links', 'en': 'Deep Links', 'es': 'Deep Links' },
   'shortLinks.enableDeepLinks': { 'pt-BR': 'Ativar Deep Links', 'en': 'Enable Deep Links', 'es': 'Activar Deep Links' },
@@ -539,7 +543,7 @@ const translations: Translations = {
   'shortLinks.fallbackUrl': { 'pt-BR': 'URL Fallback', 'en': 'Fallback URL', 'es': 'URL Fallback' },
   'shortLinks.fallbackUrlDesc': { 'pt-BR': 'URL para quando o app não está instalado (ex: App Store/Play Store).', 'en': 'URL when app is not installed (e.g., App Store/Play Store).', 'es': 'URL cuando la app no está instalada (ej: App Store/Play Store).' },
   'shortLinks.deepLink': { 'pt-BR': 'Deep Link', 'en': 'Deep Link', 'es': 'Deep Link' },
-  
+
   // Link Cloaking
   'shortLinks.linkCloaking': { 'pt-BR': 'Link Cloaking', 'en': 'Link Cloaking', 'es': 'Link Cloaking' },
   'shortLinks.enableCloaking': { 'pt-BR': 'Ativar Link Cloaking', 'en': 'Enable Link Cloaking', 'es': 'Activar Link Cloaking' },
@@ -742,7 +746,7 @@ const translations: Translations = {
   'terms.title': { 'pt-BR': 'Termos de Serviço', 'en': 'Terms of Service', 'es': 'Términos de Servicio' },
   'terms.lastUpdated': { 'pt-BR': 'Última Atualização: 2 de novembro de 2025', 'en': 'Last Updated: November 2, 2025', 'es': 'Última Actualización: 2 de noviembre de 2025' },
   'terms.tableOfContents': { 'pt-BR': 'Índice', 'en': 'Table of Contents', 'es': 'Índice' },
-  
+
   // Seções
   'terms.section1': { 'pt-BR': '1. Aceitação dos Termos', 'en': '1. Acceptance of Terms', 'es': '1. Aceptación de los Términos' },
   'terms.section2': { 'pt-BR': '2. Descrição do Serviço', 'en': '2. Description of Service', 'es': '2. Descripción del Servicio' },
@@ -763,7 +767,7 @@ const translations: Translations = {
   'privacy.title': { 'pt-BR': 'Política de Privacidade', 'en': 'Privacy Policy', 'es': 'Política de Privacidad' },
   'privacy.lastUpdated': { 'pt-BR': 'Última Atualização: 2 de novembro de 2025', 'en': 'Last Updated: November 2, 2025', 'es': 'Última Actualización: 2 de noviembre de 2025' },
   'privacy.tableOfContents': { 'pt-BR': 'Índice', 'en': 'Table of Contents', 'es': 'Índice' },
-  
+
   // Seções
   'privacy.section1': { 'pt-BR': '1. Introdução', 'en': '1. Introduction', 'es': '1. Introducción' },
   'privacy.section2': { 'pt-BR': '2. Informações que Coletamos', 'en': '2. Information We Collect', 'es': '2. Información que Recopilamos' },
@@ -785,7 +789,7 @@ const translations: Translations = {
   'export.json': { 'pt-BR': 'JSON Data', 'en': 'JSON Data', 'es': 'Datos JSON' },
   'export.exporting': { 'pt-BR': 'Exportando...', 'en': 'Exporting...', 'es': 'Exportando...' },
   'export.button': { 'pt-BR': 'Exportar', 'en': 'Export', 'es': 'Exportar' },
-  
+
   // ===== COLLABORATORS =====
   'collaborators.title': { 'pt-BR': 'Colaboradores do Projeto', 'en': 'Project Collaborators', 'es': 'Colaboradores del Proyecto' },
   'collaborators.selectMember': { 'pt-BR': 'Selecione um membro', 'en': 'Select a member', 'es': 'Selecciona un miembro' },
@@ -853,7 +857,7 @@ const translations: Translations = {
   'documents.created': { 'pt-BR': 'Documento criado com sucesso!', 'en': 'Document created successfully!', 'es': '┬íDocumento creado exitosamente!' },
   'documents.updated': { 'pt-BR': 'Documento atualizado com sucesso!', 'en': 'Document updated successfully!', 'es': '┬íDocumento actualizado exitosamente!' },
   'documents.saveError': { 'pt-BR': 'Erro ao salvar documento', 'en': 'Error saving document', 'es': 'Error al guardar documento' },
-  
+
   // ===== PAGES / DOCS EDITOR =====
   'pages.title': { 'pt-BR': 'Documentos', 'en': 'Documents', 'es': 'Documentos' },
   'pages.newPage': { 'pt-BR': 'Nova Página', 'en': 'New Page', 'es': 'Nueva Página' },
@@ -886,7 +890,7 @@ const translations: Translations = {
   'pages.addElement': { 'pt-BR': 'Adicionar elemento', 'en': 'Add element', 'es': 'Añadir elemento' },
   'pages.shortcuts.comments': { 'pt-BR': 'Ctrl/Cmd + Shift + C', 'en': 'Ctrl/Cmd + Shift + C', 'es': 'Ctrl/Cmd + Shift + C' },
   'pages.comments.title': { 'pt-BR': 'Comentários', 'en': 'Comments', 'es': 'Comentarios' },
-  
+
   // Templates
   'pages.templates.title': { 'pt-BR': 'Escolha um Template', 'en': 'Choose a Template', 'es': 'Elige una Plantilla' },
   'pages.templates.description': { 'pt-BR': 'Comece com um modelo pronto ou crie do zero', 'en': 'Start with a ready template or create from scratch', 'es': 'Comienza con una plantilla lista o crea desde cero' },
@@ -895,7 +899,7 @@ const translations: Translations = {
   'pages.templates.business': { 'pt-BR': 'Negócios', 'en': 'Business', 'es': 'Negocios' },
   'pages.templates.personal': { 'pt-BR': 'Pessoal', 'en': 'Personal', 'es': 'Personal' },
   'pages.templates.education': { 'pt-BR': 'Educação', 'en': 'Education', 'es': 'Educación' },
-  
+
   // Toolbar
   'pages.toolbar.linkTask': { 'pt-BR': 'Vincular tarefa ou documento', 'en': 'Link task or document', 'es': 'Vincular tarea o documento' },
   'pages.toolbar.wiki': { 'pt-BR': 'Marcar como Wiki', 'en': 'Mark as Wiki', 'es': 'Marcar como Wiki' },
@@ -916,7 +920,7 @@ const translations: Translations = {
   'pages.toolbar.properties': { 'pt-BR': 'Propriedades', 'en': 'Properties', 'es': 'Propiedades' },
   'pages.toolbar.history': { 'pt-BR': 'Histórico da página', 'en': 'Page history', 'es': 'Historial de página' },
   'pages.toolbar.deletePage': { 'pt-BR': 'Excluir página', 'en': 'Delete page', 'es': 'Eliminar página' },
-  
+
   // Elements Sidebar
   'pages.elements.title': { 'pt-BR': 'Elementos', 'en': 'Elements', 'es': 'Elementos' },
   'pages.elements.closeSidebar': { 'pt-BR': 'Fechar sidebar', 'en': 'Close sidebar', 'es': 'Cerrar barra lateral' },
@@ -948,7 +952,7 @@ const translations: Translations = {
   'pages.elements.heading1Placeholder': { 'pt-BR': 'Título 1', 'en': 'Heading 1', 'es': 'Título 1' },
   'pages.elements.heading2Placeholder': { 'pt-BR': 'Título 2', 'en': 'Heading 2', 'es': 'Título 2' },
   'pages.elements.textPlaceholder': { 'pt-BR': 'Digite um texto...', 'en': 'Type some text...', 'es': 'Escribe un texto...' },
-  
+
   // Export
   'pages.export.title': { 'pt-BR': 'Exportar documento', 'en': 'Export document', 'es': 'Exportar documento' },
   'pages.export.pdf': { 'pt-BR': 'Exportar como PDF', 'en': 'Export as PDF', 'es': 'Exportar como PDF' },
@@ -976,7 +980,7 @@ const translations: Translations = {
   'pages.export.errorExport': { 'pt-BR': 'Erro ao exportar', 'en': 'Error exporting', 'es': 'Error al exportar' },
   'pages.export.tryAgain': { 'pt-BR': 'Tente novamente', 'en': 'Try again', 'es': 'Intenta de nuevo' },
   'pages.export.export': { 'pt-BR': 'Exportar', 'en': 'Export', 'es': 'Exportar' },
-  
+
   // Navigation
   'pages.navigation': { 'pt-BR': 'Navegação', 'en': 'Navigation', 'es': 'Navegación' },
   'pages.addPage': { 'pt-BR': 'Adicionar página', 'en': 'Add page', 'es': 'Añadir página' },
@@ -997,7 +1001,7 @@ const translations: Translations = {
   'pages.templates.blank': { 'pt-BR': 'Página em Branco', 'en': 'Blank Page', 'es': 'Página en Blanco' },
   'pages.templates.blankDesc': { 'pt-BR': 'Comece do zero', 'en': 'Start from scratch', 'es': 'Comienza desde cero' },
   'pages.templates.use': { 'pt-BR': 'Usar Template', 'en': 'Use Template', 'es': 'Usar Plantilla' },
-  
+
   // Template Content - Meeting Notes
   'pages.templates.content.meetingInfo': { 'pt-BR': 'Data: [Inserir data]\nParticipantes: [Inserir nomes]', 'en': 'Date: [Insert date]\nParticipants: [Insert names]', 'es': 'Fecha: [Insertar fecha]\nParticipantes: [Insertar nombres]' },
   'pages.templates.content.agenda': { 'pt-BR': 'Agenda', 'en': 'Agenda', 'es': 'Agenda' },
@@ -1007,7 +1011,7 @@ const translations: Translations = {
   'pages.templates.content.nextSteps': { 'pt-BR': 'Próximos Passos', 'en': 'Next Steps', 'es': 'Próximos Pasos' },
   'pages.templates.content.action': { 'pt-BR': 'Ação', 'en': 'Action', 'es': 'Acción' },
   'pages.templates.content.responsible': { 'pt-BR': 'Responsável', 'en': 'Responsible', 'es': 'Responsable' },
-  
+
   // Template Content - Project Brief
   'pages.templates.content.overview': { 'pt-BR': 'Visão Geral', 'en': 'Overview', 'es': 'Visión General' },
   'pages.templates.content.projectDescription': { 'pt-BR': 'Descrição breve do projeto e contexto...', 'en': 'Brief description of the project and context...', 'es': 'Breve descripción del proyecto y contexto...' },
@@ -1024,7 +1028,7 @@ const translations: Translations = {
   'pages.templates.content.planning': { 'pt-BR': 'Planejamento', 'en': 'Planning', 'es': 'Planificación' },
   'pages.templates.content.execution': { 'pt-BR': 'Execução', 'en': 'Execution', 'es': 'Ejecución' },
   'pages.templates.content.delivery': { 'pt-BR': 'Entrega', 'en': 'Delivery', 'es': 'Entrega' },
-  
+
   // Template Content - Task List
   'pages.templates.content.myTasks': { 'pt-BR': 'Minhas Tarefas', 'en': 'My Tasks', 'es': 'Mis Tareas' },
   'pages.templates.content.today': { 'pt-BR': 'Hoje', 'en': 'Today', 'es': 'Hoy' },
@@ -1032,7 +1036,7 @@ const translations: Translations = {
   'pages.templates.content.thisWeek': { 'pt-BR': 'Esta Semana', 'en': 'This Week', 'es': 'Esta Semana' },
   'pages.templates.content.backlog': { 'pt-BR': 'Backlog', 'en': 'Backlog', 'es': 'Backlog' },
   'pages.templates.content.idea': { 'pt-BR': 'Ideia', 'en': 'Idea', 'es': 'Idea' },
-  
+
   // Template Content - Weekly Plan
   'pages.templates.content.weekOf': { 'pt-BR': 'Semana de: [Data início] a [Data fim]', 'en': 'Week of: [Start date] to [End date]', 'es': 'Semana de: [Fecha inicio] a [Fecha fin]' },
   'pages.templates.content.weeklyGoals': { 'pt-BR': 'Metas da Semana', 'en': 'Weekly Goals', 'es': 'Metas de la Semana' },
@@ -1044,7 +1048,7 @@ const translations: Translations = {
   'pages.templates.content.addTasks': { 'pt-BR': 'Adicionar tarefas', 'en': 'Add tasks', 'es': 'Añadir tareas' },
   'pages.templates.content.reflection': { 'pt-BR': 'Reflexão', 'en': 'Reflection', 'es': 'Reflexión' },
   'pages.templates.content.reflectionQuestions': { 'pt-BR': 'O que funcionou bem esta semana?\nO que pode melhorar?', 'en': 'What worked well this week?\nWhat can be improved?', 'es': '┬┐Qué funcionó bien esta semana?\n┬┐Qué se puede mejorar?' },
-  
+
   // Template Content - Study Notes
   'pages.templates.content.notesTitle': { 'pt-BR': 'Anotações: [Nome do Assunto]', 'en': 'Notes: [Subject Name]', 'es': 'Notas: [Nombre del Tema]' },
   'pages.templates.content.studyInfo': { 'pt-BR': 'Data: [Data]\nFonte: [Livro/Curso/Artigo]', 'en': 'Date: [Date]\nSource: [Book/Course/Article]', 'es': 'Fecha: [Fecha]\nFuente: [Libro/Curso/Artáculo]' },
@@ -1057,7 +1061,7 @@ const translations: Translations = {
   'pages.templates.content.question': { 'pt-BR': 'Dúvida', 'en': 'Question', 'es': 'Duda' },
   'pages.templates.content.summary': { 'pt-BR': 'Resumo', 'en': 'Summary', 'es': 'Resumen' },
   'pages.templates.content.summaryText': { 'pt-BR': 'Em poucas palavras, este conteúdo trata de...', 'en': 'In short, this content is about...', 'es': 'En pocas palabras, este contenido trata de...' },
-  
+
   // Template Placeholders
   'pages.templates.placeholder.name': { 'pt-BR': 'Nome', 'en': 'Name', 'es': 'Nombre' },
   'pages.templates.placeholder.date': { 'pt-BR': 'Data', 'en': 'Date', 'es': 'Fecha' },
@@ -1075,7 +1079,7 @@ const translations: Translations = {
   'pages.templates.placeholder.insertPeriod': { 'pt-BR': 'Inserir período', 'en': 'Insert period', 'es': 'Insertar período' },
   'pages.templates.placeholder.generatedDate': { 'pt-BR': 'Data de geração', 'en': 'Generated date', 'es': 'Fecha de generación' },
   'pages.templates.placeholder.autoFill': { 'pt-BR': 'Preenchimento automático', 'en': 'Auto-fill', 'es': 'Relleno automático' },
-  
+
   // Template: Financial Report
   'pages.templates.financialreport': { 'pt-BR': 'Relatório Financeiro', 'en': 'Financial Report', 'es': 'Informe Financiero' },
   'pages.templates.financialreportDesc': { 'pt-BR': 'Relatório com dados financeiros automáticos', 'en': 'Report with automatic financial data', 'es': 'Informe con datos financieros automáticos' },
@@ -1090,7 +1094,7 @@ const translations: Translations = {
   'pages.templates.content.financialInsights': { 'pt-BR': 'Análise e insights sobre a situação financeira...', 'en': 'Analysis and insights about the financial situation...', 'es': 'Análisis e insights sobre la situación financiera...' },
   'pages.templates.content.recommendations': { 'pt-BR': 'Recomendações', 'en': 'Recommendations', 'es': 'Recomendaciones' },
   'pages.templates.content.recommendation': { 'pt-BR': 'Recomendação', 'en': 'Recommendation', 'es': 'Recomendación' },
-  
+
   // Comments
   'pages.comments.add': { 'pt-BR': 'Adicionar comentário...', 'en': 'Add comment...', 'es': 'Añadir comentario...' },
   'pages.comments.send': { 'pt-BR': 'Enviar', 'en': 'Send', 'es': 'Enviar' },
@@ -1111,12 +1115,12 @@ const translations: Translations = {
   'pages.comments.beFirst': { 'pt-BR': 'Seja o primeiro a comentar', 'en': 'Be the first to comment', 'es': 'Sé el primero en comentar' },
   'pages.comments.replying': { 'pt-BR': 'Respondendo...', 'en': 'Replying...', 'es': 'Respondiendo...' },
   'pages.comments.confirmDelete': { 'pt-BR': 'Excluir comentário?', 'en': 'Delete comment?', 'es': '┬┐Eliminar comentario?' },
-  
+
   // Keyboard Shortcuts
   'pages.shortcuts.save': { 'pt-BR': 'Ctrl+S', 'en': 'Ctrl+S', 'es': 'Ctrl+S' },
   'pages.shortcuts.sidebar': { 'pt-BR': 'Ctrl+B', 'en': 'Ctrl+B', 'es': 'Ctrl+B' },
   'pages.shortcuts.close': { 'pt-BR': 'ESC', 'en': 'ESC', 'es': 'ESC' },
-  
+
   'team.members': { 'pt-BR': 'Membros', 'en': 'Members', 'es': 'Miembros' },
   'team.invite': { 'pt-BR': 'Convidar Membro', 'en': 'Invite Member', 'es': 'Invitar Miembro' },
   'team.inviteNew': { 'pt-BR': 'Convidar Novo Membro', 'en': 'Invite New Member', 'es': 'Invitar Nuevo Miembro' },
@@ -1361,7 +1365,7 @@ const translations: Translations = {
   'settings.deleteAccountConfirm': { 'pt-BR': 'Esta ação NÃO PODE ser desfeita. Isso irá excluir permanentemente sua conta, todos os seus projetos, documentos e remover todos os dados de nossos servidores.', 'en': 'This action CANNOT be undone. This will permanently delete your account, all your projects, documents and remove all data from our servers.', 'es': 'Esta acción NO PUEDE deshacerse. Esto eliminará permanentemente tu cuenta, todos tus proyectos, documentos y removerá todos los datos de nuestros servidores.' },
   'settings.deleting': { 'pt-BR': 'Excluindo...', 'en': 'Deleting...', 'es': 'Eliminando...' },
   'settings.deleteAccountButton': { 'pt-BR': 'Sim, excluir minha conta', 'en': 'Yes, delete my account', 'es': 'Sá, eliminar mi cuenta' },
-  
+
   // Profile (Revenify)
   'profile.title': { 'pt-BR': 'Perfil', 'en': 'Profile', 'es': 'Perfil' },
   'profile.description': { 'pt-BR': 'Gerencie suas informações pessoais', 'en': 'Manage your personal information', 'es': 'Gestiona tu información personal' },
@@ -1426,7 +1430,7 @@ const translations: Translations = {
   'profile.location': { 'pt-BR': 'Localização', 'en': 'Location', 'es': 'Ubicación' },
   'profile.avatar': { 'pt-BR': 'Avatar', 'en': 'Avatar', 'es': 'Avatar' },
   'profile.changeAvatar': { 'pt-BR': 'Alterar avatar', 'en': 'Change avatar', 'es': 'Cambiar avatar' },
-  
+
   // Notifications (Revenify)
   'notifications.title': { 'pt-BR': 'Notificações', 'en': 'Notifications', 'es': 'Notificaciones' },
   'notifications.description': { 'pt-BR': 'Configure como você recebe notificações', 'en': 'Configure how you receive notifications', 'es': 'Configura cómo recibes notificaciones' },
@@ -1492,7 +1496,7 @@ const translations: Translations = {
   'notifications.disableAllButton': { 'pt-BR': 'Desativar Tudo', 'en': 'Disable All', 'es': 'Desactivar Todo' },
   'notifications.allDisabled': { 'pt-BR': 'Notificações desativadas', 'en': 'Notifications disabled', 'es': 'Notificaciones desactivadas' },
   'notifications.securityRemains': { 'pt-BR': 'Notificações de segurança e manutenção crática permanecem ativas', 'en': 'Security and critical maintenance notifications remain active', 'es': 'Las notificaciones de seguridad y mantenimiento crático permanecen activas' },
-  
+
   // Billing (Revenify)
   'billing.title': { 'pt-BR': 'Planos e Faturamento', 'en': 'Plans & Billing', 'es': 'Planes y Facturación' },
   'billing.description': { 'pt-BR': 'Gerencie sua assinatura e método de pagamento', 'en': 'Manage your subscription and payment method', 'es': 'Gestiona tu suscripción y método de pago' },
@@ -1538,19 +1542,19 @@ const translations: Translations = {
   'billing.faq2Answer': { 'pt-BR': 'Você receberá um aviso ao atingir 80% do limite. Eventos adicionais serão cobrados separadamente ou você pode fazer upgrade.', 'en': 'You will receive a warning at 80% of the limit. Additional events will be charged separately or you can upgrade.', 'es': 'Recibirás un aviso al alcanzar el 80% del límite. Los eventos adicionales se cobrarán por separado o puedes mejorar.' },
   'billing.faq3Question': { 'pt-BR': 'Quais métodos de pagamento são aceitos?', 'en': 'What payment methods are accepted?', 'es': '¿Qué métodos de pago se aceptan?' },
   'billing.faq3Answer': { 'pt-BR': 'Aceitamos cartões de crédito (Visa, Mastercard, Amex) e PIX para pagamentos no Brasil.', 'en': 'We accept credit cards (Visa, Mastercard, Amex) and PIX for payments in Brazil.', 'es': 'Aceptamos tarjetas de crédito (Visa, Mastercard, Amex) y PIX para pagos en Brasil.' },
-  
+
   // Plan Names
   'billing.planFree': { 'pt-BR': 'Grátis', 'en': 'Free', 'es': 'Gratis' },
   'billing.planPro': { 'pt-BR': 'Pro', 'en': 'Pro', 'es': 'Pro' },
   'billing.planBusiness': { 'pt-BR': 'Business', 'en': 'Business', 'es': 'Business' },
   'billing.planEnterprise': { 'pt-BR': 'Enterprise', 'en': 'Enterprise', 'es': 'Enterprise' },
-  
+
   // Plan Descriptions
   'billing.planFreeDesc': { 'pt-BR': 'Perfeito para começar', 'en': 'Perfect to get started', 'es': 'Perfecto para comenzar' },
   'billing.planProDesc': { 'pt-BR': 'Para equipes pequenas', 'en': 'For small teams', 'es': 'Para equipos pequeños' },
   'billing.planBusinessDesc': { 'pt-BR': 'Para empresas em crescimento', 'en': 'For growing companies', 'es': 'Para empresas en crecimiento' },
   'billing.planEnterpriseDesc': { 'pt-BR': 'Para grandes organizações', 'en': 'For large organizations', 'es': 'Para grandes organizaciones' },
-  
+
   // Free Plan Features
   'billing.grátis.feature0': { 'pt-BR': '3 projetos', 'en': '3 projects', 'es': '3 proyectos' },
   'billing.grátis.feature1': { 'pt-BR': '50 documentos', 'en': '50 documents', 'es': '50 documentos' },
@@ -1559,7 +1563,7 @@ const translations: Translations = {
   'billing.grátis.feature4': { 'pt-BR': 'Suporte por email', 'en': 'Email support', 'es': 'Soporte por correo' },
   'billing.grátis.limit0': { 'pt-BR': 'Sem analytics avançado', 'en': 'No advanced analytics', 'es': 'Sin análisis avanzado' },
   'billing.grátis.limit1': { 'pt-BR': 'Sem exportação', 'en': 'No export', 'es': 'Sin exportación' },
-  
+
   // Pro Plan Features
   'billing.pro.feature0': { 'pt-BR': 'Projetos ilimitados', 'en': 'Unlimited projects', 'es': 'Proyectos ilimitados' },
   'billing.pro.feature1': { 'pt-BR': 'Documentos ilimitados', 'en': 'Unlimited documents', 'es': 'Documentos ilimitados' },
@@ -1569,7 +1573,7 @@ const translations: Translations = {
   'billing.pro.feature5': { 'pt-BR': 'Exportação CSV/JSON', 'en': 'CSV/JSON export', 'es': 'Exportación CSV/JSON' },
   'billing.pro.feature6': { 'pt-BR': 'Suporte prioritário', 'en': 'Priority support', 'es': 'Soporte prioritario' },
   'billing.pro.feature7': { 'pt-BR': 'API access', 'en': 'API access', 'es': 'Acceso API' },
-  
+
   // Business Plan Features
   'billing.business.feature0': { 'pt-BR': 'Tudo do Pro +', 'en': 'Everything in Pro +', 'es': 'Todo de Pro +' },
   'billing.business.feature1': { 'pt-BR': '200 GB de armazenamento', 'en': '200 GB storage', 'es': '200 GB de almacenamiento' },
@@ -1579,7 +1583,7 @@ const translations: Translations = {
   'billing.business.feature5': { 'pt-BR': 'Backup automático', 'en': 'Automatic backup', 'es': 'Respaldo automático' },
   'billing.business.feature6': { 'pt-BR': 'Suporte 24/7', 'en': '24/7 support', 'es': 'Soporte 24/7' },
   'billing.business.feature7': { 'pt-BR': 'Gerente de conta dedicado', 'en': 'Dedicated account manager', 'es': 'Gerente de cuenta dedicado' },
-  
+
   // Enterprise Plan Features
   'billing.enterprise.feature0': { 'pt-BR': 'Tudo do Business +', 'en': 'Everything in Business +', 'es': 'Todo de Business +' },
   'billing.enterprise.feature1': { 'pt-BR': 'Armazenamento ilimitado', 'en': 'Unlimited storage', 'es': 'Almacenamiento ilimitado' },
@@ -1589,7 +1593,7 @@ const translations: Translations = {
   'billing.enterprise.feature5': { 'pt-BR': 'Treinamento personalizado', 'en': 'Custom training', 'es': 'Entrenamiento personalizado' },
   'billing.enterprise.feature6': { 'pt-BR': 'Integrações customizadas', 'en': 'Custom integrations', 'es': 'Integraciones personalizadas' },
   'billing.enterprise.feature7': { 'pt-BR': 'Contrato anual', 'en': 'Annual contract', 'es': 'Contrato anual' },
-  
+
   // Billing dialogs & actions
   'billing.methodAdded': { 'pt-BR': 'Método adicionado!', 'en': 'Method added!', 'es': '┬íMétodo agregado!' },
   'billing.methodUpdated': { 'pt-BR': 'Método atualizado!', 'en': 'Method updated!', 'es': '┬íMétodo actualizado!' },
@@ -1619,7 +1623,7 @@ const translations: Translations = {
   'finance.budget': { 'pt-BR': 'Orçamento', 'en': 'Budget', 'es': 'Presupuesto' },
   'finance.categories': { 'pt-BR': 'Categorias', 'en': 'Categories', 'es': 'Categoráas' },
   'finance.reports': { 'pt-BR': 'Relatórios', 'en': 'Reports', 'es': 'Informes' },
-  
+
   // Finance Table
   'finance.table.fillRequired': { 'pt-BR': 'Preencha todos os campos obrigatórios', 'en': 'Fill all required fields', 'es': 'Complete todos los campos obligatorios' },
   'finance.table.added': { 'pt-BR': 'Transação adicionada!', 'en': 'Transaction added!', 'es': '┬íTransacción agregada!' },
@@ -1666,7 +1670,7 @@ const translations: Translations = {
   'finance.table.income': { 'pt-BR': 'Receitas', 'en': 'Income', 'es': 'Ingresos' },
   'finance.table.expenses': { 'pt-BR': 'Despesas', 'en': 'Expenses', 'es': 'Gastos' },
   'finance.table.balance': { 'pt-BR': 'Saldo', 'en': 'Balance', 'es': 'Saldo' },
-  
+
   // Finance Filters
   'finance.filters.income': { 'pt-BR': 'Receita', 'en': 'Income', 'es': 'Ingreso' },
   'finance.filters.expense': { 'pt-BR': 'Despesa', 'en': 'Expense', 'es': 'Gasto' },
@@ -1677,14 +1681,14 @@ const translations: Translations = {
   'finance.filters.clear': { 'pt-BR': 'Limpar', 'en': 'Clear', 'es': 'Limpiar' },
   'finance.filters.clearAll': { 'pt-BR': 'Limpar tudo', 'en': 'Clear all', 'es': 'Limpiar todo' },
   'finance.filters.active': { 'pt-BR': 'filtros ativos', 'en': 'active filters', 'es': 'filtros activos' },
-  
+
   // Finance Payment Methods
   'finance.payment.cash': { 'pt-BR': 'Dinheiro', 'en': 'Cash', 'es': 'Efectivo' },
   'finance.payment.creditCard': { 'pt-BR': 'Cartão de Crédito', 'en': 'Credit Card', 'es': 'Tarjeta de Crédito' },
   'finance.payment.debitCard': { 'pt-BR': 'Cartão de Débito', 'en': 'Debit Card', 'es': 'Tarjeta de Débito' },
   'finance.payment.pix': { 'pt-BR': 'PIX', 'en': 'PIX', 'es': 'PIX' },
   'finance.payment.bankTransfer': { 'pt-BR': 'Transferência Bancária', 'en': 'Bank Transfer', 'es': 'Transferencia Bancaria' },
-  
+
   // Finance Categories
   'finance.categories.title': { 'pt-BR': 'Gerenciar Categorias', 'en': 'Manage Categories', 'es': 'Gestionar Categorías' },
   'finance.categories.errorLoad': { 'pt-BR': 'Erro ao carregar categorias', 'en': 'Error loading categories', 'es': 'Error al cargar categorías' },
@@ -1710,7 +1714,7 @@ const translations: Translations = {
   'finance.categories.updated': { 'pt-BR': 'Categoria atualizada!', 'en': 'Category updated!', 'es': '¡Categoría actualizada!' },
   'finance.categories.iconUpdated': { 'pt-BR': 'Ícone atualizado!', 'en': 'Icon updated!', 'es': '¡Ícono actualizado!' },
   'finance.categories.errorUpdate': { 'pt-BR': 'Erro ao atualizar categoria', 'en': 'Error updating category', 'es': 'Error al actualizar categoría' },
-  
+
   // Finance Budget
   'finance.budget.title': { 'pt-BR': 'Gerenciar Orçamento', 'en': 'Manage Budget', 'es': 'Gestionar Presupuesto' },
   'finance.budget.add': { 'pt-BR': 'Adicionar Orçamento', 'en': 'Add Budget', 'es': 'Agregar Presupuesto' },
@@ -1801,7 +1805,7 @@ const translations: Translations = {
   'finance.budget.month.october': { 'pt-BR': 'Outubro', 'en': 'October', 'es': 'Octubre' },
   'finance.budget.month.november': { 'pt-BR': 'Novembro', 'en': 'November', 'es': 'Noviembre' },
   'finance.budget.month.december': { 'pt-BR': 'Dezembro', 'en': 'December', 'es': 'Diciembre' },
-  
+
   // Finance Sidebar
   'finance.sidebar.blocks': { 'pt-BR': 'Blocos', 'en': 'Blocks', 'es': 'Bloques' },
   'finance.sidebar.overview': { 'pt-BR': 'Visão Geral', 'en': 'Overview', 'es': 'Resumen' },
@@ -1816,11 +1820,11 @@ const translations: Translations = {
   'finance.sidebar.quickExpense': { 'pt-BR': 'Despesa Rápida', 'en': 'Quick Expense', 'es': 'Gasto Rápido' },
   'finance.sidebar.monthlyReport': { 'pt-BR': 'Relatório Mensal', 'en': 'Monthly Report', 'es': 'Informe Mensual' },
   'finance.sidebar.categorySummary': { 'pt-BR': 'Resumo por Categoria', 'en': 'Category Summary', 'es': 'Resumen por Categoráa' },
-  
+
   // Finance Blocks
   'finance.blocks.expand': { 'pt-BR': 'Expandir bloco', 'en': 'Expand block', 'es': 'Expandir bloque' },
   'finance.blocks.collapse': { 'pt-BR': 'Recolher bloco', 'en': 'Collapse block', 'es': 'Contraer bloque' },
-  
+
   // Finance Command Menu
   'finance.command.title': { 'pt-BR': 'Comandos Rápidos', 'en': 'Quick Commands', 'es': 'Comandos Rápidos' },
   'finance.command.searchPlaceholder': { 'pt-BR': 'Buscar comandos...', 'en': 'Search commands...', 'es': 'Buscar comandos...' },
@@ -1830,7 +1834,7 @@ const translations: Translations = {
   'finance.command.charts': { 'pt-BR': 'Gráficos', 'en': 'Charts', 'es': 'Gráficos' },
   'finance.command.export': { 'pt-BR': 'Exportar', 'en': 'Export', 'es': 'Exportar' },
   'finance.command.sidebar': { 'pt-BR': 'Alternar Sidebar', 'en': 'Toggle Sidebar', 'es': 'Alternar Barra Lateral' },
-  
+
   // Finance Export
   'finance.export': { 'pt-BR': 'Exportar', 'en': 'Export', 'es': 'Exportar' },
   'finance.export.title': { 'pt-BR': 'Exportar Dados', 'en': 'Export Data', 'es': 'Exportar Datos' },
@@ -1839,14 +1843,14 @@ const translations: Translations = {
   'finance.export.pdf': { 'pt-BR': 'PDF', 'en': 'PDF', 'es': 'PDF' },
   'finance.export.success': { 'pt-BR': 'Exportado com sucesso!', 'en': 'Exported successfully!', 'es': '┬íExportado exitosamente!' },
   'finance.export.error': { 'pt-BR': 'Erro ao exportar', 'en': 'Error exporting', 'es': 'Error al exportar' },
-  
+
   // Finance Offline
   'finance.offline.title': { 'pt-BR': 'Modo Offline', 'en': 'Offline Mode', 'es': 'Modo Sin Conexión' },
   'finance.offline.active': { 'pt-BR': 'Você está offline', 'en': 'You are offline', 'es': 'Estás sin conexión' },
   'finance.offline.syncing': { 'pt-BR': 'Sincronizando...', 'en': 'Syncing...', 'es': 'Sincronizando...' },
   'finance.offline.synced': { 'pt-BR': 'Sincronizado!', 'en': 'Synced!', 'es': '┬íSincronizado!' },
   'finance.offline.pending': { 'pt-BR': '{count} alterações pendentes', 'en': '{count} pending changes', 'es': '{count} cambios pendientes' },
-  
+
   // Finance Templates
   'finance.templates.title': { 'pt-BR': 'Escolha um Template', 'en': 'Choose a Template', 'es': 'Elige una Plantilla' },
   'finance.templates.personal': { 'pt-BR': 'Finanças Pessoais', 'en': 'Personal Finance', 'es': 'Finanzas Personales' },
@@ -1855,7 +1859,7 @@ const translations: Translations = {
   'finance.templates.personalDesc': { 'pt-BR': 'Gerencie suas finanças pessoais', 'en': 'Manage your personal finances', 'es': 'Gestiona tus finanzas personales' },
   'finance.templates.businessDesc': { 'pt-BR': 'Controle financeiro empresarial', 'en': 'Business financial control', 'es': 'Control financiero empresarial' },
   'finance.templates.blankDesc': { 'pt-BR': 'Comece do zero', 'en': 'Start from scratch', 'es': 'Comienza desde cero' },
-  
+
   // Finance Card
   'finance.card.title': { 'pt-BR': 'Finanças', 'en': 'Finance', 'es': 'Finanzas' },
   'finance.card.newDocument': { 'pt-BR': 'Novo documento', 'en': 'New document', 'es': 'Nuevo documento' },
@@ -1896,12 +1900,12 @@ const translations: Translations = {
   'finance.card.manageBudgets': { 'pt-BR': 'Gerenciar Orçamentos', 'en': 'Manage Budgets', 'es': 'Gestionar Presupuestos' },
   'finance.card.elements': { 'pt-BR': 'Elementos', 'en': 'Elements', 'es': 'Elementos' },
   'finance.card.close': { 'pt-BR': 'Fechar', 'en': 'Close', 'es': 'Cerrar' },
-  
+
   // Finance Cover
   'finance.cover.addCover': { 'pt-BR': 'Adicionar capa', 'en': 'Add cover', 'es': 'Agregar portada' },
   'finance.cover.selectCover': { 'pt-BR': 'Selecionar capa', 'en': 'Select cover', 'es': 'Seleccionar portada' },
   'finance.cover.remove': { 'pt-BR': 'Remover', 'en': 'Remove', 'es': 'Quitar' },
-  
+
   // ===== WORKSPACE =====
   'workspace.label': { 'pt-BR': 'Workspace', 'en': 'Workspace', 'es': 'Espacio de trabajo' },
   'workspace.personal': { 'pt-BR': 'Pessoal', 'en': 'Personal', 'es': 'Personal' },
@@ -1981,7 +1985,7 @@ const translations: Translations = {
   'tasks.addLink': { 'pt-BR': 'Adicionar Link', 'en': 'Add Link', 'es': 'Añadir Enlace' },
   'tasks.titleOptional': { 'pt-BR': 'Título (opcional)', 'en': 'Title (optional)', 'es': 'Título (opcional)' },
   'tasks.askQuestion': { 'pt-BR': 'Fazer uma pergunta', 'en': 'Ask a question', 'es': 'Hacer una pregunta' },
-  
+
   // Tasks - Detail View
   'tasks.detail.titlePlaceholder': { 'pt-BR': 'Título da tarefa', 'en': 'Task title', 'es': 'Título de la tarea' },
   'tasks.detail.status': { 'pt-BR': 'Status', 'en': 'Status', 'es': 'Estado' },
@@ -1990,7 +1994,7 @@ const translations: Translations = {
   'tasks.detail.dueDate': { 'pt-BR': 'Vencimento', 'en': 'Due', 'es': 'Vencimiento' },
   'tasks.detail.assignees': { 'pt-BR': 'Responsáveis', 'en': 'Assignees', 'es': 'Asignados' },
   'tasks.detail.selectDate': { 'pt-BR': 'Selecionar data', 'en': 'Select date', 'es': 'Seleccionar fecha' },
-  
+
   // Tasks - Toast Messages
   'tasks.toast.subtaskCreated': { 'pt-BR': 'Sub-tarefa criada', 'en': 'Subtask created', 'es': 'Subtarea creada' },
   'tasks.toast.subtaskError': { 'pt-BR': 'Erro ao criar sub-tarefa', 'en': 'Error creating subtask', 'es': 'Error al crear subtarea' },
@@ -2004,7 +2008,7 @@ const translations: Translations = {
   'tasks.toast.notFound': { 'pt-BR': 'Tarefa não encontrada', 'en': 'Task not found', 'es': 'Tarea no encontrada' },
   'tasks.toast.taskReopened': { 'pt-BR': 'Tarefa reaberta', 'en': 'Task reopened', 'es': 'Tarea reabierta' },
   'tasks.toast.errorUpdating': { 'pt-BR': 'Erro ao atualizar tarefa', 'en': 'Error updating task', 'es': 'Error al actualizar tarea' },
-  
+
   // Tasks - Card
   'tasks.card.title': { 'pt-BR': 'Tarefas', 'en': 'Tasks', 'es': 'Tareas' },
   'tasks.card.empty': { 'pt-BR': 'Nenhuma tarefa', 'en': 'No tasks', 'es': 'Sin tareas' },
@@ -2014,7 +2018,7 @@ const translations: Translations = {
   'tasks.card.completed': { 'pt-BR': 'Concluídas', 'en': 'Completed', 'es': 'Completadas' },
   'tasks.card.expand': { 'pt-BR': 'Expandir', 'en': 'Expand', 'es': 'Expandir' },
   'tasks.card.settings': { 'pt-BR': 'Configurações', 'en': 'Settings', 'es': 'Configuración' },
-  
+
   // Tasks - Page
   'tasks.page.title': { 'pt-BR': 'Meu Trabalho', 'en': 'My Work', 'es': 'Mi Trabajo' },
   'tasks.page.newTask': { 'pt-BR': 'Nova Tarefa', 'en': 'New Task', 'es': 'Nueva Tarea' },
@@ -2320,8 +2324,22 @@ const translations: Translations = {
   'sso.providerType': { 'pt-BR': 'Tipo de Provedor', 'en': 'Provider Type', 'es': 'Tipo de Proveedor' },
   'sso.testConnection': { 'pt-BR': 'Testar Conexão', 'en': 'Test Connection', 'es': 'Probar Conexión' },
   'sso.testing': { 'pt-BR': 'Testando...', 'en': 'Testing...', 'es': 'Probando...' },
+  'sso.enableSso': { 'pt-BR': 'Habilitar SSO', 'en': 'Enable SSO', 'es': 'Habilitar SSO' },
+  'sso.enableSsoDesc': { 'pt-BR': 'Ative o Single Sign-On para permitir login via provedor de identidade.', 'en': 'Enable Single Sign-On to allow login via identity provider.', 'es': 'Activa Single Sign-On para permitir inicio de sesión vía proveedor de identidad.' },
+  'sso.saveConfig': { 'pt-BR': 'Salvar Configuração', 'en': 'Save Configuration', 'es': 'Guardar Configuración' },
+  'sso.saveAdvancedConfig': { 'pt-BR': 'Salvar Configurações Avançadas', 'en': 'Save Advanced Settings', 'es': 'Guardar Configuraciones Avanzadas' },
+  'sso.spMetadataDesc': { 'pt-BR': 'Use estas informações para configurar o Revenify no seu provedor de identidade.', 'en': 'Use this information to configure Revenify in your identity provider.', 'es': 'Usa esta información para configurar Revenify en tu proveedor de identidad.' },
+  'sso.supportedProviders': { 'pt-BR': 'Provedores Suportados', 'en': 'Supported Providers', 'es': 'Proveedores Soportados' },
+  'sso.viewDocs': { 'pt-BR': 'Ver Documentação Completa', 'en': 'View Full Documentation', 'es': 'Ver Documentación Completa' },
+  'sso.noDomainsConfigured': { 'pt-BR': 'Nenhum domínio configurado. Todos os domínios serão aceitos.', 'en': 'No domains configured. All domains will be accepted.', 'es': 'Ningún dominio configurado. Todos los dominios serán aceptados.' },
+  'sso.userProvisioning': { 'pt-BR': 'Provisionamento de Usuários', 'en': 'User Provisioning', 'es': 'Aprovisionamiento de Usuarios' },
+  'sso.userProvisioningDesc': { 'pt-BR': 'Configure como novos usuários são criados via SSO.', 'en': 'Configure how new users are created via SSO.', 'es': 'Configura cómo se crean nuevos usuarios vía SSO.' },
+  'sso.enableWarning': { 'pt-BR': 'Após habilitar o SSO, usuários com emails dos domínios configurados serão redirecionados automaticamente para o provedor de identidade. Certifique-se de testar a configuração antes de ativar.', 'en': 'After enabling SSO, users with emails from configured domains will be automatically redirected to the identity provider. Make sure to test the configuration before enabling.', 'es': 'Después de habilitar SSO, los usuarios con emails de los dominios configurados serán redirigidos automáticamente al proveedor de identidad. Asegúrate de probar la configuración antes de activar.' },
 
-  // ===== COMMON =====
+  // ===== COMMON (additional) =====
+  'common.add': { 'pt-BR': 'Adicionar', 'en': 'Add', 'es': 'Agregar' },
+  'common.optional': { 'pt-BR': 'opcional', 'en': 'optional', 'es': 'opcional' },
+  'common.important': { 'pt-BR': 'Importante', 'en': 'Important', 'es': 'Importante' },
   'common.configuration': { 'pt-BR': 'Configuração', 'en': 'Configuration', 'es': 'Configuración' },
   'common.advanced': { 'pt-BR': 'Avançado', 'en': 'Advanced', 'es': 'Avanzado' },
 
@@ -2469,7 +2487,7 @@ const translations: Translations = {
   'workspace.created': { 'pt-BR': 'Workspace criado!', 'en': 'Workspace created!', 'es': '¡Espacio creado!' },
   'workspace.errorCreate': { 'pt-BR': 'Erro ao criar workspace', 'en': 'Error creating workspace', 'es': 'Error al crear espacio' },
   'workspace.fillName': { 'pt-BR': 'Preencha o nome do workspace', 'en': 'Fill in the workspace name', 'es': 'Completa el nombre del espacio' },
-  
+
   // Workspace Settings
   'workspace.settings.title': { 'pt-BR': 'Configurações do Workspace', 'en': 'Workspace Settings', 'es': 'Configuración del Espacio' },
   'workspace.settings.general': { 'pt-BR': 'Geral', 'en': 'General', 'es': 'General' },
@@ -2485,7 +2503,7 @@ const translations: Translations = {
   'workspace.settings.deleteConfirm': { 'pt-BR': 'Tem certeza que deseja excluir este workspace?', 'en': 'Are you sure you want to delete this workspace?', 'es': '¿Estás seguro de que quieres eliminar este espacio?' },
   'workspace.settings.deleted': { 'pt-BR': 'Workspace excluído!', 'en': 'Workspace deleted!', 'es': '¡Espacio eliminado!' },
   'workspace.settings.errorDelete': { 'pt-BR': 'Erro ao excluir workspace', 'en': 'Error deleting workspace', 'es': 'Error al eliminar espacio' },
-  
+
   // Workspace Members
   'workspace.members.title': { 'pt-BR': 'Membros', 'en': 'Members', 'es': 'Miembros' },
   'workspace.members.count': { 'pt-BR': '{count} membros', 'en': '{count} members', 'es': '{count} miembros' },
@@ -2499,7 +2517,7 @@ const translations: Translations = {
   'workspace.members.roleUpdated': { 'pt-BR': 'Função atualizada!', 'en': 'Role updated!', 'es': '¡Rol actualizado!' },
   'workspace.members.errorUpdate': { 'pt-BR': 'Erro ao atualizar função', 'en': 'Error updating role', 'es': 'Error al actualizar rol' },
   'workspace.members.errorLoad': { 'pt-BR': 'Erro ao carregar membros', 'en': 'Error loading members', 'es': 'Error al cargar miembros' },
-  
+
   // Workspace Invites
   'workspace.invites.title': { 'pt-BR': 'Convites Pendentes', 'en': 'Pending Invites', 'es': 'Invitaciones Pendientes' },
   'workspace.invites.send': { 'pt-BR': 'Enviar Convite', 'en': 'Send Invite', 'es': 'Enviar Invitación' },
@@ -2518,7 +2536,7 @@ const translations: Translations = {
   'workspace.invites.errorLoad': { 'pt-BR': 'Erro ao carregar convites', 'en': 'Error loading invites', 'es': 'Error al cargar invitaciones' },
   'workspace.invites.pending': { 'pt-BR': 'Pendente', 'en': 'Pending', 'es': 'Pendiente' },
   'workspace.invites.sentAt': { 'pt-BR': 'Enviado em', 'en': 'Sent at', 'es': 'Enviado el' },
-  
+
   // Finance Goals
   'finance.goals.userNotAuthenticated': { 'pt-BR': 'Usuário não autenticado', 'en': 'User not authenticated', 'es': 'Usuario no autenticado' },
   'finance.goals.errorLoad': { 'pt-BR': 'Erro ao carregar metas', 'en': 'Error loading goals', 'es': 'Error al cargar metas' },
@@ -2545,7 +2563,7 @@ const translations: Translations = {
   'finance.goals.spent': { 'pt-BR': 'Gasto', 'en': 'Spent', 'es': 'Gastado' },
   'finance.goals.progress': { 'pt-BR': 'Progresso', 'en': 'Progress', 'es': 'Progreso' },
   'finance.goals.errorUpdate': { 'pt-BR': 'Erro ao atualizar meta', 'en': 'Error updating goal', 'es': 'Error al actualizar meta' },
-  
+
   // Finance Calendar
   'finance.calendar.sun': { 'pt-BR': 'Dom', 'en': 'Sun', 'es': 'Dom' },
   'finance.calendar.mon': { 'pt-BR': 'Seg', 'en': 'Mon', 'es': 'Lun' },
@@ -2554,7 +2572,7 @@ const translations: Translations = {
   'finance.calendar.thu': { 'pt-BR': 'Qui', 'en': 'Thu', 'es': 'Jue' },
   'finance.calendar.fri': { 'pt-BR': 'Sex', 'en': 'Fri', 'es': 'Vie' },
   'finance.calendar.sat': { 'pt-BR': 'Sáb', 'en': 'Sat', 'es': 'Sáb' },
-  
+
   // Finance Recurring Bills
   'finance.recurringBills.errorLoad': { 'pt-BR': 'Erro ao carregar contas', 'en': 'Error loading bills', 'es': 'Error al cargar cuentas' },
   'finance.recurringBills.billName': { 'pt-BR': 'Digite o nome da conta', 'en': 'Enter bill name', 'es': 'Ingrese el nombre de la cuenta' },
@@ -2569,7 +2587,7 @@ const translations: Translations = {
   'finance.recurringBills.pending': { 'pt-BR': 'Pendente', 'en': 'Pending', 'es': 'Pendiente' },
   'finance.recurringBills.noBills': { 'pt-BR': 'Nenhuma conta recorrente', 'en': 'No recurring bills', 'es': 'No hay cuentas recurrentes' },
   'finance.recurringBills.addBills': { 'pt-BR': 'Adicione contas para acompanhar seus pagamentos', 'en': 'Add bills to track your payments', 'es': 'Añada cuentas para rastrear sus pagos' },
-  
+
   // Finance Receipts
   'finance.receipts.noReceipts': { 'pt-BR': 'Nenhum recibo anexado', 'en': 'No receipts attached', 'es': 'No hay recibos adjuntos' },
   'finance.receipts.dragDrop': { 'pt-BR': 'Arraste e solte arquivos aqui', 'en': 'Drag and drop files here', 'es': 'Arrastre y suelte archivos aquí' },
@@ -2601,7 +2619,7 @@ const translations: Translations = {
   'finance.receipts.importedFromGmail': { 'pt-BR': 'comprovante(s) importado(s) do Gmail', 'en': 'receipt(s) imported from Gmail', 'es': 'comprobante(s) importado(s) de Gmail' },
   'finance.receipts.gmailError': { 'pt-BR': 'Erro ao acessar Gmail', 'en': 'Error accessing Gmail', 'es': 'Error al acceder a Gmail' },
   'finance.receipts.importError': { 'pt-BR': 'Erro ao importar', 'en': 'Error importing', 'es': 'Error al importar' },
-  
+
   // Finance Viewer
   'finance.viewer.coverAlt': { 'pt-BR': 'Capa', 'en': 'Cover', 'es': 'Portada' },
   'finance.viewer.titlePlaceholder': { 'pt-BR': 'Sem título', 'en': 'Untitled', 'es': 'Sin título' },
@@ -2611,11 +2629,11 @@ const translations: Translations = {
   'finance.viewer.month': { 'pt-BR': 'Mês', 'en': 'Month', 'es': 'Mes' },
   'finance.viewer.selectMonth': { 'pt-BR': 'Mês', 'en': 'Month', 'es': 'Mes' },
   'finance.viewer.selectYear': { 'pt-BR': 'Ano', 'en': 'Year', 'es': 'Año' },
-  
+
   // Finance Search
   'finance.search.title': { 'pt-BR': 'Buscar', 'en': 'Search', 'es': 'Buscar' },
   'finance.search.placeholder': { 'pt-BR': 'Buscar transações...', 'en': 'Search transactions...', 'es': 'Buscar transacciones...' },
-  
+
   // Finance Dock
   'finance.dock.new': { 'pt-BR': 'Nova', 'en': 'New', 'es': 'Nueva' },
   'finance.dock.search': { 'pt-BR': 'Buscar', 'en': 'Search', 'es': 'Buscar' },
@@ -2623,7 +2641,7 @@ const translations: Translations = {
   'finance.dock.charts': { 'pt-BR': 'Gráficos', 'en': 'Charts', 'es': 'Gráficos' },
   'finance.dock.export': { 'pt-BR': 'Exportar', 'en': 'Export', 'es': 'Exportar' },
   'finance.dock.blocks': { 'pt-BR': 'Blocos', 'en': 'Blocks', 'es': 'Bloques' },
-  
+
   // Finance Add Transaction
   'finance.addTransaction.title': { 'pt-BR': 'Nova Transação', 'en': 'New Transaction', 'es': 'Nueva Transacción' },
   'finance.addTransaction.selectCategory': { 'pt-BR': 'Selecione uma categoria', 'en': 'Select a category', 'es': 'Seleccione una categoría' },
@@ -2634,7 +2652,7 @@ const translations: Translations = {
   'finance.addTransaction.save': { 'pt-BR': 'Salvar', 'en': 'Save', 'es': 'Guardar' },
   'finance.addTransaction.payment': { 'pt-BR': 'Pagto', 'en': 'Payment', 'es': 'Pago' },
   'finance.addTransaction.success': { 'pt-BR': 'Transação adicionada!', 'en': 'Transaction added!', 'es': '¡Transacción agregada!' },
-  
+
   // Finance Export (extended)
   'finance.export.transactions': { 'pt-BR': 'Exportar Transações (CSV)', 'en': 'Export Transactions (CSV)', 'es': 'Exportar Transacciones (CSV)' },
   'finance.export.summary': { 'pt-BR': 'Exportar Resumo (CSV)', 'en': 'Export Summary (CSV)', 'es': 'Exportar Resumen (CSV)' },
@@ -2644,10 +2662,10 @@ const translations: Translations = {
   'finance.export.successPDF': { 'pt-BR': 'PDF exportado com sucesso!', 'en': 'PDF exported successfully!', 'es': '¡PDF exportado exitosamente!' },
   'finance.export.driveSuccess': { 'pt-BR': 'Salvo no Google Drive!', 'en': 'Saved to Google Drive!', 'es': '¡Guardado en Google Drive!' },
   'finance.export.driveError': { 'pt-BR': 'Erro ao salvar no Drive', 'en': 'Error saving to Drive', 'es': 'Error al guardar en Drive' },
-  
+
   // Finance Calendar
   'finance.calendar.today': { 'pt-BR': 'Hoje', 'en': 'Today', 'es': 'Hoy' },
-  
+
   // Finance Charts
   'finance.charts.income': { 'pt-BR': 'Receitas', 'en': 'Income', 'es': 'Ingresos' },
   'finance.charts.expenses': { 'pt-BR': 'Despesas', 'en': 'Expenses', 'es': 'Gastos' },
@@ -2664,7 +2682,7 @@ const translations: Translations = {
   'finance.charts.incomeDistribution': { 'pt-BR': 'Distribuição de receitas', 'en': 'Income distribution', 'es': 'Distribución de ingresos' },
   'finance.charts.noData': { 'pt-BR': 'Nenhum dado disponível', 'en': 'No data available', 'es': 'No hay datos disponibles' },
   'finance.charts.addTransactions': { 'pt-BR': 'Adicione transações para visualizar gráficos', 'en': 'Add transactions to view charts', 'es': 'Añada transacciones para ver gráficos' },
-  
+
   // Finance Recurring Bills (continuação)
   'finance.recurringBills.due': { 'pt-BR': 'Vence dia', 'en': 'Due on', 'es': 'Vence el día' },
   'finance.recurringBills.markPending': { 'pt-BR': 'Marcar como pendente', 'en': 'Mark as pending', 'es': 'Marcar como pendiente' },
@@ -2677,7 +2695,7 @@ const translations: Translations = {
   'finance.recurringBills.upcoming': { 'pt-BR': 'vencendo', 'en': 'upcoming', 'es': 'venciendo' },
   'finance.recurringBills.addNew': { 'pt-BR': 'Adicionar conta...', 'en': 'Add bill...', 'es': 'Añadir cuenta...' },
   'finance.recurringBills.title': { 'pt-BR': 'Contas Recorrentes', 'en': 'Recurring Bills', 'es': 'Cuentas Recurrentes' },
-  
+
   // Finance Templates (novas chaves)
   'finance.templates.all': { 'pt-BR': 'Todos', 'en': 'All', 'es': 'Todos' },
   'finance.templates.investment': { 'pt-BR': 'Investimentos', 'en': 'Investment', 'es': 'Inversiones' },
@@ -2686,7 +2704,7 @@ const translations: Translations = {
   'finance.templates.noResults': { 'pt-BR': 'Nenhum template encontrado', 'en': 'No templates found', 'es': 'No se encontraron plantillas' },
   'finance.templates.noProject': { 'pt-BR': 'Nenhum projeto', 'en': 'No project', 'es': 'Sin proyecto' },
   'finance.templates.linkProject': { 'pt-BR': 'Vincular a Projeto (opcional)', 'en': 'Link to Project (optional)', 'es': 'Vincular a Proyecto (opcional)' },
-  
+
   // Finance Quick Expense
   'finance.quickExpense.fillValueCategory': { 'pt-BR': 'Preencha valor e categoria', 'en': 'Fill value and category', 'es': 'Complete valor y categoría' },
   'finance.quickExpense.fillFields': { 'pt-BR': 'Preencha descrição e valor', 'en': 'Fill description and value', 'es': 'Complete descripción y valor' },
@@ -2700,7 +2718,7 @@ const translations: Translations = {
   'finance.quickExpense.currencyPlaceholder': { 'pt-BR': 'R$ 0,00', 'en': '$ 0.00', 'es': '$ 0,00' },
   'finance.quickExpense.currencySymbol': { 'pt-BR': 'R$', 'en': '$', 'es': '$' },
   'finance.quickExpense.invalidValue': { 'pt-BR': 'Valor inválido', 'en': 'Invalid value', 'es': 'Valor inválido' },
-  
+
   // Finance Monthly Report
   'finance.monthlyReport.financialFlow': { 'pt-BR': 'Fluxo Financeiro', 'en': 'Financial Flow', 'es': 'Flujo Financiero' },
   'finance.monthlyReport.trackDaily': { 'pt-BR': 'Acompanhe suas receitas e despesas diárias', 'en': 'Track your daily income and expenses', 'es': 'Rastree sus ingresos y gastos diarios' },
@@ -3126,27 +3144,27 @@ class I18n {
       return key
     }
     let result = translation[this.locale] || translation['en'] || key
-    
+
     // Interpolate parameters
     if (params) {
       Object.keys(params).forEach(paramKey => {
         result = result.replace(`{${paramKey}}`, String(params[paramKey]))
       })
     }
-    
+
     return result
   }
 
   setLocale(locale: Locale, saveToSupabase = true) {
     this.locale = locale
     localStorage.setItem('revenify:locale', locale)
-    
+
     if (saveToSupabase) {
       this.saveToSupabase(locale).catch(err => {
         console.warn('Failed to save locale to Supabase:', err)
       })
     }
-    
+
     window.dispatchEvent(new CustomEvent('localechange'))
   }
 
@@ -3154,7 +3172,7 @@ class I18n {
     try {
       const { supabase } = await import('@/lib/supabase')
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) return
 
       await supabase.auth.updateUser({
@@ -3170,14 +3188,14 @@ class I18n {
     try {
       const { supabase } = await import('@/lib/supabase')
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) return null
 
       const userLocale = user.user_metadata?.locale as Locale
       if (userLocale && (userLocale === 'pt-BR' || userLocale === 'en' || userLocale === 'es')) {
         return userLocale
       }
-      
+
       return null
     } catch (error) {
       console.error('Error loading locale from Supabase:', error)

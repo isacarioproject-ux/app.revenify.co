@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,13 +6,13 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Shield, 
-  Lock, 
-  Key, 
-  Copy, 
-  Check, 
-  ExternalLink, 
+import {
+  Shield,
+  Lock,
+  Key,
+  Copy,
+  Check,
+  ExternalLink,
   AlertCircle,
   Building2,
   Users,
@@ -177,7 +176,7 @@ export default function SSOSettingsPage() {
     try {
       // Simulate test - in production this would validate the SAML config
       await new Promise(resolve => setTimeout(resolve, 2000))
-      
+
       if (!config.entity_id || !config.sso_url || !config.certificate) {
         toast.error('Preencha todos os campos obrigatórios')
         return
@@ -217,7 +216,7 @@ export default function SSOSettingsPage() {
 
   if (subscriptionLoading || loading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <HeaderSkeleton />
@@ -234,13 +233,13 @@ export default function SSOSettingsPage() {
           <CardSkeleton lines={6} />
           <CardSkeleton lines={4} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   if (!canUseSSO) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 max-w-4xl mx-auto">
           <div className="mb-6">
             <h1 className="text-2xl font-bold tracking-tight">{t('sso.title')}</h1>
@@ -262,12 +261,12 @@ export default function SSOSettingsPage() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-4">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -278,41 +277,61 @@ export default function SSOSettingsPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {config.enabled ? (
-              <Badge className="gap-1 text-xs sm:text-sm bg-green-600 text-white">
-                <CheckCircle2 className="h-3 w-3" />
-                {t('sso.enabled')}
-              </Badge>
-            ) : (
-              <Badge variant="secondary" className="gap-1 text-xs sm:text-sm">
-                <XCircle className="h-3 w-3" />
-                {t('sso.disabled')}
-              </Badge>
-            )}
-            <Badge className="bg-emerald-600 text-white gap-1 text-xs sm:text-sm">
+            <div
+              className={`inline-flex items-center gap-1 rounded-md border border-transparent px-2 py-0.5 text-xs sm:text-sm font-medium ${config.enabled
+                  ? 'bg-green-600 text-white'
+                  : 'bg-secondary text-secondary-foreground'
+                }`}
+            >
+              {config.enabled
+                ? <CheckCircle2 className="h-3 w-3" />
+                : <XCircle className="h-3 w-3" />
+              }
+              <span>{config.enabled ? t('sso.enabled') : t('sso.disabled')}</span>
+            </div>
+            <div className="inline-flex items-center gap-1 rounded-md border border-transparent px-2 py-0.5 text-xs sm:text-sm font-medium bg-emerald-600 text-white">
               <Shield className="h-3 w-3" />
-              Business
-            </Badge>
+              <span>Business</span>
+            </div>
           </div>
         </div>
+
+        {/* SSO Enable/Disable Toggle */}
+        <Card>
+          <CardContent className="flex items-center justify-between py-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${config.enabled ? 'bg-green-500/10' : 'bg-muted/50'}`}>
+                <Shield className={`h-5 w-5 ${config.enabled ? 'text-green-600' : 'text-muted-foreground'}`} />
+              </div>
+              <div>
+                <p className="font-medium text-sm">{t('sso.enableSso')}</p>
+                <p className="text-xs text-muted-foreground">{t('sso.enableSsoDesc')}</p>
+              </div>
+            </div>
+            <Switch
+              checked={config.enabled}
+              onCheckedChange={(enabled) => setConfig(prev => ({ ...prev, enabled }))}
+            />
+          </CardContent>
+        </Card>
 
         {/* Tabs */}
         <Tabs defaultValue="config" className="space-y-6">
           <TabsList className="h-auto p-0 bg-transparent rounded-none inline-flex gap-4 sm:gap-6 overflow-x-auto">
-            <TabsTrigger 
-              value="config" 
+            <TabsTrigger
+              value="config"
               className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
               {t('common.configuration')}
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="metadata"
               className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
               <span className="hidden sm:inline">{t('sso.spMetadata')}</span>
               <span className="sm:hidden">Metadados</span>
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="advanced"
               className="rounded-none border-0 border-b-[3px] border-transparent data-[state=active]:border-b-black dark:data-[state=active]:border-b-white data-[state=active]:!bg-transparent !bg-transparent px-0 pb-2 pt-0 font-normal text-muted-foreground data-[state=active]:text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 hover:!bg-transparent hover:text-foreground transition-colors text-sm sm:text-base whitespace-nowrap"
             >
@@ -343,7 +362,7 @@ export default function SSOSettingsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="provider">Tipo de Provedor</Label>
+                  <Label htmlFor="provider">{t('sso.providerType')}</Label>
                   <select
                     id="provider"
                     value={config.provider}
@@ -427,15 +446,15 @@ export default function SSOSettingsPage() {
             {/* Attribute Mapping */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Mapeamento de Atributos</CardTitle>
+                <CardTitle className="text-base">{t('sso.attributeMapping')}</CardTitle>
                 <CardDescription>
-                  Configure como os atributos SAML são mapeados para campos do usuário
+                  {t('sso.attributeMappingTooltip')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="attr_email">Atributo de Email</Label>
+                    <Label htmlFor="attr_email">{t('sso.emailAttribute')}</Label>
                     <Input
                       id="attr_email"
                       placeholder="email"
@@ -447,7 +466,7 @@ export default function SSOSettingsPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="attr_name">Atributo de Nome</Label>
+                    <Label htmlFor="attr_name">{t('sso.nameAttribute')}</Label>
                     <Input
                       id="attr_name"
                       placeholder="displayName"
@@ -460,7 +479,7 @@ export default function SSOSettingsPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="attr_groups">Atributo de Grupos (opcional)</Label>
+                  <Label htmlFor="attr_groups">{t('sso.groupsAttribute')} ({t('common.optional')})</Label>
                   <Input
                     id="attr_groups"
                     placeholder="groups"
@@ -478,16 +497,16 @@ export default function SSOSettingsPage() {
             <div className="flex gap-3">
               <Button onClick={saveConfig} disabled={saving}>
                 {saving ? (
-                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Salvando...</>
+                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('common.saving')}</>
                 ) : (
-                  'Salvar Configuração'
+                  t('sso.saveConfig')
                 )}
               </Button>
               <Button variant="outline" onClick={testConnection} disabled={testing}>
                 {testing ? (
-                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Testando...</>
+                  <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('sso.testing')}</>
                 ) : (
-                  'Testar Conexão'
+                  t('sso.testConnection')
                 )}
               </Button>
             </div>
@@ -497,9 +516,9 @@ export default function SSOSettingsPage() {
           <TabsContent value="metadata" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Metadados do Service Provider (SP)</CardTitle>
+                <CardTitle className="text-base">{t('sso.spMetadata')}</CardTitle>
                 <CardDescription>
-                  Use estas informações para configurar o Revenify no seu provedor de identidade
+                  {t('sso.spMetadataDesc')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -548,7 +567,7 @@ export default function SSOSettingsPage() {
                 <div className="p-4 rounded-lg bg-muted/50 border">
                   <h4 className="font-medium mb-2 flex items-center gap-2">
                     <FileText className="h-4 w-4" />
-                    Provedores Suportados
+                    {t('sso.supportedProviders')}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {['Okta', 'Azure AD', 'Google Workspace', 'OneLogin', 'Auth0', 'Ping Identity', 'JumpCloud'].map((provider) => (
@@ -560,7 +579,7 @@ export default function SSOSettingsPage() {
                 <Button variant="outline">
                   <a href="https://www.revenify.co/docs" target="_blank" rel="noopener noreferrer" className="flex items-center">
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    Ver Documentação Completa
+                    {t('sso.viewDocs')}
                   </a>
                 </Button>
               </CardContent>
@@ -571,9 +590,9 @@ export default function SSOSettingsPage() {
           <TabsContent value="advanced" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Domínios Permitidos</CardTitle>
+                <CardTitle className="text-base">{t('sso.allowedDomains')}</CardTitle>
                 <CardDescription>
-                  Restrinja o SSO apenas para emails de domínios específicos
+                  {t('sso.allowedDomainsTooltip')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -584,7 +603,7 @@ export default function SSOSettingsPage() {
                     onChange={(e) => setNewDomain(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && addDomain()}
                   />
-                  <Button onClick={addDomain}>Adicionar</Button>
+                  <Button onClick={addDomain}>{t('common.add')}</Button>
                 </div>
 
                 {config.allowed_domains.length > 0 ? (
@@ -603,7 +622,7 @@ export default function SSOSettingsPage() {
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Nenhum domínio configurado. Todos os domínios serão aceitos.
+                    {t('sso.noDomainsConfigured')}
                   </p>
                 )}
               </CardContent>
@@ -611,17 +630,17 @@ export default function SSOSettingsPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Provisionamento de Usuários</CardTitle>
+                <CardTitle className="text-base">{t('sso.userProvisioning')}</CardTitle>
                 <CardDescription>
-                  Configure como novos usuários são criados via SSO
+                  {t('sso.userProvisioningDesc')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Auto-provisionamento</Label>
+                    <Label>{t('sso.autoProvision')}</Label>
                     <p className="text-xs text-muted-foreground">
-                      Criar automaticamente contas para novos usuários SSO
+                      {t('sso.autoProvisionTooltip')}
                     </p>
                   </div>
                   <Switch
@@ -631,17 +650,17 @@ export default function SSOSettingsPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Papel Padrão</Label>
+                  <Label>{t('sso.defaultRole')}</Label>
                   <select
                     value={config.default_role}
                     onChange={(e) => setConfig(prev => ({ ...prev, default_role: e.target.value as 'member' | 'admin' }))}
                     className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm"
                   >
-                    <option value="member">Membro</option>
-                    <option value="admin">Administrador</option>
+                    <option value="member">{t('sso.member')}</option>
+                    <option value="admin">{t('sso.admin')}</option>
                   </select>
                   <p className="text-xs text-muted-foreground">
-                    Papel atribuído a novos usuários criados via SSO
+                    {t('sso.defaultRoleTooltip')}
                   </p>
                 </div>
               </CardContent>
@@ -651,11 +670,9 @@ export default function SSOSettingsPage() {
               <div className="flex gap-3">
                 <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-amber-600">Importante</h4>
+                  <h4 className="font-medium text-amber-600">{t('common.important')}</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Após habilitar o SSO, usuários com emails dos domínios configurados 
-                    serão redirecionados automaticamente para o provedor de identidade.
-                    Certifique-se de testar a configuração antes de ativar.
+                    {t('sso.enableWarning')}
                   </p>
                 </div>
               </div>
@@ -663,14 +680,14 @@ export default function SSOSettingsPage() {
 
             <Button onClick={saveConfig} disabled={saving}>
               {saving ? (
-                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Salvando...</>
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('common.saving')}</>
               ) : (
-                'Salvar Configurações Avançadas'
+                t('sso.saveAdvancedConfig')
               )}
             </Button>
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

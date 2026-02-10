@@ -35,6 +35,10 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<Error | null>(null)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const hasLoadedOnce = useRef(false)
+  const selectedProjectRef = useRef<Project | null>(null)
+
+  // Keep ref in sync with state to avoid stale closures
+  selectedProjectRef.current = selectedProject
 
   const fetchProjects = useCallback(async () => {
     if (!user) {
@@ -50,9 +54,9 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       }
       const data = await getProjects()
       setProjects(data || [])
-      
+
       // Selecionar primeiro projeto se não houver selecionado
-      if (data && data.length > 0 && !selectedProject) {
+      if (data && data.length > 0 && !selectedProjectRef.current) {
         setSelectedProject(data[0])
       }
       hasLoadedOnce.current = true

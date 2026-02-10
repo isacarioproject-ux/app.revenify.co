@@ -19,6 +19,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const location = useLocation()
 
   useEffect(() => {
+    let isMounted = true
+
     // Buscar usuário inicial
     const getInitialUser = async () => {
       try {
@@ -27,19 +29,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Silenciar erros de rede retryable
           if (error.name === 'AuthRetryableFetchError' || error.status === 0) {
             // Tentar novamente após 2 segundos
-            setTimeout(() => getInitialUser(), 2000)
+            if (isMounted) setTimeout(() => getInitialUser(), 2000)
             return
           }
         }
+        if (!isMounted) return
         const initialUser = session?.user ?? null
         setUser(initialUser)
         setLoading(false)
       } catch (err: any) {
         // Silenciar erros de rede
         if (err?.name === 'AuthRetryableFetchError' || err?.status === 0) {
-          setTimeout(() => getInitialUser(), 2000)
+          if (isMounted) setTimeout(() => getInitialUser(), 2000)
           return
         }
+        if (!isMounted) return
         setError(err instanceof Error ? err : new Error('Erro de autenticação'))
         setLoading(false)
       }
@@ -50,17 +54,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Escutar mudanças de auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!isMounted) return
         // Limpar erro anterior
         setError(null)
-        
+
         // Atualizar usuário
         setUser(session?.user ?? null)
         setLoading(false)
-        
+
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      isMounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   // Redirecionar para onboarding se necessário
@@ -68,11 +76,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user || loading) {
       return
     }
-    
+
     // Rotas públicas que não precisam de autenticação
     const publicPaths = ['/auth', '/auth/callback', '/invite', '/privacy-policy', '/terms-of-service']
     const isPublicPath = publicPaths.some(path => location.pathname.startsWith(path))
-    
+
     if (isPublicPath) {
       return
     }

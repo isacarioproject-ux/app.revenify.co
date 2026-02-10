@@ -5,7 +5,8 @@ import { SubscriptionProvider } from '@/contexts/subscription-context'
 import { ProjectsProvider } from '@/contexts/projects-context'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/auth-context'
-import { ProtectedRoute } from '@/components/protected-route'
+import { ErrorBoundary } from '@/components/error-boundary'
+import { DashboardShell } from '@/components/dashboard-shell'
 
 // Import direto do onboarding (SEM lazy) para não mostrar preload
 import OnboardingPage from '@/pages/onboarding-v2'
@@ -45,49 +46,56 @@ function App() {
         <AuthProvider>
           <SubscriptionProvider>
             <ProjectsProvider>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                {/* Auth */}
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/auth/callback" element={<AuthCallbackPage />} />
-                
-                {/* Onboarding */}
-                <Route path="/onboarding" element={<OnboardingPage />} />
-                
-                {/* Legal Pages */}
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-                
-                {/* Protected Routes - Dashboard */}
-                <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-                <Route path="/projects" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
-                <Route path="/projects/:projectId" element={<ProtectedRoute><ProjectDetailsPage /></ProtectedRoute>} />
-                <Route path="/sources" element={<ProtectedRoute><SourcesPage /></ProtectedRoute>} />
-                <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
-                <Route path="/leads" element={<ProtectedRoute><LeadsPage /></ProtectedRoute>} />
-                <Route path="/journey" element={<ProtectedRoute><CustomerJourneyPage /></ProtectedRoute>} />
-                <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
-                <Route path="/short-links" element={<ProtectedRoute><ShortLinksPage /></ProtectedRoute>} />
-                <Route path="/pricing" element={<ProtectedRoute><PricingPage /></ProtectedRoute>} />
-                
-                {/* Settings Routes */}
-                <Route path="/settings/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                <Route path="/settings/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
-                <Route path="/settings/preferences" element={<ProtectedRoute><PreferencesPage /></ProtectedRoute>} />
-                <Route path="/settings/billing" element={<ProtectedRoute><BillingPage /></ProtectedRoute>} />
-                <Route path="/settings/integrations" element={<ProtectedRoute><IntegrationsPage /></ProtectedRoute>} />
-                <Route path="/settings/custom-domain" element={<ProtectedRoute><CustomDomainPage /></ProtectedRoute>} />
-                <Route path="/custom-domain" element={<ProtectedRoute><CustomDomainPage /></ProtectedRoute>} />
-                <Route path="/settings/sso" element={<ProtectedRoute><SSOPage /></ProtectedRoute>} />
-                <Route path="/sso" element={<ProtectedRoute><SSOPage /></ProtectedRoute>} />
+              <Suspense fallback={<PageLoader />}>
+                <ErrorBoundary>
+                  <Routes>
+                    {/* Auth (public) */}
+                    <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-                {/* Blog Routes */}
-                <Route path="/blog/create" element={<ProtectedRoute><BlogCreatePage /></ProtectedRoute>} />
+                    {/* Onboarding (public) */}
+                    <Route path="/onboarding" element={<OnboardingPage />} />
 
-                {/* Default redirect */}
-                <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-              </Routes>
-            </Suspense>
+                    {/* Legal Pages (public) */}
+                    <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                    <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+
+                    {/* 
+                      Dashboard Layout Route — persistent sidebar & header.
+                      DashboardShell renders once, child pages swap via <Outlet>.
+                    */}
+                    <Route element={<DashboardShell />}>
+                      <Route path="/dashboard" element={<DashboardPage />} />
+                      <Route path="/projects" element={<ProjectsPage />} />
+                      <Route path="/projects/:projectId" element={<ProjectDetailsPage />} />
+                      <Route path="/sources" element={<SourcesPage />} />
+                      <Route path="/analytics" element={<AnalyticsPage />} />
+                      <Route path="/leads" element={<LeadsPage />} />
+                      <Route path="/journey" element={<CustomerJourneyPage />} />
+                      <Route path="/templates" element={<TemplatesPage />} />
+                      <Route path="/short-links" element={<ShortLinksPage />} />
+                      <Route path="/pricing" element={<PricingPage />} />
+
+                      {/* Settings */}
+                      <Route path="/settings/profile" element={<ProfilePage />} />
+                      <Route path="/settings/notifications" element={<NotificationsPage />} />
+                      <Route path="/settings/preferences" element={<PreferencesPage />} />
+                      <Route path="/settings/billing" element={<BillingPage />} />
+                      <Route path="/settings/integrations" element={<IntegrationsPage />} />
+                      <Route path="/settings/custom-domain" element={<CustomDomainPage />} />
+                      <Route path="/custom-domain" element={<CustomDomainPage />} />
+                      <Route path="/settings/sso" element={<SSOPage />} />
+                      <Route path="/sso" element={<SSOPage />} />
+
+                      {/* Blog */}
+                      <Route path="/blog/create" element={<BlogCreatePage />} />
+
+                      {/* Default */}
+                      <Route path="/" element={<DashboardPage />} />
+                    </Route>
+                  </Routes>
+                </ErrorBoundary>
+              </Suspense>
             </ProjectsProvider>
           </SubscriptionProvider>
         </AuthProvider>

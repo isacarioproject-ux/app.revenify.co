@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -184,7 +183,7 @@ export default function TemplatesPage() {
   // Loading State - só na primeira carga
   if (showSkeleton) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <HeaderSkeleton />
@@ -195,14 +194,14 @@ export default function TemplatesPage() {
           </div>
           <ListSkeleton items={4} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   // No Project State
   if (!selectedProject) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex items-center justify-center min-h-[600px]">
           <div className="text-center max-w-md">
             <div className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-6">
@@ -216,14 +215,14 @@ export default function TemplatesPage() {
             </p>
           </div>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   // Empty State
   if (templates.length === 0) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex items-center justify-center min-h-[600px]">
           <div className="text-center max-w-md">
             {/* Icon Circle */}
@@ -272,12 +271,12 @@ export default function TemplatesPage() {
             editingTemplate={editingTemplate}
           />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -424,6 +423,6 @@ export default function TemplatesPage() {
           editingTemplate={editingTemplate}
         />
       </div>
-    </DashboardLayout>
+    </>
   )
 }

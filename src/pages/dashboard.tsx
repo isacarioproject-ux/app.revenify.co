@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
@@ -66,7 +65,7 @@ export default function DashboardPage() {
   // Se não tem projetos, mostrar tela de setup
   if (!projectsLoading && projects.length === 0) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6">
           <Card className="max-w-2xl mx-auto text-center py-12">
             <CardContent className="space-y-6">
@@ -86,12 +85,12 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -237,6 +236,6 @@ export default function DashboardPage() {
           setUpgradeOpen(false)
         }}
       />
-    </DashboardLayout>
+    </>
   )
 }

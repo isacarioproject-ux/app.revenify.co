@@ -7,10 +7,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { 
-  Search, 
+import {
+  Search,
   Code2,
-  Users, 
+  Users,
   BarChart3,
   Link2,
   User,
@@ -23,6 +23,8 @@ import {
   Route,
   Sparkles,
   FolderKanban,
+  Shield,
+  Globe,
 } from 'lucide-react'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { cn } from '@/lib/utils'
@@ -46,7 +48,7 @@ interface GlobalSearchProps {
 export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
   const navigate = useNavigate()
   const { t } = useI18n()
-  
+
   const pages: SearchResult[] = useMemo(() => [
     // Páginas principais
     { id: '1', titleKey: 'search.dashboard', descriptionKey: 'search.dashboardDesc', type: 'page', path: '/dashboard', icon: LayoutDashboard, shortcut: 'D' },
@@ -57,7 +59,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     { id: '6', titleKey: 'search.shortLinks', descriptionKey: 'search.shortLinksDesc', type: 'page', path: '/short-links', icon: Link2, shortcut: 'K' },
     { id: '7', titleKey: 'search.templates', descriptionKey: 'search.templatesDesc', type: 'page', path: '/templates', icon: FileText, shortcut: 'T' },
     { id: '8', titleKey: 'search.customerJourney', descriptionKey: 'search.customerJourneyDesc', type: 'page', path: '/customer-journey', icon: Route, shortcut: 'J' },
-    
+
     // Settings
     { id: '10', titleKey: 'search.profile', descriptionKey: 'search.profileDesc', type: 'page', path: '/settings/profile', icon: User },
     { id: '11', titleKey: 'search.notifications', descriptionKey: 'search.notificationsDesc', type: 'page', path: '/settings/notifications', icon: Bell },
@@ -65,6 +67,8 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     { id: '13', titleKey: 'search.billing', descriptionKey: 'search.billingDesc', type: 'page', path: '/settings/billing', icon: CreditCard },
     { id: '14', titleKey: 'search.integrations', descriptionKey: 'search.integrationsDesc', type: 'page', path: '/settings/integrations', icon: Plug },
     { id: '15', titleKey: 'search.pricing', descriptionKey: 'search.pricingDesc', type: 'page', path: '/pricing', icon: Sparkles },
+    { id: '16', titleKey: 'search.sso', descriptionKey: 'search.ssoDesc', type: 'page', path: '/settings/sso', icon: Shield },
+    { id: '17', titleKey: 'search.customDomain', descriptionKey: 'search.customDomainDesc', type: 'page', path: '/settings/custom-domain', icon: Globe },
   ], [])
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
@@ -83,7 +87,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     )
     setResults(filtered)
     setSelectedIndex(0)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
   useEffect(() => {
@@ -117,7 +121,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
         <VisuallyHidden>
           <DialogTitle>Buscar</DialogTitle>
         </VisuallyHidden>
-        
+
         <div className="flex items-center border-b px-3">
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
           <Input

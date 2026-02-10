@@ -24,6 +24,11 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
   const { t } = useI18n()
   const [events, setEvents] = useState<LiveEvent[]>(initialEvents)
 
+  // Sync state with prop when project changes or new events arrive from parent
+  useEffect(() => {
+    setEvents(initialEvents)
+  }, [initialEvents])
+
   const getEventIcon = (type: string) => {
     switch (type) {
       case 'page_view':
@@ -71,7 +76,7 @@ export function LiveEventsFeed({ projectId, initialEvents = [] }: LiveEventsFeed
     const diffMs = now.getTime() - date.getTime()
     const diffSec = Math.floor(diffMs / 1000)
     const diffMin = Math.floor(diffSec / 60)
-    
+
     if (diffSec < 60) return t('events.now')
     if (diffMin < 60) return `${diffMin}m ${t('events.ago')}`
     return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })

@@ -1,4 +1,3 @@
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
@@ -110,14 +109,14 @@ export default function NotificationsPage() {
 
   if (loading || authLoading) {
     return (
-      <DashboardLayout>
+      <>
         <SettingsPageSkeleton />
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div>
@@ -245,6 +244,6 @@ export default function NotificationsPage() {
           </Button>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

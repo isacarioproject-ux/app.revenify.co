@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useI18n } from '@/hooks/use-i18n'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -452,7 +451,7 @@ export default function IntegrationsPage() {
   // Loading inicial
   if (projectsLoading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <HeaderSkeleton />
@@ -466,23 +465,23 @@ export default function IntegrationsPage() {
           <IntegrationCardSkeleton />
           <IntegrationCardSkeleton />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   // Se estiver mostrando documentação da API
   if (showApiDocs) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6">
           <ApiDocumentation onBack={() => setShowApiDocs(false)} apiKey={fullApiKey} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header compacto */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -875,6 +874,6 @@ Body:
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

@@ -128,231 +128,229 @@ export function AppSidebar() {
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <Sidebar collapsible="icon" className="border-r border-border/40 backdrop-blur-sm bg-background/95">
-      <SidebarHeader>
-        <motion.div 
-          className="flex items-center gap-2 px-1 py-1"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {/* Sidebar Aberta: Logo + Toggle */}
-          <motion.div 
-            className="group-data-[collapsible=icon]:hidden w-full flex items-center gap-1.5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.2 }}
+        <SidebarHeader>
+          <motion.div
+            className="flex items-center gap-2 px-1 py-1"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <Logo className="shrink-0 h-6" />
-            <div className="flex-1" />
+            {/* Sidebar Aberta: Logo + Toggle */}
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="shrink-0"
+              className="group-data-[collapsible=icon]:hidden w-full flex items-center gap-1.5"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.2 }}
             >
-              <SidebarTrigger className="h-7 w-7 transition-colors duration-200 hover:bg-sidebar-accent/50" />
+              <Logo className="shrink-0 h-6" />
+              <div className="flex-1" />
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="shrink-0"
+              >
+                <SidebarTrigger className="h-7 w-7 transition-colors duration-200 hover:bg-sidebar-accent/50" />
+              </motion.div>
+            </motion.div>
+
+            {/* Sidebar Fechada: Toggle para abrir */}
+            <motion.div
+              className="hidden group-data-[collapsible=icon]:flex w-full justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.2 }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <SidebarTrigger className="transition-colors duration-200 hover:bg-sidebar-accent/50" />
+              </motion.div>
             </motion.div>
           </motion.div>
-          
-          {/* Sidebar Fechada: Toggle para abrir */}
-          <motion.div 
-            className="hidden group-data-[collapsible=icon]:flex w-full justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.2 }}
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <SidebarTrigger className="transition-colors duration-200 hover:bg-sidebar-accent/50" />
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </SidebarHeader>
+        </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
-            {menuItems.map((item, index) => {
-              const Icon = item.icon
-              const isActive = location.pathname === item.href
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarMenu>
+              {menuItems.map((item, index) => {
+                const Icon = item.icon
+                const isActive = location.pathname === item.href
 
-              return (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive}
-                    tooltip={item.title}
-                    className="group transition-all duration-200 hover:bg-sidebar-accent/50"
-                  >
-                    <Link to={item.href} className="gap-3 flex items-center">
-                      <div
-                        className={`transition-colors duration-200 ${
-                          isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
-                        }`}
-                      >
-                        <Icon isActive={isActive} />
-                      </div>
-                      <span
-                        className={`transition-colors duration-200 ${
-                          isActive ? 'text-sidebar-accent-foreground font-medium' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground'
-                        }`}
-                      >
-                        {item.title}
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )
-            })}
-            
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter className="gap-2">
-        {/* Usage Widget - No Footer (esconde quando sidebar colapsado) */}
-        <div className="px-2 group-data-[collapsible=icon]:hidden">
-          <UsageWidget 
-            projectId={selectedProject?.id} 
-            userId={user?.id}
-            compact 
-          />
-        </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.3, ease: "easeOut" }}
-        >
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                return (
+                  <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
-                      size="lg"
-                      className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground transition-all duration-200 hover:bg-sidebar-accent/50"
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                      className="group transition-all duration-200 hover:bg-sidebar-accent/50"
                     >
-                      <motion.div
-                        whileHover={{ rotate: 5 }}
-                        transition={{ duration: 0.2 }}
+                      <Link to={item.href} className="gap-3 flex items-center">
+                        <div
+                          className={`transition-colors duration-200 ${isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
+                            }`}
+                        >
+                          <Icon isActive={isActive} />
+                        </div>
+                        <span
+                          className={`transition-colors duration-200 ${isActive ? 'text-sidebar-accent-foreground font-medium' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground'
+                            }`}
+                        >
+                          {item.title}
+                        </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter className="gap-2">
+          {/* Usage Widget - No Footer (esconde quando sidebar colapsado) */}
+          <div className="px-2 group-data-[collapsible=icon]:hidden">
+            <UsageWidget
+              projectId={selectedProject?.id}
+              userId={user?.id}
+              compact
+            />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.3, ease: "easeOut" }}
+          >
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <SidebarMenuButton
+                        size="lg"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground transition-all duration-200 hover:bg-sidebar-accent/50"
                       >
-                        <Avatar className="h-8 w-8 rounded-lg transition-shadow duration-200 hover:shadow-md">
+                        <motion.div
+                          whileHover={{ rotate: 5 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Avatar className="h-8 w-8 rounded-lg transition-shadow duration-200 hover:shadow-md">
+                            <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email} />
+                            <AvatarFallback className="rounded-lg">
+                              {getUserInitials()}
+                            </AvatarFallback>
+                          </Avatar>
+                        </motion.div>
+                        <div className="grid flex-1 text-left text-sm leading-tight">
+                          <motion.span
+                            className="truncate font-semibold transition-colors duration-200"
+                            initial={{ opacity: 0.8 }}
+                            whileHover={{ opacity: 1 }}
+                          >
+                            {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || t('common.user')}
+                          </motion.span>
+                          <motion.span
+                            className="truncate text-xs text-muted-foreground transition-colors duration-200"
+                            initial={{ opacity: 0.6 }}
+                            whileHover={{ opacity: 0.8 }}
+                          >
+                            {user?.email}
+                          </motion.span>
+                        </div>
+                        <motion.div
+                          whileHover={{ rotate: 180 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ChevronUp className="ml-auto size-4 transition-colors duration-200" />
+                        </motion.div>
+                      </SidebarMenuButton>
+                    </motion.div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                    side={isMobile ? "top" : "bottom"}
+                    align="end"
+                    sideOffset={4}
+                  >
+                    <DropdownMenuLabel className="p-0 font-normal">
+                      <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                        <Avatar className="h-8 w-8 rounded-lg">
                           <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email} />
                           <AvatarFallback className="rounded-lg">
                             {getUserInitials()}
                           </AvatarFallback>
                         </Avatar>
-                      </motion.div>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <motion.span 
-                          className="truncate font-semibold transition-colors duration-200"
-                          initial={{ opacity: 0.8 }}
-                          whileHover={{ opacity: 1 }}
-                        >
-                          {user?.user_metadata?.name || user?.email?.split('@')[0] || t('common.user')}
-                        </motion.span>
-                        <motion.span 
-                          className="truncate text-xs text-muted-foreground transition-colors duration-200"
-                          initial={{ opacity: 0.6 }}
-                          whileHover={{ opacity: 0.8 }}
-                        >
-                          {user?.email}
-                        </motion.span>
+                        <div className="grid flex-1 text-left text-sm leading-tight">
+                          <span className="truncate font-semibold">
+                            {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || t('common.user')}
+                          </span>
+                          <span className="truncate text-xs text-muted-foreground">
+                            {user?.email}
+                          </span>
+                        </div>
                       </div>
-                      <motion.div
-                        whileHover={{ rotate: 180 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ChevronUp className="ml-auto size-4 transition-colors duration-200" />
-                      </motion.div>
-                    </SidebarMenuButton>
-                  </motion.div>
-                </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                side={isMobile ? "top" : "bottom"}
-                align="end"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email} />
-                      <AvatarFallback className="rounded-lg">
-                        {getUserInitials()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {user?.user_metadata?.name || user?.email?.split('@')[0] || t('common.user')}
-                      </span>
-                      <span className="truncate text-xs text-muted-foreground">
-                        {user?.email}
-                      </span>
-                    </div>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/settings/profile">
-                    <User className="mr-2 h-4 w-4" />
-                    {t('settings.profile')}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings/notifications">
-                    <Bell className="mr-2 h-4 w-4" />
-                    {t('settings.notifications')}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings/preferences">
-                    <Palette className="mr-2 h-4 w-4" />
-                    {t('settings.preferences')}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings/billing">
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    {t('settings.billing')}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings/integrations">
-                    <Plug className="mr-2 h-4 w-4" />
-                    {t('settings.integrations')}
-                  </Link>
-                </DropdownMenuItem>
-                {/* Blog - apenas para admin */}
-                {user?.email === 'revenify.co@gmail.com' && (
-                  <>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/blog/create">
-                        <PenSquare className="mr-2 h-4 w-4" />
-                        Blog Admin
+                      <Link to="/settings/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        {t('settings.profile')}
                       </Link>
                     </DropdownMenuItem>
-                  </>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-destructive">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  {t('auth.logout')}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        </motion.div>
-      </SidebarFooter>
-    </Sidebar>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings/notifications">
+                        <Bell className="mr-2 h-4 w-4" />
+                        {t('settings.notifications')}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings/preferences">
+                        <Palette className="mr-2 h-4 w-4" />
+                        {t('settings.preferences')}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings/billing">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        {t('settings.billing')}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings/integrations">
+                        <Plug className="mr-2 h-4 w-4" />
+                        {t('settings.integrations')}
+                      </Link>
+                    </DropdownMenuItem>
+                    {/* Blog - apenas para admin */}
+                    {user?.email === 'revenify.co@gmail.com' && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link to="/blog/create">
+                            <PenSquare className="mr-2 h-4 w-4" />
+                            Blog Admin
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      {t('auth.logout')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </motion.div>
+        </SidebarFooter>
+      </Sidebar>
     </motion.div>
   )
 }
