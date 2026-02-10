@@ -1,12 +1,26 @@
 import { useState, useEffect, useCallback } from 'react'
 import { i18n, type Locale } from '@/lib/i18n'
 
+// Module-level flag: only load from Supabase once per session
+let hasLoadedFromSupabase = false
+
 export function useI18n() {
   const [locale, setLocaleState] = useState<Locale>(i18n.getLocale())
   const [loading, setLoading] = useState(false) // Não bloqueia - sempre false
 
   useEffect(() => {
-    // Load locale from Supabase em background - não bloqueia UI
+    // Load locale from Supabase only ONCE per session
+    // Skip if already loaded or if user has a saved locale in localStorage
+    if (hasLoadedFromSupabase) return
+
+    const savedLocale = localStorage.getItem('revenify:locale')
+    if (savedLocale) {
+      // User already has a preference — don't override from Supabase
+      hasLoadedFromSupabase = true
+      return
+    }
+
+    hasLoadedFromSupabase = true
     const loadLocale = async () => {
       try {
         const supabaseLocale = await i18n.loadFromSupabase()

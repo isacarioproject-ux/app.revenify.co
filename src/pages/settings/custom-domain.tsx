@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { HeaderSkeleton, CardSkeleton } from '@/components/page-skeleton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -151,19 +150,19 @@ export default function CustomDomainPage() {
   // Loading skeleton
   if (subscriptionLoading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <HeaderSkeleton />
           <CardSkeleton lines={4} />
           <CardSkeleton lines={6} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   if (!canUseCustomDomain) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div>
             <h1 className="text-2xl font-bold">{t('customDomain.title')}</h1>
@@ -188,12 +187,12 @@ export default function CustomDomainPage() {
             </CardContent>
           </Card>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -375,6 +374,6 @@ export default function CustomDomainPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

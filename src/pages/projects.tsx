@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '@/hooks/use-i18n'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -66,7 +65,7 @@ export default function ProjectsPage() {
   // Loading State
   if (loading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex items-center justify-between">
             <HeaderSkeleton />
@@ -74,12 +73,12 @@ export default function ProjectsPage() {
           </div>
           <ListSkeleton items={3} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -274,6 +273,6 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
-    </DashboardLayout>
+    </>
   )
 }

@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
+import {
+  BarChart3,
+  TrendingUp,
+  Users,
   Globe,
   Monitor,
   Smartphone,
@@ -56,7 +55,7 @@ export default function AnalyticsPage() {
   const { projects, loading: projectsLoading, selectedProject, setSelectedProject } = useProjects()
   const { metrics, chartData, sources, loading: dataLoading } = useDashboardData(selectedProject?.id || null)
   const [dateRange, setDateRange] = useState('30d')
-  
+
   // Analytics data from database
   const [deviceData, setDeviceData] = useState<DeviceData[]>([])
   const [countryData, setCountryData] = useState<CountryData[]>([])
@@ -65,17 +64,17 @@ export default function AnalyticsPage() {
   const hasLoadedOnce = useRef(false)
 
   const loading = projectsLoading || dataLoading
-  
+
   // Marcar como carregado após primeira carga
   if (!loading && !analyticsLoading && selectedProject && !hasLoadedOnce.current) {
     hasLoadedOnce.current = true
   }
-  
+
   // Só mostrar skeleton na primeira carga
   const showInitialSkeleton = !hasLoadedOnce.current && loading
 
-  // Calculate date range - must be before useEffect
-  const getDateRange = () => {
+  // Calculate date range - memoized to avoid stale closures
+  const getDateRange = useCallback(() => {
     const end = new Date()
     const start = new Date()
     switch (dateRange) {
@@ -90,14 +89,14 @@ export default function AnalyticsPage() {
         break
     }
     return { start, end }
-  }
+  }, [dateRange])
 
   // Fetch analytics data when project or date range changes
   // IMPORTANT: All hooks must be called before any conditional returns
   useEffect(() => {
     async function fetchAnalytics() {
       if (!selectedProject?.id) return
-      
+
       setAnalyticsLoading(true)
       try {
         const { start } = getDateRange()
@@ -106,7 +105,7 @@ export default function AnalyticsPage() {
           getCountryAnalytics(selectedProject.id, start.toISOString()),
           getBrowserAnalytics(selectedProject.id, start.toISOString()),
         ])
-        
+
         setDeviceData(devices)
         setCountryData(countries)
         setBrowserData(browsers)
@@ -116,14 +115,14 @@ export default function AnalyticsPage() {
         setAnalyticsLoading(false)
       }
     }
-    
+
     fetchAnalytics()
   }, [selectedProject?.id, dateRange])
 
   // Loading State - só na primeira carga
   if (showInitialSkeleton) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <HeaderSkeleton />
@@ -140,7 +139,7 @@ export default function AnalyticsPage() {
             <CardSkeleton lines={5} />
           </div>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
@@ -191,7 +190,7 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -214,8 +213,8 @@ export default function AnalyticsPage() {
             </Select>
 
             {/* Project Selector */}
-            <Select 
-              value={selectedProject?.id || ''} 
+            <Select
+              value={selectedProject?.id || ''}
               onValueChange={(value) => {
                 const project = projects.find(p => p.id === value)
                 if (project) setSelectedProject(project)
@@ -254,8 +253,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Chart */}
-        <VisitorsChart 
-          data={chartData} 
+        <VisitorsChart
+          data={chartData}
           loading={loading}
           title={t('analytics.visitorsOverTime')}
         />
@@ -293,7 +292,7 @@ export default function AnalyticsPage() {
                             <span className="text-sm text-muted-foreground">{device.value}%</span>
                           </div>
                           <div className="h-2 bg-muted rounded-full overflow-hidden">
-                            <div 
+                            <div
                               className="h-full bg-primary rounded-full transition-all"
                               style={{ width: `${device.value}%` }}
                             />
@@ -427,7 +426,7 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </>
   )
 }
 

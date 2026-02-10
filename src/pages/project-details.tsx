@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -127,29 +126,29 @@ export default function ProjectDetailsPage() {
 
   if (loading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   if (!project) {
     return (
-      <DashboardLayout>
+      <>
         <div className="text-center py-12">
           <p>Projeto não encontrado</p>
           <Button onClick={() => navigate('/projects')} className="mt-4">
             Voltar para Projetos
           </Button>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -378,6 +377,6 @@ export default function ProjectDetailsPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

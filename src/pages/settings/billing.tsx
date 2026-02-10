@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -76,7 +75,7 @@ export default function BillingPage() {
 
   if (subLoading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
           <HeaderSkeleton />
           <CardSkeleton lines={4} />
@@ -87,12 +86,12 @@ export default function BillingPage() {
             <MetricCardSkeleton />
           </div>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
         {/* Header with Plan Badge */}
         <div className="flex items-center justify-between">
@@ -277,6 +276,6 @@ export default function BillingPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

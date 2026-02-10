@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -332,18 +331,18 @@ export default function BlogCreate() {
 
   if (loading || authLoading) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   // Mostrar mensagem se não autorizado
   if (!isAuthorized) {
     return (
-      <DashboardLayout>
+      <>
         <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] text-center p-4">
           <div className="p-4 rounded-full bg-destructive/10 mb-4">
             <X className="h-8 w-8 text-destructive" />
@@ -356,14 +355,14 @@ export default function BlogCreate() {
             Voltar ao Dashboard
           </Button>
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   const readingTime = estimateReadingTime(formData.content)
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -869,6 +868,6 @@ const code = 'example';
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </DashboardLayout>
+    </>
   )
 }

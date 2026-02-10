@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +18,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  
+
   // Form state
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -30,16 +29,16 @@ export default function ProfilePage() {
   useEffect(() => {
     const loadUserData = async () => {
       if (!user) return
-      
+
       setEmail(user.email || '')
       setName(user.user_metadata?.full_name || user.user_metadata?.name || '')
       setCompany(user.user_metadata?.company || '')
-      
+
       // Get avatar from user metadata
       const avatar = user.user_metadata?.avatar_url || ''
       setAvatarUrl(avatar)
     }
-    
+
     loadUserData()
   }, [user])
 
@@ -97,6 +96,9 @@ export default function ProfilePage() {
       })
 
       if (updateError) throw updateError
+
+      // Refresh session so the auth context picks up the new avatar
+      await supabase.auth.refreshSession()
 
       setAvatarUrl(publicUrl)
       toast.success('Foto atualizada com sucesso!')
@@ -158,14 +160,14 @@ export default function ProfilePage() {
 
   if (authLoading) {
     return (
-      <DashboardLayout>
+      <>
         <SettingsPageSkeleton />
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div>
@@ -203,9 +205,9 @@ export default function ProfilePage() {
                 onChange={handleAvatarUpload}
                 className="hidden"
               />
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => fileInputRef.current?.click()}
                 loading={uploading}
               >
@@ -227,20 +229,20 @@ export default function ProfilePage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">{t('profile.name')}</Label>
-                <Input 
-                  id="name" 
-                  placeholder={t('profile.namePlaceholder')} 
+                <Input
+                  id="name"
+                  placeholder={t('profile.namePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">{t('profile.email')}</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
+                <Input
+                  id="email"
+                  type="email"
                   value={email}
-                  disabled 
+                  disabled
                   className="bg-muted"
                 />
                 <p className="text-xs text-muted-foreground">
@@ -250,9 +252,9 @@ export default function ProfilePage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="company">{t('profile.company')}</Label>
-              <Input 
-                id="company" 
-                placeholder={t('profile.companyPlaceholder')} 
+              <Input
+                id="company"
+                placeholder={t('profile.companyPlaceholder')}
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
               />
@@ -304,8 +306,8 @@ export default function ProfilePage() {
                   {t('profile.deleteAccountDesc')}
                 </p>
               </div>
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 size="sm"
                 onClick={() => toast.info(t('profile.deleteAccountInfo'))}
               >
@@ -322,6 +324,6 @@ export default function ProfilePage() {
           </Button>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

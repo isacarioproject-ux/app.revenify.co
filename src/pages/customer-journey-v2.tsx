@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -396,7 +395,7 @@ export default function CustomerJourneyPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -1065,6 +1064,6 @@ export default function CustomerJourneyPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   )
 }

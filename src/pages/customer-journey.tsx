@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
-import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Search, 
-  MousePointer, 
-  UserPlus, 
-  CreditCard, 
+import {
+  Search,
+  MousePointer,
+  UserPlus,
+  CreditCard,
   ArrowRight,
   Calendar,
   Globe,
@@ -69,7 +68,7 @@ interface JourneyData {
 }
 
 export default function CustomerJourneyPage() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const { projects, selectedProject, setSelectedProject, loading: projectsLoading } = useProjects()
   const [searchQuery, setSearchQuery] = useState('')
   const [journeys, setJourneys] = useState<JourneyData[]>([])
@@ -78,12 +77,12 @@ export default function CustomerJourneyPage() {
   const hasLoadedOnce = useRef(false)
 
   const isLoading = projectsLoading || loading
-  
+
   // Marcar como carregado após primeira carga
   if (!isLoading && selectedProject && !hasLoadedOnce.current) {
     hasLoadedOnce.current = true
   }
-  
+
   // Só mostrar skeleton na primeira carga
   const showInitialSkeleton = !hasLoadedOnce.current && isLoading
 
@@ -176,7 +175,7 @@ export default function CustomerJourneyPage() {
 
       const results = await Promise.all(journeyPromises)
       setJourneys(results.filter(j => j.touchpoints.length > 0))
-      
+
       if (results.length === 0) {
         toast.info(t('journey.noJourneys'))
       }
@@ -194,8 +193,10 @@ export default function CustomerJourneyPage() {
     }
   }, [selectedProject?.id])
 
+
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleString('pt-BR', {
+    const localeMap: Record<string, string> = { 'pt-BR': 'pt-BR', 'en': 'en-US', 'es': 'es-ES' }
+    return new Date(date).toLocaleString(localeMap[locale] || 'en-US', {
       day: '2-digit',
       month: '2-digit',
       hour: '2-digit',
@@ -212,7 +213,7 @@ export default function CustomerJourneyPage() {
   // Loading State - só na primeira carga
   if (showInitialSkeleton) {
     return (
-      <DashboardLayout>
+      <>
         <div className="w-full p-4 md:p-6 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <HeaderSkeleton />
@@ -221,12 +222,12 @@ export default function CustomerJourneyPage() {
           <CardSkeleton lines={2} />
           <ListSkeleton items={4} />
         </div>
-      </DashboardLayout>
+      </>
     )
   }
 
   return (
-    <DashboardLayout>
+    <>
       <div className="w-full p-4 md:p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -236,9 +237,9 @@ export default function CustomerJourneyPage() {
               {t('journey.subtitle')}
             </p>
           </div>
-          
-          <Select 
-            value={selectedProject?.id || ''} 
+
+          <Select
+            value={selectedProject?.id || ''}
             onValueChange={(value) => {
               const project = projects.find(p => p.id === value)
               if (project) setSelectedProject(project)
@@ -286,11 +287,10 @@ export default function CustomerJourneyPage() {
               {journeys.length} {t('journey.journeysFound')}
             </h3>
             {journeys.map((journey) => (
-              <Card 
+              <Card
                 key={journey.visitor_id}
-                className={`cursor-pointer transition-colors hover:bg-muted/50 ${
-                  selectedJourney?.visitor_id === journey.visitor_id ? 'border-primary' : ''
-                }`}
+                className={`cursor-pointer transition-colors hover:bg-muted/50 ${selectedJourney?.visitor_id === journey.visitor_id ? 'border-primary' : ''
+                  }`}
                 onClick={() => setSelectedJourney(journey)}
               >
                 <CardContent className="p-4">
@@ -458,6 +458,6 @@ export default function CustomerJourneyPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   )
 }
