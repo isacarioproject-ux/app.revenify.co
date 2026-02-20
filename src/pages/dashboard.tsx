@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { 
-  Users, 
+import {
+  Users,
   Eye,
   UserCheck,
   Percent,
@@ -13,14 +13,14 @@ import {
 import { useProjects } from '@/hooks/use-projects'
 import { usePageToast } from '@/hooks/use-page-toast'
 import { useDashboardData } from '@/hooks/use-dashboard-data'
-import { 
-  MetricCard, 
-  VisitorsChart, 
-  LiveEventsFeed, 
-  SourcesTable, 
+import {
+  MetricCard,
+  VisitorsChart,
+  LiveEventsFeed,
+  SourcesTable,
   ConversionFunnel,
   CreateSourceDialog,
-  UpgradeModal 
+  UpgradeModal
 } from '@/components/dashboard'
 import {
   Select,
@@ -46,11 +46,11 @@ export default function DashboardPage() {
   usePageToast(
     !selectedProject && projects.length > 0
       ? {
-          id: 'select-project-warning',
-          title: t('dashboard.selectProjectAlert'),
-          type: 'warning',
-          duration: 6000,
-        }
+        id: 'select-project-warning',
+        title: t('dashboard.selectProjectAlert'),
+        type: 'warning',
+        duration: 6000,
+      }
       : null
   )
 
@@ -111,31 +111,31 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                  <Select 
-                    value={selectedProject?.id || ''} 
-                    onValueChange={(value) => {
-                      const project = projects.find(p => p.id === value)
-                      if (project) setSelectedProject(project)
-                    }}
-                  >
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder={t('dashboard.selectProject')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {projects.map((project) => (
-                        <SelectItem key={project.id} value={project.id}>
-                          {project.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {selectedProject && (
-                    <CreateSourceDialog 
-                      projectDomain={selectedProject.domain}
-                      onSourceCreated={() => {}}
-                    />
-                  )}
-                </div>
+                <Select
+                  value={selectedProject?.id || ''}
+                  onValueChange={(value) => {
+                    const project = projects.find(p => p.id === value)
+                    if (project) setSelectedProject(project)
+                  }}
+                >
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue placeholder={t('dashboard.selectProject')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects.map((project) => (
+                      <SelectItem key={project.id} value={project.id}>
+                        {project.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {selectedProject && (
+                  <CreateSourceDialog
+                    projectDomain={selectedProject.domain}
+                    onSourceCreated={() => { }}
+                  />
+                )}
+              </div>
             </>
           )}
         </div>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           />
           <MetricCard
             title={t('dashboard.revenue')}
-            value={`R$ ${(metrics?.totalRevenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+            value={`R$ ${(metrics?.totalRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
             icon={DollarSign}
             color="green"
             loading={showInitialSkeleton}
@@ -191,8 +191,8 @@ export default function DashboardPage() {
         <div className="grid gap-4 lg:grid-cols-3">
           {/* Chart */}
           <div className="lg:col-span-2">
-            <VisitorsChart 
-              data={chartData} 
+            <VisitorsChart
+              data={chartData}
               loading={showInitialSkeleton}
               title={t('dashboard.visitorsLast30Days')}
             />
@@ -201,7 +201,7 @@ export default function DashboardPage() {
           {/* Conversion Funnel */}
           <div>
             {funnel && (
-              <ConversionFunnel 
+              <ConversionFunnel
                 data={funnel}
                 loading={showInitialSkeleton}
               />
@@ -212,14 +212,14 @@ export default function DashboardPage() {
         {/* Bottom Grid */}
         <div className="grid gap-4 lg:grid-cols-2">
           {/* Sources Table */}
-          <SourcesTable 
+          <SourcesTable
             sources={sources}
             loading={showInitialSkeleton}
           />
 
           {/* Live Events Feed */}
           {selectedProject && (
-            <LiveEventsFeed 
+            <LiveEventsFeed
               projectId={selectedProject.id}
               initialEvents={recentEvents}
             />
@@ -228,7 +228,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Upgrade Modal */}
-      <UpgradeModal 
+      <UpgradeModal
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
         currentPlan="free"

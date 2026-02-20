@@ -287,14 +287,14 @@ export default function TemplatesPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Select 
-              value={selectedProject?.id || ''} 
+            <Select
+              value={selectedProject?.id || ''}
               onValueChange={(value) => {
                 const project = projects.find(p => p.id === value)
                 if (project) setSelectedProject(project)
               }}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>

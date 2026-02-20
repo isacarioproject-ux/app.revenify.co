@@ -502,6 +502,9 @@ const translations: Translations = {
   'shortLinks.passwordPlaceholder': { 'pt-BR': 'Digite uma senha...', 'en': 'Enter a password...', 'es': 'Ingresa una contraseña...' },
   'shortLinks.passwordHint': { 'pt-BR': 'Visitantes precisarão digitar esta senha para acessar o link.', 'en': 'Visitors will need to enter this password to access the link.', 'es': 'Los visitantes deberán ingresar esta contraseña para acceder al enlace.' },
   'shortLinks.protected': { 'pt-BR': 'Protegido', 'en': 'Protected', 'es': 'Protegido' },
+  'shortLinks.domainConfigTitle': { 'pt-BR': 'Domínio em configuração:', 'en': 'Domain being configured:', 'es': 'Dominio en configuración:' },
+  'shortLinks.domainConfigDesc': { 'pt-BR': 'Os links serão exibidos como', 'en': 'Links will be displayed as', 'es': 'Los enlaces se mostrarán como' },
+  'shortLinks.domainConfigSuffix': { 'pt-BR': ', mas usam uma URL temporária até o domínio estar ativo. O rastreamento já funciona normalmente.', 'en': ', but use a temporary URL until the domain is active. Tracking works normally.', 'es': ', pero usan una URL temporal hasta que el dominio esté activo. El rastreo funciona normalmente.' },
 
   // A/B Testing
   'shortLinks.abTesting': { 'pt-BR': 'Teste A/B', 'en': 'A/B Testing', 'es': 'Prueba A/B' },

@@ -3,6 +3,7 @@ import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -76,7 +77,7 @@ export function CreateTemplateDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    
+
     try {
       if (isEditing && onUpdate && formData.id) {
         await onUpdate(formData.id, formData)
@@ -96,6 +97,9 @@ export function CreateTemplateDialog({
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEditing ? t('templates.editTemplate') : t('templates.createTemplate')}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {isEditing ? t('templates.editTemplate') : t('templates.createTemplate')}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">

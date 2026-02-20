@@ -45,13 +45,14 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertTriangle } from 'lucide-react'
 import { format, isPast, formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { ptBR, enUS, es } from 'date-fns/locale'
 import { toast } from 'sonner'
 import { HeaderSkeleton, SelectSkeleton, ButtonSkeleton, MetricCardSkeleton, TableSkeleton } from '@/components/page-skeleton'
 import { useI18n } from '@/hooks/use-i18n'
 
 export default function ShortLinksPage() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
+  const dateFnsLocale = locale === 'pt-BR' ? ptBR : locale === 'es' ? es : enUS
   const { projects, selectedProject, setSelectedProject, loading: projectsLoading } = useProjects()
   const { shortLinks, isLoading, stats, createShortLink, deleteShortLink } = useShortLinks()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -59,12 +60,12 @@ export default function ShortLinksPage() {
   const [selectedLink, setSelectedLink] = useState<ShortLink | null>(null)
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const hasLoadedOnce = useRef(false)
-  
+
   // Marcar como carregado após primeira carga
   if (!isLoading && !projectsLoading && selectedProject && !hasLoadedOnce.current) {
     hasLoadedOnce.current = true
   }
-  
+
   // Só mostrar skeleton na primeira carga
   const showInitialSkeleton = !hasLoadedOnce.current && (isLoading || projectsLoading)
 
@@ -257,8 +258,7 @@ export default function ShortLinksPage() {
           <Alert className="border-amber-500/50 bg-amber-500/10">
             <AlertTriangle className="h-4 w-4 text-amber-500" />
             <AlertDescription className="text-sm">
-              <strong>Domínio em configuração:</strong> Os links serão exibidos como <code className="px-1 py-0.5 bg-muted rounded text-xs">{DEFAULT_SHORT_DOMAIN}/codigo</code>, 
-              mas usam uma URL temporária até o domínio estar ativo. O rastreamento já funciona normalmente.
+              <strong>{t('shortLinks.domainConfigTitle')}</strong> {t('shortLinks.domainConfigDesc')} <code className="px-1 py-0.5 bg-muted rounded text-xs">{DEFAULT_SHORT_DOMAIN}/codigo</code>{t('shortLinks.domainConfigSuffix')}
             </AlertDescription>
           </Alert>
         )}
@@ -309,7 +309,7 @@ export default function ShortLinksPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {stats.totalLinks > 0 
+                {stats.totalLinks > 0
                   ? `${((stats.totalClicks / stats.totalLinks) * 100).toFixed(1)}%`
                   : '0%'
                 }
@@ -413,7 +413,7 @@ export default function ShortLinksPage() {
                                 </Badge>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>{t('shortLinks.expiresIn')}: {formatDistanceToNow(new Date(link.expires_at), { locale: ptBR, addSuffix: true })}</p>
+                                <p>{t('shortLinks.expiresIn')}: {formatDistanceToNow(new Date(link.expires_at), { locale: dateFnsLocale, addSuffix: true })}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>

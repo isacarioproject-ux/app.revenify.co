@@ -245,7 +245,7 @@ export default function CustomerJourneyPage() {
               if (project) setSelectedProject(project)
             }}
           >
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder={t('dashboard.selectProject')} />
             </SelectTrigger>
             <SelectContent>
@@ -261,7 +261,7 @@ export default function CustomerJourneyPage() {
         {/* Search */}
         <Card>
           <CardContent className="p-4">
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -306,7 +306,7 @@ export default function CustomerJourneyPage() {
                     <div className="text-right">
                       {journey.total_revenue > 0 ? (
                         <Badge variant="default" className="bg-green-600">
-                          R$ {journey.total_revenue.toLocaleString('pt-BR')}
+                          R$ {journey.total_revenue.toLocaleString()}
                         </Badge>
                       ) : journey.lead ? (
                         <Badge variant="secondary">Lead</Badge>
@@ -414,7 +414,7 @@ export default function CustomerJourneyPage() {
                               {t('journey.payment')}
                             </span>
                             <Badge variant="default" className="bg-emerald-600">
-                              R$ {Number(payment.amount).toLocaleString('pt-BR')}
+                              R$ {Number(payment.amount).toLocaleString()}
                             </Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-1">
@@ -437,7 +437,7 @@ export default function CustomerJourneyPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-green-600">
-                        R$ {selectedJourney.total_revenue.toLocaleString('pt-BR')}
+                        R$ {selectedJourney.total_revenue.toLocaleString()}
                       </p>
                       <p className="text-xs text-muted-foreground">{t('journey.totalRevenue')}</p>
                     </div>
