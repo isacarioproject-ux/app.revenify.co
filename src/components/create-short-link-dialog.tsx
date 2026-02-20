@@ -3,6 +3,7 @@ import { useI18n } from '@/hooks/use-i18n'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -236,6 +237,9 @@ export function CreateShortLinkDialog({
             <Link2 className="h-5 w-5" />
             {t('shortLinks.createLink')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('shortLinks.createLink')}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">
@@ -459,397 +463,397 @@ export function CreateShortLinkDialog({
               <Accordion type="single" collapsible className="w-full">
                 {/* A/B Testing */}
                 <AccordionItem value="ab-testing" className="border-0">
-              <AccordionTrigger className="text-sm font-medium">
-                <div className="flex items-center gap-2">
-                  <GitBranch className="h-4 w-4" />
-                  {t('shortLinks.abTesting')}
-                  <Badge variant="secondary" className="text-xs">Pro</Badge>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>{t('shortLinks.enableAbTest')}</Label>
-                    <p className="text-xs text-muted-foreground">{t('shortLinks.abTestDesc')}</p>
-                  </div>
-                  <Switch
-                    checked={formData.ab_test_enabled}
-                    onCheckedChange={(checked) => setFormData({ ...formData, ab_test_enabled: checked })}
-                  />
-                </div>
-
-                {formData.ab_test_enabled && (
-                  <>
-                    <div className="space-y-2">
-                      <Label htmlFor="ab_test_url">{t('shortLinks.abTestUrl')}</Label>
-                      <Input
-                        id="ab_test_url"
-                        type="url"
-                        placeholder="https://example.com/variant-b"
-                        value={formData.ab_test_url}
-                        onChange={(e) => setFormData({ ...formData, ab_test_url: e.target.value })}
+                  <AccordionTrigger className="text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <GitBranch className="h-4 w-4" />
+                      {t('shortLinks.abTesting')}
+                      <Badge variant="secondary" className="text-xs">Pro</Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>{t('shortLinks.enableAbTest')}</Label>
+                        <p className="text-xs text-muted-foreground">{t('shortLinks.abTestDesc')}</p>
+                      </div>
+                      <Switch
+                        checked={formData.ab_test_enabled}
+                        onCheckedChange={(checked) => setFormData({ ...formData, ab_test_enabled: checked })}
                       />
                     </div>
 
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <Label>{t('shortLinks.trafficSplit')}</Label>
-                        <span className="text-sm font-medium">{formData.ab_test_split}% / {100 - formData.ab_test_split}%</span>
-                      </div>
-                      <Slider
-                        value={[formData.ab_test_split]}
-                        onValueChange={([value]) => setFormData({ ...formData, ab_test_split: value })}
-                        min={10}
-                        max={90}
-                        step={5}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>{t('shortLinks.originalUrl')}</span>
-                        <span>{t('shortLinks.variantUrl')}</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </AccordionContent>
-            </AccordionItem>
+                    {formData.ab_test_enabled && (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="ab_test_url">{t('shortLinks.abTestUrl')}</Label>
+                          <Input
+                            id="ab_test_url"
+                            type="url"
+                            placeholder="https://example.com/variant-b"
+                            value={formData.ab_test_url}
+                            onChange={(e) => setFormData({ ...formData, ab_test_url: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label>{t('shortLinks.trafficSplit')}</Label>
+                            <span className="text-sm font-medium">{formData.ab_test_split}% / {100 - formData.ab_test_split}%</span>
+                          </div>
+                          <Slider
+                            value={[formData.ab_test_split]}
+                            onValueChange={([value]) => setFormData({ ...formData, ab_test_split: value })}
+                            min={10}
+                            max={90}
+                            step={5}
+                            className="w-full"
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>{t('shortLinks.originalUrl')}</span>
+                            <span>{t('shortLinks.variantUrl')}</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
 
                 {/* Geo Targeting */}
                 <AccordionItem value="geo-targeting" className="border-0">
-              <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  {t('shortLinks.geoTargeting')}
-                  <Badge variant="secondary" className="text-xs">Pro</Badge>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-2">
-                <p className="text-xs text-muted-foreground">{t('shortLinks.geoTargetingDesc')}</p>
+                  <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      {t('shortLinks.geoTargeting')}
+                      <Badge variant="secondary" className="text-xs">Pro</Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-2">
+                    <p className="text-xs text-muted-foreground">{t('shortLinks.geoTargetingDesc')}</p>
 
-                {geoRules.map((rule, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Select
-                      value={rule.country}
-                      onValueChange={(value) => {
-                        const newRules = [...geoRules]
-                        newRules[index].country = value
-                        setGeoRules(newRules)
-                      }}
-                    >
-                      <SelectTrigger className="w-[140px]">
-                        <SelectValue placeholder={t('shortLinks.selectCountry')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {COUNTRIES.map((country) => (
-                          <SelectItem key={country.code} value={country.code}>
-                            {country.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      placeholder="https://example.com/br"
-                      value={rule.url}
-                      onChange={(e) => {
-                        const newRules = [...geoRules]
-                        newRules[index].url = e.target.value
-                        setGeoRules(newRules)
-                      }}
-                      className="flex-1"
-                    />
+                    {geoRules.map((rule, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <Select
+                          value={rule.country}
+                          onValueChange={(value) => {
+                            const newRules = [...geoRules]
+                            newRules[index].country = value
+                            setGeoRules(newRules)
+                          }}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue placeholder={t('shortLinks.selectCountry')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {COUNTRIES.map((country) => (
+                              <SelectItem key={country.code} value={country.code}>
+                                {country.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          placeholder="https://example.com/br"
+                          value={rule.url}
+                          onChange={(e) => {
+                            const newRules = [...geoRules]
+                            newRules[index].url = e.target.value
+                            setGeoRules(newRules)
+                          }}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setGeoRules(geoRules.filter((_, i) => i !== index))}
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    ))}
+
                     <Button
                       type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setGeoRules(geoRules.filter((_, i) => i !== index))}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setGeoRules([...geoRules, { country: '', url: '' }])}
+                      className="w-full"
                     >
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <Plus className="h-4 w-4 mr-2" />
+                      {t('shortLinks.addGeoRule')}
                     </Button>
-                  </div>
-                ))}
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setGeoRules([...geoRules, { country: '', url: '' }])}
-                  className="w-full"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  {t('shortLinks.addGeoRule')}
-                </Button>
-              </AccordionContent>
-            </AccordionItem>
+                  </AccordionContent>
+                </AccordionItem>
 
                 {/* Device Targeting */}
                 <AccordionItem value="device-targeting" className="border-0">
-              <AccordionTrigger className="text-sm font-medium">
-                <div className="flex items-center gap-2">
-                  <Smartphone className="h-4 w-4" />
-                  {t('shortLinks.deviceTargeting')}
-                  <Badge variant="secondary" className="text-xs">Pro</Badge>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>{t('shortLinks.enableDeviceTargeting')}</Label>
-                    <p className="text-xs text-muted-foreground">{t('shortLinks.deviceTargetingDesc')}</p>
-                  </div>
-                  <Switch
-                    checked={deviceTargetingEnabled}
-                    onCheckedChange={setDeviceTargetingEnabled}
-                  />
-                </div>
-
-                {deviceTargetingEnabled && (
-                  <div className="space-y-3">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Monitor className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.desktopUrl')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.desktopUrl')}
-                          description={t('shortLinks.desktopUrlDesc')}
-                          icon="help"
-                        />
+                  <AccordionTrigger className="text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <Smartphone className="h-4 w-4" />
+                      {t('shortLinks.deviceTargeting')}
+                      <Badge variant="secondary" className="text-xs">Pro</Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>{t('shortLinks.enableDeviceTargeting')}</Label>
+                        <p className="text-xs text-muted-foreground">{t('shortLinks.deviceTargetingDesc')}</p>
                       </div>
-                      <Input
-                        placeholder="https://example.com/desktop"
-                        value={deviceTargeting.desktop_url || ''}
-                        onChange={(e) => setDeviceTargeting({ ...deviceTargeting, desktop_url: e.target.value })}
+                      <Switch
+                        checked={deviceTargetingEnabled}
+                        onCheckedChange={setDeviceTargetingEnabled}
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Smartphone className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.mobileUrl')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.mobileUrl')}
-                          description={t('shortLinks.mobileUrlDesc')}
-                          icon="help"
-                        />
-                      </div>
-                      <Input
-                        placeholder="https://example.com/mobile"
-                        value={deviceTargeting.mobile_url || ''}
-                        onChange={(e) => setDeviceTargeting({ ...deviceTargeting, mobile_url: e.target.value })}
-                      />
-                    </div>
+                    {deviceTargetingEnabled && (
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Monitor className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.desktopUrl')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.desktopUrl')}
+                              description={t('shortLinks.desktopUrlDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="https://example.com/desktop"
+                            value={deviceTargeting.desktop_url || ''}
+                            onChange={(e) => setDeviceTargeting({ ...deviceTargeting, desktop_url: e.target.value })}
+                          />
+                        </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Tablet className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.tabletUrl')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.tabletUrl')}
-                          description={t('shortLinks.tabletUrlDesc')}
-                          icon="help"
-                        />
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Smartphone className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.mobileUrl')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.mobileUrl')}
+                              description={t('shortLinks.mobileUrlDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="https://example.com/mobile"
+                            value={deviceTargeting.mobile_url || ''}
+                            onChange={(e) => setDeviceTargeting({ ...deviceTargeting, mobile_url: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Tablet className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.tabletUrl')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.tabletUrl')}
+                              description={t('shortLinks.tabletUrlDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="https://example.com/tablet"
+                            value={deviceTargeting.tablet_url || ''}
+                            onChange={(e) => setDeviceTargeting({ ...deviceTargeting, tablet_url: e.target.value })}
+                          />
+                        </div>
                       </div>
-                      <Input
-                        placeholder="https://example.com/tablet"
-                        value={deviceTargeting.tablet_url || ''}
-                        onChange={(e) => setDeviceTargeting({ ...deviceTargeting, tablet_url: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
 
                 {/* Deep Links */}
                 <AccordionItem value="deep-links" className="border-0">
-              <AccordionTrigger className="text-sm font-medium">
-                <div className="flex items-center gap-2">
-                  <Link2 className="h-4 w-4" />
-                  {t('shortLinks.deepLinks')}
-                  <Badge variant="secondary" className="text-xs">Pro</Badge>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>{t('shortLinks.enableDeepLinks')}</Label>
-                    <p className="text-xs text-muted-foreground">{t('shortLinks.deepLinksDesc')}</p>
-                  </div>
-                  <Switch
-                    checked={deepLinksEnabled}
-                    onCheckedChange={setDeepLinksEnabled}
-                  />
-                </div>
-
-                {deepLinksEnabled && (
-                  <div className="space-y-3">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Apple className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.iosDeepLink')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.iosDeepLink')}
-                          description={t('shortLinks.iosDeepLinkDesc')}
-                          icon="help"
-                        />
+                  <AccordionTrigger className="text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <Link2 className="h-4 w-4" />
+                      {t('shortLinks.deepLinks')}
+                      <Badge variant="secondary" className="text-xs">Pro</Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>{t('shortLinks.enableDeepLinks')}</Label>
+                        <p className="text-xs text-muted-foreground">{t('shortLinks.deepLinksDesc')}</p>
                       </div>
-                      <Input
-                        placeholder="myapp://path/to/content"
-                        value={formData.deep_link_ios}
-                        onChange={(e) => setFormData({ ...formData, deep_link_ios: e.target.value })}
+                      <Switch
+                        checked={deepLinksEnabled}
+                        onCheckedChange={setDeepLinksEnabled}
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Play className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.androidDeepLink')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.androidDeepLink')}
-                          description={t('shortLinks.androidDeepLinkDesc')}
-                          icon="help"
-                        />
-                      </div>
-                      <Input
-                        placeholder="myapp://path/to/content"
-                        value={formData.deep_link_android}
-                        onChange={(e) => setFormData({ ...formData, deep_link_android: e.target.value })}
-                      />
-                    </div>
+                    {deepLinksEnabled && (
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Apple className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.iosDeepLink')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.iosDeepLink')}
+                              description={t('shortLinks.iosDeepLinkDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="myapp://path/to/content"
+                            value={formData.deep_link_ios}
+                            onChange={(e) => setFormData({ ...formData, deep_link_ios: e.target.value })}
+                          />
+                        </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.fallbackUrl')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.fallbackUrl')}
-                          description={t('shortLinks.fallbackUrlDesc')}
-                          icon="help"
-                        />
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Play className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.androidDeepLink')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.androidDeepLink')}
+                              description={t('shortLinks.androidDeepLinkDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="myapp://path/to/content"
+                            value={formData.deep_link_android}
+                            onChange={(e) => setFormData({ ...formData, deep_link_android: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Globe className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.fallbackUrl')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.fallbackUrl')}
+                              description={t('shortLinks.fallbackUrlDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Input
+                            placeholder="https://example.com/app-store"
+                            value={formData.deep_link_fallback}
+                            onChange={(e) => setFormData({ ...formData, deep_link_fallback: e.target.value })}
+                          />
+                        </div>
                       </div>
-                      <Input
-                        placeholder="https://example.com/app-store"
-                        value={formData.deep_link_fallback}
-                        onChange={(e) => setFormData({ ...formData, deep_link_fallback: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
 
                 {/* Link Cloaking */}
                 <AccordionItem value="link-cloaking" className="border-0">
-              <AccordionTrigger className="text-sm font-medium">
-                <div className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  {t('shortLinks.linkCloaking')}
-                  <Badge variant="secondary" className="text-xs">Business</Badge>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-4 pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>{t('shortLinks.enableCloaking')}</Label>
-                    <p className="text-xs text-muted-foreground">{t('shortLinks.cloakingDesc')}</p>
-                  </div>
-                  <Switch
-                    checked={formData.cloaking_enabled}
-                    onCheckedChange={(checked) => setFormData({ ...formData, cloaking_enabled: checked })}
-                  />
-                </div>
-
-                {formData.cloaking_enabled && (
-                  <div className="space-y-3">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Tag className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.cloakedTitle')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.cloakedTitle')}
-                          description={t('shortLinks.cloakedTitleDesc')}
-                          icon="help"
-                        />
+                  <AccordionTrigger className="text-sm font-medium">
+                    <div className="flex items-center gap-2">
+                      <Eye className="h-4 w-4" />
+                      {t('shortLinks.linkCloaking')}
+                      <Badge variant="secondary" className="text-xs">Business</Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <Label>{t('shortLinks.enableCloaking')}</Label>
+                        <p className="text-xs text-muted-foreground">{t('shortLinks.cloakingDesc')}</p>
                       </div>
-                      <Input
-                        placeholder="Título personalizado para preview"
-                        value={formData.cloaked_title}
-                        onChange={(e) => setFormData({ ...formData, cloaked_title: e.target.value })}
+                      <Switch
+                        checked={formData.cloaking_enabled}
+                        onCheckedChange={(checked) => setFormData({ ...formData, cloaking_enabled: checked })}
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Megaphone className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.cloakedDescription')}</Label>
-                        <InfoTooltipRich
-                          title={t('shortLinks.cloakedDescription')}
-                          description={t('shortLinks.cloakedDescriptionDesc')}
-                          icon="help"
-                        />
-                      </div>
-                      <Textarea
-                        placeholder="Descrição personalizada para preview"
-                        value={formData.cloaked_description}
-                        onChange={(e) => setFormData({ ...formData, cloaked_description: e.target.value })}
-                        rows={2}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Image className="h-4 w-4 text-muted-foreground" />
-                        <Label>{t('shortLinks.cloakedImage')}</Label>
-                      </div>
-                      {formData.cloaked_image ? (
-                        <div className="flex items-center gap-2">
-                          <div className="relative h-10 w-16 rounded border overflow-hidden bg-muted">
-                            <img 
-                              src={formData.cloaked_image} 
-                              alt="Preview" 
-                              className="h-full w-full object-cover"
+                    {formData.cloaking_enabled && (
+                      <div className="space-y-3">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Tag className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.cloakedTitle')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.cloakedTitle')}
+                              description={t('shortLinks.cloakedTitleDesc')}
+                              icon="help"
                             />
                           </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={removeImage}
-                            className="h-8 px-2"
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                            id="cloaked-image-upload"
+                          <Input
+                            placeholder="Título personalizado para preview"
+                            value={formData.cloaked_title}
+                            onChange={(e) => setFormData({ ...formData, cloaked_title: e.target.value })}
                           />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => fileInputRef.current?.click()}
-                            disabled={isUploadingImage}
-                            className="h-8 text-xs"
-                          >
-                            <Upload className="h-3 w-3 mr-1" />
-                            {isUploadingImage ? '...' : 'Upload'}
-                          </Button>
-                          <span className="text-xs text-muted-foreground">Max 2MB</span>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-          </CollapsibleContent>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Megaphone className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.cloakedDescription')}</Label>
+                            <InfoTooltipRich
+                              title={t('shortLinks.cloakedDescription')}
+                              description={t('shortLinks.cloakedDescriptionDesc')}
+                              icon="help"
+                            />
+                          </div>
+                          <Textarea
+                            placeholder="Descrição personalizada para preview"
+                            value={formData.cloaked_description}
+                            onChange={(e) => setFormData({ ...formData, cloaked_description: e.target.value })}
+                            rows={2}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Image className="h-4 w-4 text-muted-foreground" />
+                            <Label>{t('shortLinks.cloakedImage')}</Label>
+                          </div>
+                          {formData.cloaked_image ? (
+                            <div className="flex items-center gap-2">
+                              <div className="relative h-10 w-16 rounded border overflow-hidden bg-muted">
+                                <img
+                                  src={formData.cloaked_image}
+                                  alt="Preview"
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={removeImage}
+                                className="h-8 px-2"
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="hidden"
+                                id="cloaked-image-upload"
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isUploadingImage}
+                                className="h-8 text-xs"
+                              >
+                                <Upload className="h-3 w-3 mr-1" />
+                                {isUploadingImage ? '...' : 'Upload'}
+                              </Button>
+                              <span className="text-xs text-muted-foreground">Max 2MB</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CollapsibleContent>
           </Collapsible>
 
           {/* Actions */}

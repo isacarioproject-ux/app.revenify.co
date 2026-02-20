@@ -16,13 +16,11 @@ if (!localStorage.getItem(LOCALE_MIGRATION_KEY)) {
 // on nodes the extension has already moved or removed, React crashes with
 // "NotFoundError: The node to be removed is not a child of this node".
 // This patch catches those errors gracefully so the app doesn't crash.
+// Warnings are silenced as they are harmless and fill the console with noise.
 if (typeof Node !== 'undefined') {
   const originalRemoveChild = Node.prototype.removeChild
   Node.prototype.removeChild = function <T extends Node>(child: T): T {
     if (child.parentNode !== this) {
-      if (console && console.warn) {
-        console.warn('Cannot remove child: node is not a child of this node.', child)
-      }
       return child
     }
     // eslint-disable-next-line prefer-rest-params
@@ -32,9 +30,6 @@ if (typeof Node !== 'undefined') {
   const originalInsertBefore = Node.prototype.insertBefore
   Node.prototype.insertBefore = function <T extends Node>(newNode: T, referenceNode: Node | null): T {
     if (referenceNode && referenceNode.parentNode !== this) {
-      if (console && console.warn) {
-        console.warn('Cannot insert before: reference node is not a child of this node.', referenceNode)
-      }
       return newNode
     }
     // eslint-disable-next-line prefer-rest-params

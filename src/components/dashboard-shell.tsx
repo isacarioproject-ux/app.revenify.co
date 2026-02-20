@@ -12,6 +12,7 @@ import { TrialExpiredModal } from '@/components/trial-expired-modal'
 import { Search } from 'lucide-react'
 import { useAuth } from '@/contexts/auth-context'
 import { SidebarSkeleton, HeaderSkeleton } from '@/components/loading-skeleton'
+import { useI18n } from '@/hooks/use-i18n'
 
 /**
  * Persistent shell that wraps ALL dashboard pages.
@@ -22,6 +23,7 @@ import { SidebarSkeleton, HeaderSkeleton } from '@/components/loading-skeleton'
 export function DashboardShell() {
     const navigate = useNavigate()
     const { user, loading } = useAuth()
+    const { t } = useI18n()
     const [searchOpen, setSearchOpen] = useState(false)
 
     // Global search shortcut (Cmd+K / Ctrl+K)
@@ -48,7 +50,7 @@ export function DashboardShell() {
             <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
             <div className="flex h-screen w-full">
                 {loading ? <SidebarSkeleton /> : <AppSidebar />}
-                <main className="flex flex-1 flex-col min-h-0 transition-all duration-300 ease-in-out">
+                <main className="flex flex-1 flex-col min-h-0 min-w-0 transition-all duration-300 ease-in-out">
                     {loading ? (
                         <HeaderSkeleton />
                     ) : (
@@ -63,7 +65,7 @@ export function DashboardShell() {
                                     className="relative h-7 w-auto justify-start text-xs text-muted-foreground md:w-48 lg:w-56"
                                 >
                                     <Search className="mr-2 h-3.5 w-3.5" />
-                                    <span className="hidden md:inline-flex">Buscar...</span>
+                                    <span className="hidden md:inline-flex">{t('common.search')}...</span>
                                     <kbd className="pointer-events-none absolute right-1 top-1 hidden h-3.5 select-none items-center gap-1 rounded border bg-muted px-1 font-mono text-[9px] font-medium opacity-100 md:flex">
                                         <span>⌘K</span>
                                     </kbd>
@@ -73,7 +75,7 @@ export function DashboardShell() {
                             </div>
                         </header>
                     )}
-                    <div className="relative flex-1 overflow-y-auto overflow-x-hidden">
+                    <div className="relative flex-1 overflow-y-auto">
                         <div className="p-4 pb-0">
                             <TrialBanner />
                         </div>

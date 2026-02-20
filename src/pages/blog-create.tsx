@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { Loader2, Upload, X, Eye, Save, Send, Edit, Trash2 } from 'lucide-react'
+import { Loader2, Upload, X, Eye, Save, Send, Edit, Trash2, FileText, Clock, Type, Shield } from 'lucide-react'
 import {
   getBlogCategories,
   createBlogPost,
@@ -52,7 +52,7 @@ export default function BlogCreate() {
 
   const [categories, setCategories] = useState<BlogCategory[]>([])
   const [loading, setLoading] = useState(true)
-  
+
   // Verificar se o usuário tem permissão
   const isAuthorized = user?.email === AUTHORIZED_EMAIL
 
@@ -344,14 +344,14 @@ export default function BlogCreate() {
     return (
       <>
         <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] text-center p-4">
-          <div className="p-4 rounded-full bg-destructive/10 mb-4">
-            <X className="h-8 w-8 text-destructive" />
+          <div className="p-5 rounded-2xl bg-destructive/10 mb-6">
+            <Shield className="h-10 w-10 text-destructive" />
           </div>
           <h1 className="text-2xl font-bold mb-2">Acesso Restrito</h1>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-6 max-w-sm">
             Esta página é exclusiva para administradores do Revenify.
           </p>
-          <Button onClick={() => navigate('/dashboard')}>
+          <Button onClick={() => navigate('/dashboard')} variant="outline">
             Voltar ao Dashboard
           </Button>
         </div>
@@ -363,27 +363,41 @@ export default function BlogCreate() {
 
   return (
     <>
-      <div className="w-full p-4 md:p-6 space-y-6 max-w-5xl mx-auto">
+      <div className="w-full p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">Create Blog Post</h1>
-            <p className="text-muted-foreground mt-1">
-              Write and publish a new blog post for your site
+            <div className="flex items-center gap-2.5 mb-1">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10">
+                <FileText className="h-4 w-4 text-primary" />
+              </div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Blog Admin</h1>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Create and manage blog posts for revenify.co
             </p>
           </div>
           <div className="flex gap-2">
             <Button
               variant="outline"
+              size="sm"
               onClick={() => handleSubmit('draft')}
               disabled={submitting}
+              className="h-9"
             >
-              {!submitting && <Save className="mr-2 h-4 w-4" />}
-              {submitting ? 'Saving...' : 'Save Draft'}
+              <Save className="h-3.5 w-3.5 mr-1.5" />
+              <span className="hidden sm:inline">Save Draft</span>
+              <span className="sm:hidden">Draft</span>
             </Button>
-            <Button onClick={() => handleSubmit('published')} disabled={submitting}>
-              {!submitting && <Send className="mr-2 h-4 w-4" />}
-              {submitting ? 'Publishing...' : 'Publish'}
+            <Button
+              size="sm"
+              onClick={() => handleSubmit('published')}
+              disabled={submitting}
+              className="h-9"
+            >
+              <Send className="h-3.5 w-3.5 mr-1.5" />
+              <span className="hidden sm:inline">Publish</span>
+              <span className="sm:hidden">Publish</span>
             </Button>
           </div>
         </div>
@@ -408,20 +422,20 @@ export default function BlogCreate() {
           </Alert>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Title & Slug */}
             <Card>
-              <CardHeader>
-                <CardTitle>Post Details</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <CardTitle className="text-base">Post Details</CardTitle>
+                <CardDescription className="text-xs">
                   Basic information about your blog post
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="title" className="text-xs">
                     Title <span className="text-destructive">*</span>
                   </Label>
                   <Input
@@ -430,25 +444,26 @@ export default function BlogCreate() {
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     maxLength={200}
+                    className="h-9"
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] text-muted-foreground">
                     {formData.title.length}/200 characters
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="slug">
+                    <Label htmlFor="slug" className="text-xs">
                       Slug <span className="text-destructive">*</span>
                     </Label>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <Switch
                         checked={autoSlug}
                         onCheckedChange={setAutoSlug}
                         id="auto-slug"
                       />
-                      <Label htmlFor="auto-slug" className="text-xs cursor-pointer">
-                        Auto-generate
+                      <Label htmlFor="auto-slug" className="text-[10px] cursor-pointer text-muted-foreground">
+                        Auto
                       </Label>
                     </div>
                   </div>
@@ -459,14 +474,15 @@ export default function BlogCreate() {
                     onChange={(e) => handleInputChange('slug', e.target.value)}
                     disabled={autoSlug}
                     maxLength={200}
+                    className="h-9 font-mono text-xs"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    URL: https://revenify.co/blog/{formData.slug || 'your-slug'}
+                  <p className="text-[10px] text-muted-foreground truncate">
+                    revenify.co/blog/{formData.slug || 'your-slug'}
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="excerpt">
+                <div className="space-y-1.5">
+                  <Label htmlFor="excerpt" className="text-xs">
                     Excerpt <span className="text-destructive">*</span>
                   </Label>
                   <Textarea
@@ -474,10 +490,11 @@ export default function BlogCreate() {
                     placeholder="Brief description of the post (appears in cards and SEO)"
                     value={formData.excerpt}
                     onChange={(e) => handleInputChange('excerpt', e.target.value)}
-                    rows={3}
+                    rows={2}
                     maxLength={300}
+                    className="text-sm resize-none"
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] text-muted-foreground">
                     {formData.excerpt.length}/300 characters
                   </p>
                 </div>
@@ -486,53 +503,35 @@ export default function BlogCreate() {
 
             {/* Content */}
             <Card>
-              <CardHeader>
-                <CardTitle>Content</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <CardTitle className="text-base">Content</CardTitle>
+                <CardDescription className="text-xs">
                   Write your blog post in Markdown format
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 sm:p-6 pt-0">
                 <Tabs defaultValue="write" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="write">Write</TabsTrigger>
-                    <TabsTrigger value="preview">
-                      <Eye className="mr-2 h-4 w-4" />
+                  <TabsList className="grid w-full grid-cols-2 h-9">
+                    <TabsTrigger value="write" className="text-xs"><Type className="h-3.5 w-3.5 mr-1.5" />Write</TabsTrigger>
+                    <TabsTrigger value="preview" className="text-xs">
+                      <Eye className="h-3.5 w-3.5 mr-1.5" />
                       Preview
                     </TabsTrigger>
                   </TabsList>
-                  <TabsContent value="write" className="space-y-4">
+                  <TabsContent value="write" className="space-y-3 mt-3">
                     <Textarea
-                      placeholder="Write your blog post content in Markdown...
-
-# Section Title
-
-This is a paragraph with **bold** and *italic* text.
-
-## Subsection
-
-- List item 1
-- List item 2
-
-```javascript
-const code = 'example';
-```
-
-[Link text](https://example.com)"
+                      placeholder={"Write your blog post content in Markdown...\n\n# Section Title\n\nThis is a paragraph with **bold** and *italic* text.\n\n## Subsection\n\n- List item 1\n- List item 2"}
                       value={formData.content}
                       onChange={(e) => handleInputChange('content', e.target.value)}
-                      rows={20}
-                      className="font-mono text-sm"
+                      rows={16}
+                      className="font-mono text-xs resize-none"
                     />
-                    <Alert>
-                      <AlertDescription>
-                        <strong>Markdown Guide:</strong> Use # for headers, **bold**, *italic*,
-                        [link](url), ```code blocks```, - for lists
-                      </AlertDescription>
-                    </Alert>
+                    <div className="flex items-center gap-4 text-[10px] text-muted-foreground px-1">
+                      <span>Markdown supported: # headers, **bold**, *italic*, [links](url), ```code```</span>
+                    </div>
                   </TabsContent>
-                  <TabsContent value="preview" className="space-y-4">
-                    <div className="border rounded-lg p-6 min-h-[400px] prose prose-sm max-w-none">
+                  <TabsContent value="preview" className="mt-3">
+                    <div className="border rounded-lg p-4 sm:p-6 min-h-[300px] prose prose-sm max-w-none dark:prose-invert">
                       {formData.content ? (
                         <div
                           dangerouslySetInnerHTML={{
@@ -540,7 +539,7 @@ const code = 'example';
                           }}
                         />
                       ) : (
-                        <p className="text-muted-foreground">
+                        <p className="text-muted-foreground text-sm">
                           No content to preview. Start writing in the Write tab.
                         </p>
                       )}
@@ -552,36 +551,36 @@ const code = 'example';
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Cover Image */}
             <Card>
-              <CardHeader>
-                <CardTitle>Cover Image</CardTitle>
-                <CardDescription>Upload a cover image (optional)</CardDescription>
+              <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <CardTitle className="text-base">Cover Image</CardTitle>
+                <CardDescription className="text-xs">Upload a cover image (optional)</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
                 {imagePreview ? (
                   <div className="relative">
                     <img
                       src={imagePreview}
                       alt="Cover preview"
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-36 object-cover rounded-lg"
                     />
                     <Button
                       variant="destructive"
                       size="icon"
-                      className="absolute top-2 right-2"
+                      className="absolute top-2 right-2 h-7 w-7"
                       onClick={handleRemoveImage}
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 ) : (
-                  <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                    <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-2" />
+                  <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                    <Upload className="mx-auto h-8 w-8 text-muted-foreground mb-1.5" />
                     <Label
                       htmlFor="cover-image"
-                      className="cursor-pointer text-sm text-primary hover:underline"
+                      className="cursor-pointer text-xs text-primary hover:underline"
                     >
                       Click to upload image
                     </Label>
@@ -593,14 +592,14 @@ const code = 'example';
                       onChange={handleImageUpload}
                       disabled={uploadingImage}
                     />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Recommended: 1200x630px, max 5MB
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      1200×630px recommended, max 5MB
                     </p>
                   </div>
                 )}
                 {uploadingImage && (
                   <div className="flex items-center justify-center">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                   </div>
                 )}
               </CardContent>
@@ -608,20 +607,20 @@ const code = 'example';
 
             {/* Settings */}
             <Card>
-              <CardHeader>
-                <CardTitle>Settings</CardTitle>
-                <CardDescription>Post metadata and settings</CardDescription>
+              <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <CardTitle className="text-base">Settings</CardTitle>
+                <CardDescription className="text-xs">Post metadata and settings</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="category">
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="category" className="text-xs">
                     Category <span className="text-destructive">*</span>
                   </Label>
                   <Select
                     value={formData.category_id}
                     onValueChange={(value) => handleInputChange('category_id', value)}
                   >
-                    <SelectTrigger id="category">
+                    <SelectTrigger id="category" className="h-9 text-xs">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -634,24 +633,31 @@ const code = 'example';
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="author">
+                <div className="space-y-1.5">
+                  <Label htmlFor="author" className="text-xs">
                     Author Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="author"
                     value={formData.author_name}
                     onChange={(e) => handleInputChange('author_name', e.target.value)}
+                    className="h-9 text-xs"
                   />
                 </div>
 
-                <div className="pt-4 border-t">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Reading time</span>
+                <div className="pt-3 border-t space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground flex items-center gap-1.5">
+                      <Clock className="h-3 w-3" />
+                      Reading time
+                    </span>
                     <span className="font-medium">{readingTime} min</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm mt-2">
-                    <span className="text-muted-foreground">Words</span>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground flex items-center gap-1.5">
+                      <Type className="h-3 w-3" />
+                      Words
+                    </span>
                     <span className="font-medium">
                       {formData.content.trim().split(/\s+/).length}
                     </span>
@@ -662,185 +668,205 @@ const code = 'example';
 
             {/* Sidebar Company Info (Optional) */}
             <Card>
-              <CardHeader>
-                <CardTitle>Company/Customer Info (Optional)</CardTitle>
-                <CardDescription>
-                  Add company details to show in sidebar (like Dub.co customer stories)
+              <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+                <CardTitle className="text-base">Company Info</CardTitle>
+                <CardDescription className="text-xs">
+                  Optional sidebar details (like Dub.co customer stories)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="companyName">Company Name</Label>
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyName" className="text-xs">Company Name</Label>
                   <Input
                     id="companyName"
                     placeholder="Acme Corp"
                     value={formData.sidebar_company_name || ''}
                     onChange={(e) => handleInputChange('sidebar_company_name', e.target.value || null)}
+                    className="h-9 text-xs"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="companyWebsite">Website</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyWebsite" className="text-xs">Website</Label>
                   <Input
                     id="companyWebsite"
                     placeholder="acme.com"
                     value={formData.sidebar_company_website || ''}
                     onChange={(e) => handleInputChange('sidebar_company_website', e.target.value || null)}
+                    className="h-9 text-xs"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="companyIndustry">Industry</Label>
-                  <Input
-                    id="companyIndustry"
-                    placeholder="SaaS, E-commerce, etc."
-                    value={formData.sidebar_company_industry || ''}
-                    onChange={(e) => handleInputChange('sidebar_company_industry', e.target.value || null)}
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="companyIndustry" className="text-xs">Industry</Label>
+                    <Input
+                      id="companyIndustry"
+                      placeholder="SaaS"
+                      value={formData.sidebar_company_industry || ''}
+                      onChange={(e) => handleInputChange('sidebar_company_industry', e.target.value || null)}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="companySize" className="text-xs">Size</Label>
+                    <Input
+                      id="companySize"
+                      placeholder="1-10"
+                      value={formData.sidebar_company_size || ''}
+                      onChange={(e) => handleInputChange('sidebar_company_size', e.target.value || null)}
+                      className="h-9 text-xs"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="companySize">Company Size</Label>
-                  <Input
-                    id="companySize"
-                    placeholder="1-10 employees"
-                    value={formData.sidebar_company_size || ''}
-                    onChange={(e) => handleInputChange('sidebar_company_size', e.target.value || null)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="companyFounded">Founded Year</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyFounded" className="text-xs">Founded Year</Label>
                   <Input
                     id="companyFounded"
                     placeholder="2023"
                     value={formData.sidebar_company_founded || ''}
                     onChange={(e) => handleInputChange('sidebar_company_founded', e.target.value || null)}
+                    className="h-9 text-xs"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="companyAbout">About</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyAbout" className="text-xs">About</Label>
                   <Textarea
                     id="companyAbout"
-                    placeholder="Brief description of the company..."
-                    rows={3}
+                    placeholder="Brief description..."
+                    rows={2}
                     value={formData.sidebar_company_about || ''}
                     onChange={(e) => handleInputChange('sidebar_company_about', e.target.value || null)}
+                    className="text-xs resize-none"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="companyLogo">Company Logo URL</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyLogo" className="text-xs">Logo URL</Label>
                   <Input
                     id="companyLogo"
                     placeholder="https://example.com/logo.png"
                     value={formData.sidebar_company_logo || ''}
                     onChange={(e) => handleInputChange('sidebar_company_logo', e.target.value || null)}
+                    className="h-9 text-xs"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Or upload the logo to Supabase Storage and paste the URL here
-                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* Posts List Table */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Published Posts</CardTitle>
-            <CardDescription>
-              {posts.length} {posts.length === 1 ? 'post' : 'posts'} total
-            </CardDescription>
+        {/* Posts List */}
+        <Card>
+          <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-base">Published Posts</CardTitle>
+                <CardDescription className="text-xs">
+                  {posts.length} {posts.length === 1 ? 'post' : 'posts'} total
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             {loadingPosts ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
             ) : posts.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No posts yet. Create your first post above!
+              <div className="text-center py-10">
+                <div className="w-12 h-12 mx-auto rounded-full bg-muted/60 flex items-center justify-center mb-3">
+                  <FileText className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium">No posts yet</p>
+                <p className="text-xs text-muted-foreground mt-1">Create your first post above!</p>
               </div>
             ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Published</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {posts.map((post) => (
-                      <TableRow key={post.id}>
-                        <TableCell className="font-medium max-w-md">
-                          <div className="truncate">{post.title}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {(post as any).blog_categories?.name || 'Unknown'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={
-                              post.status === 'published' ? 'default' : 'secondary'
-                            }
-                          >
-                            {post.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {post.published_at
-                            ? format(new Date(post.published_at), 'MMM d, yyyy')
-                            : '-'}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-end gap-2">
-                            {post.status === 'published' && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() =>
-                                  window.open(
-                                    `http://localhost:3007/blog/${post.slug}`,
-                                    '_blank'
-                                  )
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <div className="min-w-[580px] px-4 sm:px-0">
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-xs">Title</TableHead>
+                          <TableHead className="text-xs">Category</TableHead>
+                          <TableHead className="text-xs">Status</TableHead>
+                          <TableHead className="text-xs">Published</TableHead>
+                          <TableHead className="text-xs text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {posts.map((post) => (
+                          <TableRow key={post.id}>
+                            <TableCell className="font-medium max-w-[200px]">
+                              <div className="truncate text-xs">{post.title}</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="text-[10px]">
+                                {(post as any).blog_categories?.name || 'Unknown'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  post.status === 'published' ? 'default' : 'secondary'
                                 }
-                                title="View post"
+                                className="text-[10px]"
                               >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                            )}
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => toast.info('Edit feature coming soon!')}
-                              title="Edit post"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => confirmDelete(post.id)}
-                              className="text-destructive hover:text-destructive"
-                              title="Delete post"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                                {post.status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground text-xs">
+                              {post.published_at
+                                ? format(new Date(post.published_at), 'MMM d, yyyy')
+                                : '-'}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center justify-end gap-1">
+                                {post.status === 'published' && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7"
+                                    onClick={() =>
+                                      window.open(
+                                        `https://revenify.co/blog/${post.slug}`,
+                                        '_blank'
+                                      )
+                                    }
+                                    title="View post"
+                                  >
+                                    <Eye className="h-3.5 w-3.5" />
+                                  </Button>
+                                )}
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7"
+                                  onClick={() => toast.info('Edit feature coming soon!')}
+                                  title="Edit post"
+                                >
+                                  <Edit className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7 text-destructive hover:text-destructive"
+                                  onClick={() => confirmDelete(post.id)}
+                                  title="Delete post"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
               </div>
             )}
           </CardContent>

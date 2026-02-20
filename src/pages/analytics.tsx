@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
     const csv = [
       '# Relatório Analytics - Revenify',
       `Projeto: ${selectedProject?.name || 'N/A'}`,
-      `Período: ${start.toLocaleDateString('pt-BR')} - ${end.toLocaleDateString('pt-BR')}`,
+      `Período: ${start.toLocaleDateString()} - ${end.toLocaleDateString()}`,
       '',
       '# Métricas',
       `Visitantes,${metrics?.totalVisitors || 0}`,

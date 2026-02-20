@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -120,6 +121,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
       <DialogContent className="max-w-2xl p-0">
         <VisuallyHidden>
           <DialogTitle>Buscar</DialogTitle>
+          <DialogDescription>Buscar no aplicativo</DialogDescription>
         </VisuallyHidden>
 
         <div className="flex items-center border-b px-3">

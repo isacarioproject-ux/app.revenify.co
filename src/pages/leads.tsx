@@ -3,10 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Users, 
-  Search, 
-  Download, 
+import {
+  Users,
+  Search,
+  Download,
   Mail,
   Calendar,
   ExternalLink
@@ -53,12 +53,12 @@ export default function LeadsPage() {
   const hasLoadedOnce = useRef(false)
 
   const isLoading = projectsLoading || loading
-  
+
   // Marcar como carregado após primeira carga
   if (!isLoading && selectedProject && !hasLoadedOnce.current) {
     hasLoadedOnce.current = true
   }
-  
+
   // Só mostrar skeleton na primeira carga
   const showInitialSkeleton = !hasLoadedOnce.current && isLoading
 
@@ -70,7 +70,7 @@ export default function LeadsPage() {
 
   const loadLeads = async () => {
     if (!selectedProject) return
-    
+
     try {
       setLoading(true)
       const { data, error } = await supabase
@@ -93,7 +93,7 @@ export default function LeadsPage() {
     }
   }
 
-  const filteredLeads = leads.filter(lead => 
+  const filteredLeads = leads.filter(lead =>
     lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     lead.name?.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -105,7 +105,7 @@ export default function LeadsPage() {
         lead.email,
         lead.name || '',
         lead.source?.name || 'Direto',
-        new Date(lead.created_at).toLocaleDateString('pt-BR')
+        new Date(lead.created_at).toLocaleDateString()
       ].join(','))
     ].join('\n')
 
@@ -155,14 +155,14 @@ export default function LeadsPage() {
           </div>
           <div className="flex items-center gap-3">
             {/* Project Selector */}
-            <Select 
-              value={selectedProject?.id || ''} 
+            <Select
+              value={selectedProject?.id || ''}
               onValueChange={(value) => {
                 const project = projects.find(p => p.id === value)
                 if (project) setSelectedProject(project)
               }}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>
@@ -260,57 +260,59 @@ export default function LeadsPage() {
                 </p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('leads.email')}</TableHead>
-                    <TableHead>{t('leads.name')}</TableHead>
-                    <TableHead>{t('leads.source')}</TableHead>
-                    <TableHead>{t('leads.date')}</TableHead>
-                    <TableHead className="text-right">{t('common.actions')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredLeads.map((lead) => (
-                    <TableRow key={lead.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{lead.email}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {lead.name || <span className="text-muted-foreground">-</span>}
-                      </TableCell>
-                      <TableCell>
-                        {lead.source ? (
-                          <Badge variant="outline">{lead.source.name}</Badge>
-                        ) : (
-                          <Badge variant="secondary">{t('leads.direct')}</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(lead.created_at).toLocaleDateString('pt-BR', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => window.open(`mailto:${lead.email}`, '_blank')}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table className="min-w-[650px]">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('leads.email')}</TableHead>
+                      <TableHead>{t('leads.name')}</TableHead>
+                      <TableHead>{t('leads.source')}</TableHead>
+                      <TableHead>{t('leads.date')}</TableHead>
+                      <TableHead className="text-right">{t('common.actions')}</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredLeads.map((lead) => (
+                      <TableRow key={lead.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium">{lead.email}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {lead.name || <span className="text-muted-foreground">-</span>}
+                        </TableCell>
+                        <TableCell>
+                          {lead.source ? (
+                            <Badge variant="outline">{lead.source.name}</Badge>
+                          ) : (
+                            <Badge variant="secondary">{t('leads.direct')}</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(lead.created_at).toLocaleDateString(undefined, {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => window.open(`mailto:${lead.email}`, '_blank')}
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>

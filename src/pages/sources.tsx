@@ -63,7 +63,7 @@ export default function SourcesPage() {
 
   const loadSources = async () => {
     if (!selectedProject) return
-    
+
     try {
       setLoading(true)
       const data = await getSources(selectedProject.id)
@@ -97,12 +97,12 @@ export default function SourcesPage() {
 
   const generateUrl = (source: Source) => {
     if (!selectedProject) return ''
-    
+
     const params = new URLSearchParams()
     if (source.utm_source) params.set('utm_source', source.utm_source)
     if (source.utm_medium) params.set('utm_medium', source.utm_medium)
     if (source.utm_campaign) params.set('utm_campaign', source.utm_campaign)
-    
+
     const queryString = params.toString()
     return `https://${selectedProject.domain}${queryString ? '?' + queryString : ''}`
   }
@@ -146,14 +146,14 @@ export default function SourcesPage() {
           </div>
           <div className="flex items-center gap-3">
             {/* Project Selector */}
-            <Select 
-              value={selectedProject?.id || ''} 
+            <Select
+              value={selectedProject?.id || ''}
               onValueChange={(value) => {
                 const project = projects.find(p => p.id === value)
                 if (project) setSelectedProject(project)
               }}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder={t('dashboard.selectProject')} />
               </SelectTrigger>
               <SelectContent>
@@ -166,7 +166,7 @@ export default function SourcesPage() {
             </Select>
 
             {selectedProject && (
-              <CreateSourceDialog 
+              <CreateSourceDialog
                 projectDomain={selectedProject.domain}
                 onSourceCreated={handleSourceCreated}
               />
@@ -197,7 +197,7 @@ export default function SourcesPage() {
                   {t('sources.noSourcesDesc')}
                 </p>
                 {selectedProject && (
-                  <CreateSourceDialog 
+                  <CreateSourceDialog
                     projectDomain={selectedProject.domain}
                     onSourceCreated={handleSourceCreated}
                     trigger={
@@ -210,100 +210,102 @@ export default function SourcesPage() {
                 )}
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('common.name')}</TableHead>
-                    <TableHead>UTM</TableHead>
-                    <TableHead className="text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <Users className="h-4 w-4" />
-                        <span>{t('sources.visitors')}</span>
-                      </div>
-                    </TableHead>
-                    <TableHead className="text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <UserCheck className="h-4 w-4" />
-                        <span>{t('sources.leads')}</span>
-                      </div>
-                    </TableHead>
-                    <TableHead className="text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <DollarSign className="h-4 w-4" />
-                        <span>{t('sources.revenue')}</span>
-                      </div>
-                    </TableHead>
-                    <TableHead className="text-right">{t('common.actions')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sources.map((source) => (
-                    <TableRow key={source.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{source.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(source.created_at).toLocaleDateString('pt-BR')}
-                          </p>
+              <div className="overflow-x-auto">
+                <Table className="min-w-[600px]">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('common.name')}</TableHead>
+                      <TableHead>UTM</TableHead>
+                      <TableHead className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>{t('sources.visitors')}</span>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {source.utm_source && (
-                            <Badge variant="outline" className="text-xs">{source.utm_source}</Badge>
-                          )}
-                          {source.utm_medium && (
-                            <Badge variant="secondary" className="text-xs">{source.utm_medium}</Badge>
-                          )}
-                          {source.utm_campaign && (
-                            <Badge variant="default" className="text-xs">{source.utm_campaign}</Badge>
-                          )}
+                      </TableHead>
+                      <TableHead className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <UserCheck className="h-4 w-4" />
+                          <span>{t('sources.leads')}</span>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-center font-medium">
-                        {(source.total_visitors || 0).toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-center font-medium">
-                        {(source.total_leads || 0).toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span className="font-bold text-green-600">
-                          R$ {(source.total_revenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                        </span>
-                        {(source.total_payments || 0) > 0 && (
-                          <p className="text-xs text-muted-foreground">
-                            {source.total_payments} {t('sources.payments')}
-                          </p>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleCopyUrl(source)}
-                            title={t('sources.copyUrl')}
-                          >
-                            {copiedId === source.id ? (
-                              <Check className="h-4 w-4" />
-                            ) : (
-                              <Copy className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => window.open(generateUrl(source), '_blank')}
-                            title={t('sources.openUrl')}
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                          </Button>
+                      </TableHead>
+                      <TableHead className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <DollarSign className="h-4 w-4" />
+                          <span>{t('sources.revenue')}</span>
                         </div>
-                      </TableCell>
+                      </TableHead>
+                      <TableHead className="text-right">{t('common.actions')}</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {sources.map((source) => (
+                      <TableRow key={source.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{source.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(source.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {source.utm_source && (
+                              <Badge variant="outline" className="text-xs">{source.utm_source}</Badge>
+                            )}
+                            {source.utm_medium && (
+                              <Badge variant="secondary" className="text-xs">{source.utm_medium}</Badge>
+                            )}
+                            {source.utm_campaign && (
+                              <Badge variant="default" className="text-xs">{source.utm_campaign}</Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center font-medium">
+                          {(source.total_visitors || 0).toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-center font-medium">
+                          {(source.total_leads || 0).toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <span className="font-bold text-green-600">
+                            R$ {(source.total_revenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          </span>
+                          {(source.total_payments || 0) > 0 && (
+                            <p className="text-xs text-muted-foreground">
+                              {source.total_payments} {t('sources.payments')}
+                            </p>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleCopyUrl(source)}
+                              title={t('sources.copyUrl')}
+                            >
+                              {copiedId === source.id ? (
+                                <Check className="h-4 w-4" />
+                              ) : (
+                                <Copy className="h-4 w-4" />
+                              )}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => window.open(generateUrl(source), '_blank')}
+                              title={t('sources.openUrl')}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>

@@ -53,7 +53,7 @@ import { useAuth } from '@/contexts/auth-context'
 export function AppSidebar() {
   const { t } = useI18n()
   const location = useLocation()
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
   const { user } = useAuth()
   const { selectedProject } = useProjects()
 
@@ -185,7 +185,7 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="group transition-all duration-200 hover:bg-sidebar-accent/50"
                     >
-                      <Link to={item.href} className="gap-3 flex items-center">
+                      <Link to={item.href} className="gap-3 flex items-center" onClick={() => { if (isMobile) setOpenMobile(false) }}>
                         <div
                           className={`transition-colors duration-200 ${isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground'
                             }`}
