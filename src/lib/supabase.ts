@@ -19,19 +19,26 @@ export const supabase = createClient(url, anonKey, {
     detectSessionInUrl: true,
     flowType: 'pkce',
   },
+  realtime: {
+    // Disable automatic Realtime connection — the admin app doesn't use
+    // subscriptions, so there's no reason to keep a WebSocket open.
+    // This prevents the retry flood when the device goes offline.
+    params: { eventsPerSecond: 0 },
+  },
   global: {
     fetch: (url, options) => {
+      // Fail fast when offline — prevents Supabase auth retry loops from
+      // flooding the console with 100+ ERR_INTERNET_DISCONNECTED errors
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        return Promise.reject(new TypeError('Network request failed: device is offline'))
+      }
       return fetch(url, {
         ...options,
         signal: AbortSignal.timeout(10000), // 10s timeout
-      }).catch((err) => {
-        // Silently handle network errors to avoid console spam
-        if (err.name === 'AbortError' || err.name === 'TypeError') {
-          console.warn('Supabase fetch warning:', err.message)
-          throw err
-        }
-        throw err
       })
     },
   },
 })
+
+// Disconnect Realtime channel on creation to prevent WebSocket connections
+supabase.removeAllChannels()
