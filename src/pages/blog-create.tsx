@@ -433,12 +433,12 @@ export default function BlogCreate() {
           <div className="p-5 rounded-2xl bg-destructive/10 mb-6">
             <Shield className="h-10 w-10 text-destructive" />
           </div>
-          <h1 className="text-2xl font-bold mb-2">Acesso Restrito</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('blog.accessDenied')}</h1>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            Esta página é exclusiva para administradores do Revenify.
+            {t('blog.accessDenied.description')}
           </p>
           <Button onClick={() => navigate('/dashboard')} variant="outline">
-            Voltar ao Dashboard
+            {t('blog.backToDashboard')}
           </Button>
         </div>
       </>
@@ -457,10 +457,10 @@ export default function BlogCreate() {
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10">
                 <FileText className="h-4 w-4 text-primary" />
               </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Blog Admin</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t('blog.admin')}</h1>
             </div>
             <p className="text-sm text-muted-foreground">
-              Create and manage blog posts for revenify.co
+              {t('blog.admin.description')}
             </p>
           </div>
           <div className="flex gap-2">
@@ -472,8 +472,8 @@ export default function BlogCreate() {
               className="h-9"
             >
               <Save className="h-3.5 w-3.5 mr-1.5" />
-              <span className="hidden sm:inline">Save Draft</span>
-              <span className="sm:hidden">Draft</span>
+              <span className="hidden sm:inline">{t('blog.saveDraft')}</span>
+              <span className="sm:hidden">{t('blog.saveDraft')}</span>
             </Button>
             <Button
               size="sm"
@@ -482,8 +482,8 @@ export default function BlogCreate() {
               className="h-9"
             >
               <Send className="h-3.5 w-3.5 mr-1.5" />
-              <span className="hidden sm:inline">Publish</span>
-              <span className="sm:hidden">Publish</span>
+              <span className="hidden sm:inline">{t('blog.publish')}</span>
+              <span className="sm:hidden">{t('blog.publish')}</span>
             </Button>
           </div>
         </div>
@@ -514,19 +514,19 @@ export default function BlogCreate() {
             {/* Title & Slug */}
             <Card>
               <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
-                <CardTitle className="text-base">Post Details</CardTitle>
+                <CardTitle className="text-base">{t('blog.postDetails')}</CardTitle>
                 <CardDescription className="text-xs">
-                  Basic information about your blog post
+                  {t('blog.postDetails.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="title" className="text-xs">
-                    Title <span className="text-destructive">*</span>
+                    {t('blog.title')} <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="title"
-                    placeholder="Enter post title..."
+                    placeholder={t('blog.title.placeholder')}
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     maxLength={200}
@@ -540,7 +540,7 @@ export default function BlogCreate() {
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="slug" className="text-xs">
-                      Slug <span className="text-destructive">*</span>
+                      {t('blog.slug')} <span className="text-destructive">*</span>
                     </Label>
                     <div className="flex items-center gap-1.5">
                       <Switch
@@ -569,11 +569,11 @@ export default function BlogCreate() {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="excerpt" className="text-xs">
-                    Excerpt <span className="text-destructive">*</span>
+                    {t('blog.excerpt')} <span className="text-destructive">*</span>
                   </Label>
                   <Textarea
                     id="excerpt"
-                    placeholder="Brief description of the post (appears in cards and SEO)"
+                    placeholder={t('blog.excerpt.placeholder')}
                     value={formData.excerpt}
                     onChange={(e) => handleInputChange('excerpt', e.target.value)}
                     rows={2}
@@ -590,18 +590,18 @@ export default function BlogCreate() {
             {/* Content */}
             <Card>
               <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
-                <CardTitle className="text-base">Content</CardTitle>
+                <CardTitle className="text-base">{t('blog.content')}</CardTitle>
                 <CardDescription className="text-xs">
-                  Write your blog post in Markdown format
+                  {t('blog.content.markdown')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0">
                 <Tabs defaultValue="write" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 h-9">
-                    <TabsTrigger value="write" className="text-xs"><Type className="h-3.5 w-3.5 mr-1.5" />Write</TabsTrigger>
+                    <TabsTrigger value="write" className="text-xs"><Type className="h-3.5 w-3.5 mr-1.5" />{t('blog.write')}</TabsTrigger>
                     <TabsTrigger value="preview" className="text-xs">
                       <Eye className="h-3.5 w-3.5 mr-1.5" />
-                      Preview
+                      {t('blog.preview')}
                     </TabsTrigger>
                   </TabsList>
                   <TabsContent value="write" className="space-y-3 mt-3">
@@ -641,8 +641,8 @@ export default function BlogCreate() {
             {/* Cover Image */}
             <Card>
               <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
-                <CardTitle className="text-base">Cover Image</CardTitle>
-                <CardDescription className="text-xs">Upload a cover image (optional)</CardDescription>
+                <CardTitle className="text-base">{t('blog.coverImage')}</CardTitle>
+                <CardDescription className="text-xs">{t('blog.coverImage.specs')}</CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
                 {imagePreview ? (
@@ -668,7 +668,7 @@ export default function BlogCreate() {
                       htmlFor="cover-image"
                       className="cursor-pointer text-xs text-primary hover:underline"
                     >
-                      Click to upload image
+                      {t('blog.coverImage.upload')}
                     </Label>
                     <Input
                       id="cover-image"
@@ -679,7 +679,7 @@ export default function BlogCreate() {
                       disabled={uploadingImage}
                     />
                     <p className="text-[10px] text-muted-foreground mt-1">
-                      1200×630px recommended, max 5MB
+                      {t('blog.coverImage.specs')}
                     </p>
                   </div>
                 )}
@@ -694,20 +694,20 @@ export default function BlogCreate() {
             {/* Settings */}
             <Card>
               <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
-                <CardTitle className="text-base">Settings</CardTitle>
-                <CardDescription className="text-xs">Post metadata and settings</CardDescription>
+                <CardTitle className="text-base">{t('blog.settings')}</CardTitle>
+                <CardDescription className="text-xs">{t('blog.settings.description')}</CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="category" className="text-xs">
-                    Category <span className="text-destructive">*</span>
+                    {t('blog.category')} <span className="text-destructive">*</span>
                   </Label>
                   <Select
                     value={formData.category_id}
                     onValueChange={(value) => handleInputChange('category_id', value)}
                   >
                     <SelectTrigger id="category" className="h-9 text-xs">
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('blog.category.select')} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
@@ -721,7 +721,7 @@ export default function BlogCreate() {
 
                 <div className="space-y-1.5">
                   <Label htmlFor="author" className="text-xs">
-                    Author Name <span className="text-destructive">*</span>
+                    {t('blog.authorName')} <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="author"
@@ -735,14 +735,14 @@ export default function BlogCreate() {
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground flex items-center gap-1.5">
                       <Clock className="h-3 w-3" />
-                      Reading time
+                      {t('blog.readingTime')}
                     </span>
                     <span className="font-medium">{readingTime} min</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground flex items-center gap-1.5">
                       <Type className="h-3 w-3" />
-                      Words
+                      {t('blog.words')}
                     </span>
                     <span className="font-medium">
                       {formData.content.trim().split(/\s+/).length}
@@ -755,9 +755,9 @@ export default function BlogCreate() {
             {/* Sidebar Company Info (Optional) */}
             <Card>
               <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
-                <CardTitle className="text-base">Company Info</CardTitle>
+                <CardTitle className="text-base">{t('blog.companyInfo')}</CardTitle>
                 <CardDescription className="text-xs">
-                  Optional sidebar details (like Dub.co customer stories)
+                  {t('blog.companyInfo.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 space-y-3">
@@ -849,9 +849,9 @@ export default function BlogCreate() {
           <CardHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-base">Published Posts</CardTitle>
+                <CardTitle className="text-base">{t('blog.publishedPosts')}</CardTitle>
                 <CardDescription className="text-xs">
-                  {posts.length} {posts.length === 1 ? 'post' : 'posts'} total
+                  {posts.length} {posts.length === 1 ? 'post' : 'posts'}
                 </CardDescription>
               </div>
             </div>
@@ -866,8 +866,8 @@ export default function BlogCreate() {
                 <div className="w-12 h-12 mx-auto rounded-full bg-muted/60 flex items-center justify-center mb-3">
                   <FileText className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <p className="text-sm font-medium">No posts yet</p>
-                <p className="text-xs text-muted-foreground mt-1">Create your first post above!</p>
+                <p className="text-sm font-medium">{t('blog.noPosts')}</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('blog.noPosts.description')}</p>
               </div>
             ) : (
               <div className="overflow-x-auto -mx-4 sm:mx-0">
@@ -876,10 +876,10 @@ export default function BlogCreate() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="text-xs">Title</TableHead>
-                          <TableHead className="text-xs">Category</TableHead>
-                          <TableHead className="text-xs">Status</TableHead>
-                          <TableHead className="text-xs">Published</TableHead>
+                          <TableHead className="text-xs">{t('blog.title')}</TableHead>
+                          <TableHead className="text-xs">{t('blog.category')}</TableHead>
+                          <TableHead className="text-xs">{t('blog.status')}</TableHead>
+                          <TableHead className="text-xs">{t('blog.status.published')}</TableHead>
                           <TableHead className="text-xs text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -901,7 +901,7 @@ export default function BlogCreate() {
                                 }
                                 className="text-[10px]"
                               >
-                                {post.status}
+                                {post.status === 'published' ? t('blog.status.published') : t('blog.status.draft')}
                               </Badge>
                             </TableCell>
                             <TableCell className="text-muted-foreground text-xs">
@@ -992,7 +992,7 @@ export default function BlogCreate() {
                 </Badge>
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {viewPost.reading_time || estimateReadingTime(viewPost.content)} min read
+                  {viewPost.reading_time || estimateReadingTime(viewPost.content)} {t('blog.minRead')}
                 </span>
                 {viewPost.published_at && (
                   <span>{format(new Date(viewPost.published_at), 'MMM d, yyyy')}</span>
@@ -1019,7 +1019,7 @@ export default function BlogCreate() {
                     onClick={() => window.open(`https://revenify.co/blog/${viewPost.slug}`, '_blank')}
                   >
                     <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                    <span>Open in site</span>
+                    <span>{t('blog.openInSite')}</span>
                   </Button>
                 )}
                 <Button
@@ -1030,7 +1030,7 @@ export default function BlogCreate() {
                   }}
                 >
                   <Edit className="h-3.5 w-3.5 mr-1.5" />
-                  <span>Edit</span>
+                  <span>{t('blog.edit')}</span>
                 </Button>
               </div>
             </div>
