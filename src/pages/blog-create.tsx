@@ -15,10 +15,11 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { Loader2, Upload, X, Eye, Save, Send, Edit, Trash2, FileText, Clock, Type, Shield } from 'lucide-react'
+import { Loader2, Upload, X, Eye, Save, Send, Edit, Trash2, FileText, Clock, Type, Shield, ExternalLink } from 'lucide-react'
 import {
   getBlogCategories,
   createBlogPost,
+  updateBlogPost,
   uploadBlogImage,
   generateSlug,
   estimateReadingTime,
@@ -41,6 +42,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { format } from 'date-fns'
 
 // Email autorizado para acessar o blog admin
@@ -73,6 +82,10 @@ export default function BlogCreate() {
   const [loadingPosts, setLoadingPosts] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
+  const [viewPost, setViewPost] = useState<BlogPost | null>(null)
+  const [editPost, setEditPost] = useState<BlogPost | null>(null)
+  const [editFormData, setEditFormData] = useState<Partial<BlogPostFormData>>({})
+  const [saving, setSaving] = useState(false)
 
   const [formData, setFormData] = useState<BlogPostFormData>({
     title: '',
@@ -327,6 +340,44 @@ export default function BlogCreate() {
   function confirmDelete(id: string) {
     setPostToDelete(id)
     setDeleteDialogOpen(true)
+  }
+
+  function openEditDialog(post: BlogPost) {
+    setEditPost(post)
+    setEditFormData({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      category_id: post.category_id,
+      status: post.status,
+      cover_image: post.cover_image,
+      author_name: post.author_name,
+      sidebar_company_name: post.sidebar_company_name,
+      sidebar_company_logo: post.sidebar_company_logo,
+      sidebar_company_website: post.sidebar_company_website,
+      sidebar_company_industry: post.sidebar_company_industry,
+      sidebar_company_size: post.sidebar_company_size,
+      sidebar_company_founded: post.sidebar_company_founded,
+      sidebar_company_about: post.sidebar_company_about,
+    })
+  }
+
+  async function handleSaveEdit() {
+    if (!editPost) return
+    setSaving(true)
+    try {
+      await updateBlogPost(editPost.id, editFormData)
+      toast.success('Post updated successfully')
+      setEditPost(null)
+      await loadPosts()
+    } catch (error: any) {
+      toast.error('Failed to update post', {
+        description: error.message,
+      })
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (loading || authLoading) {
@@ -825,40 +876,45 @@ export default function BlogCreate() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center justify-end gap-1">
-                                {post.status === 'published' && (
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-7 w-7"
-                                    onClick={() =>
-                                      window.open(
-                                        `https://revenify.co/blog/${post.slug}`,
-                                        '_blank'
-                                      )
-                                    }
-                                    title="View post"
-                                  >
-                                    <Eye className="h-3.5 w-3.5" />
-                                  </Button>
-                                )}
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7"
-                                  onClick={() => toast.info('Edit feature coming soon!')}
-                                  title="Edit post"
-                                >
-                                  <Edit className="h-3.5 w-3.5" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-7 w-7 text-destructive hover:text-destructive"
-                                  onClick={() => confirmDelete(post.id)}
-                                  title="Delete post"
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </Button>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7"
+                                      onClick={() => setViewPost(post)}
+                                    >
+                                      <Eye className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>View post</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7"
+                                      onClick={() => openEditDialog(post)}
+                                    >
+                                      <Edit className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Edit post</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7 text-destructive hover:text-destructive"
+                                      onClick={() => confirmDelete(post.id)}
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Delete post</TooltipContent>
+                                </Tooltip>
                               </div>
                             </TableCell>
                           </TableRow>
@@ -872,6 +928,201 @@ export default function BlogCreate() {
           </CardContent>
         </Card>
       </div>
+
+      {/* View Post Dialog */}
+      <Dialog open={!!viewPost} onOpenChange={(open) => !open && setViewPost(null)}>
+        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-lg">{viewPost?.title}</DialogTitle>
+            <DialogDescription className="sr-only">Post preview</DialogDescription>
+          </DialogHeader>
+          {viewPost && (
+            <div className="space-y-4">
+              {/* Cover Image */}
+              {viewPost.cover_image && (
+                <img
+                  src={viewPost.cover_image}
+                  alt={viewPost.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              )}
+
+              {/* Metadata Row */}
+              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <Badge variant="outline">
+                  {(viewPost as any).blog_categories?.name || 'Unknown'}
+                </Badge>
+                <Badge variant={viewPost.status === 'published' ? 'default' : 'secondary'}>
+                  {viewPost.status}
+                </Badge>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  {viewPost.reading_time || estimateReadingTime(viewPost.content)} min read
+                </span>
+                {viewPost.published_at && (
+                  <span>{format(new Date(viewPost.published_at), 'MMM d, yyyy')}</span>
+                )}
+                <span>by {viewPost.author_name}</span>
+              </div>
+
+              {/* Excerpt */}
+              <div className="p-3 rounded-lg bg-muted/50 border">
+                <p className="text-sm text-muted-foreground italic">{viewPost.excerpt}</p>
+              </div>
+
+              {/* Content */}
+              <div className="prose prose-sm max-w-none dark:prose-invert border rounded-lg p-4">
+                <div dangerouslySetInnerHTML={{ __html: markdownToSafeHtml(viewPost.content) }} />
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-2">
+                {viewPost.status === 'published' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(`https://revenify.co/blog/${viewPost.slug}`, '_blank')}
+                  >
+                    <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                    <span>Open in site</span>
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setViewPost(null)
+                    openEditDialog(viewPost)
+                  }}
+                >
+                  <Edit className="h-3.5 w-3.5 mr-1.5" />
+                  <span>Edit</span>
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Post Dialog */}
+      <Dialog open={!!editPost} onOpenChange={(open) => !open && setEditPost(null)}>
+        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Post</DialogTitle>
+            <DialogDescription className="sr-only">Edit blog post details</DialogDescription>
+          </DialogHeader>
+          {editPost && (
+            <div className="space-y-4">
+              {/* Title */}
+              <div className="space-y-1.5">
+                <Label className="text-xs">Title</Label>
+                <Input
+                  value={editFormData.title || ''}
+                  onChange={(e) => setEditFormData((p) => ({ ...p, title: e.target.value }))}
+                  className="h-9"
+                />
+              </div>
+
+              {/* Slug */}
+              <div className="space-y-1.5">
+                <Label className="text-xs">Slug</Label>
+                <Input
+                  value={editFormData.slug || ''}
+                  onChange={(e) => setEditFormData((p) => ({ ...p, slug: e.target.value }))}
+                  className="h-9 font-mono text-xs"
+                />
+              </div>
+
+              {/* Excerpt */}
+              <div className="space-y-1.5">
+                <Label className="text-xs">Excerpt</Label>
+                <Textarea
+                  value={editFormData.excerpt || ''}
+                  onChange={(e) => setEditFormData((p) => ({ ...p, excerpt: e.target.value }))}
+                  rows={2}
+                  className="text-sm resize-none"
+                />
+              </div>
+
+              {/* Content */}
+              <div className="space-y-1.5">
+                <Label className="text-xs">Content (Markdown)</Label>
+                <Textarea
+                  value={editFormData.content || ''}
+                  onChange={(e) => setEditFormData((p) => ({ ...p, content: e.target.value }))}
+                  rows={12}
+                  className="font-mono text-xs resize-none"
+                />
+              </div>
+
+              {/* Category + Status */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Category</Label>
+                  <Select
+                    value={editFormData.category_id || ''}
+                    onValueChange={(v) => setEditFormData((p) => ({ ...p, category_id: v }))}
+                  >
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Status</Label>
+                  <Select
+                    value={editFormData.status || 'draft'}
+                    onValueChange={(v) => setEditFormData((p) => ({ ...p, status: v as 'draft' | 'published', published_at: v === 'published' ? new Date().toISOString() : null }))}
+                  >
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Cover Image URL */}
+              <div className="space-y-1.5">
+                <Label className="text-xs">Cover Image URL</Label>
+                <Input
+                  value={editFormData.cover_image || ''}
+                  onChange={(e) => setEditFormData((p) => ({ ...p, cover_image: e.target.value || null }))}
+                  placeholder="https://..."
+                  className="h-9 text-xs"
+                />
+              </div>
+
+              {/* Save Buttons */}
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="outline" size="sm" onClick={() => setEditPost(null)}>
+                  <span>Cancel</span>
+                </Button>
+                <Button size="sm" onClick={handleSaveEdit} disabled={saving}>
+                  {saving ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-3.5 w-3.5 mr-1.5" />
+                      <span>Save Changes</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
