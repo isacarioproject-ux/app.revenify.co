@@ -966,7 +966,7 @@ export default function BlogCreate() {
 
       {/* View Post Dialog */}
       <Dialog open={!!viewPost} onOpenChange={(open) => !open && setViewPost(null)}>
-        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
             <DialogTitle className="text-lg">{viewPost?.title}</DialogTitle>
             <DialogDescription className="sr-only">Post preview</DialogDescription>
@@ -1006,7 +1006,7 @@ export default function BlogCreate() {
               </div>
 
               {/* Content */}
-              <div className="prose prose-sm max-w-none dark:prose-invert border rounded-lg p-4">
+              <div className="blog-content">
                 <div dangerouslySetInnerHTML={{ __html: markdownToSafeHtml(viewPost.content) }} />
               </div>
 
