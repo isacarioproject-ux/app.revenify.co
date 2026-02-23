@@ -19,6 +19,12 @@ export const supabase = createClient(url, anonKey, {
     detectSessionInUrl: true,
     flowType: 'pkce',
   },
+  realtime: {
+    // Disable automatic Realtime connection — the admin app doesn't use
+    // subscriptions, so there's no reason to keep a WebSocket open.
+    // This prevents the retry flood when the device goes offline.
+    params: { eventsPerSecond: 0 },
+  },
   global: {
     fetch: (url, options) => {
       // Fail fast when offline — prevents Supabase auth retry loops from
@@ -33,3 +39,6 @@ export const supabase = createClient(url, anonKey, {
     },
   },
 })
+
+// Disconnect Realtime channel on creation to prevent WebSocket connections
+supabase.removeAllChannels()
