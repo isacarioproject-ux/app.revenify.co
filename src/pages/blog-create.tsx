@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
@@ -50,6 +50,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { useI18n } from '@/hooks/use-i18n'
 import { format } from 'date-fns'
 
 // Email autorizado para acessar o blog admin
@@ -58,6 +59,7 @@ const AUTHORIZED_EMAIL = 'revenify.co@gmail.com'
 export default function BlogCreate() {
   const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
+  const { t } = useI18n()
 
   const [categories, setCategories] = useState<BlogCategory[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,6 +88,9 @@ export default function BlogCreate() {
   const [editPost, setEditPost] = useState<BlogPost | null>(null)
   const [editFormData, setEditFormData] = useState<Partial<BlogPostFormData>>({})
   const [saving, setSaving] = useState(false)
+  const [editImagePreview, setEditImagePreview] = useState<string | null>(null)
+  const [uploadingEditImage, setUploadingEditImage] = useState(false)
+  const editImageRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState<BlogPostFormData>({
     title: '',
@@ -344,6 +349,7 @@ export default function BlogCreate() {
 
   function openEditDialog(post: BlogPost) {
     setEditPost(post)
+    setEditImagePreview(post.cover_image || null)
     setEditFormData({
       title: post.title,
       slug: post.slug,
@@ -363,16 +369,45 @@ export default function BlogCreate() {
     })
   }
 
+  async function handleEditImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) return
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t('blog.toast.imageSizeError'))
+      return
+    }
+    setUploadingEditImage(true)
+    try {
+      const timestamp = Date.now()
+      const fileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`
+      const publicUrl = await uploadBlogImage(file, fileName)
+      setEditFormData((p) => ({ ...p, cover_image: publicUrl }))
+      setEditImagePreview(publicUrl)
+      toast.success(t('blog.toast.imageUploaded'))
+    } catch (error: any) {
+      toast.error(t('blog.toast.imageError'), { description: error?.message })
+    } finally {
+      setUploadingEditImage(false)
+    }
+  }
+
+  function removeEditImage() {
+    setEditFormData((p) => ({ ...p, cover_image: null }))
+    setEditImagePreview(null)
+    if (editImageRef.current) editImageRef.current.value = ''
+  }
+
   async function handleSaveEdit() {
     if (!editPost) return
     setSaving(true)
     try {
       await updateBlogPost(editPost.id, editFormData)
-      toast.success('Post updated successfully')
+      toast.success(t('blog.toast.updated'))
       setEditPost(null)
       await loadPosts()
     } catch (error: any) {
-      toast.error('Failed to update post', {
+      toast.error(t('blog.toast.updateError'), {
         description: error.message,
       })
     } finally {
@@ -887,7 +922,7 @@ export default function BlogCreate() {
                                       <Eye className="h-3.5 w-3.5" />
                                     </Button>
                                   </TooltipTrigger>
-                                  <TooltipContent>View post</TooltipContent>
+                                  <TooltipContent>{t('blog.viewPost')}</TooltipContent>
                                 </Tooltip>
                                 <Tooltip>
                                   <TooltipTrigger asChild>
@@ -900,7 +935,7 @@ export default function BlogCreate() {
                                       <Edit className="h-3.5 w-3.5" />
                                     </Button>
                                   </TooltipTrigger>
-                                  <TooltipContent>Edit post</TooltipContent>
+                                  <TooltipContent>{t('blog.editPost')}</TooltipContent>
                                 </Tooltip>
                                 <Tooltip>
                                   <TooltipTrigger asChild>
@@ -913,7 +948,7 @@ export default function BlogCreate() {
                                       <Trash2 className="h-3.5 w-3.5" />
                                     </Button>
                                   </TooltipTrigger>
-                                  <TooltipContent>Delete post</TooltipContent>
+                                  <TooltipContent>{t('blog.deletePost')}</TooltipContent>
                                 </Tooltip>
                               </div>
                             </TableCell>
@@ -1004,66 +1039,122 @@ export default function BlogCreate() {
       </Dialog>
 
       {/* Edit Post Dialog */}
-      <Dialog open={!!editPost} onOpenChange={(open) => !open && setEditPost(null)}>
-        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+      <Dialog open={!!editPost} onOpenChange={(open) => { if (!open) { setEditPost(null); setEditImagePreview(null) } }}>
+        <DialogContent className="!top-0 !left-0 !translate-x-0 !translate-y-0 !max-w-full max-h-full h-full w-full rounded-none border-0 sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%] sm:rounded-xl sm:border sm:!max-w-4xl sm:h-auto sm:max-h-[85vh] lg:!max-w-5xl overflow-y-auto overflow-x-hidden p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle>Edit Post</DialogTitle>
-            <DialogDescription className="sr-only">Edit blog post details</DialogDescription>
+            <DialogTitle>{t('blog.editPost')}</DialogTitle>
+            <DialogDescription className="sr-only">{t('blog.editPost.description')}</DialogDescription>
           </DialogHeader>
           {editPost && (
-            <div className="space-y-4">
-              {/* Title */}
-              <div className="space-y-1.5">
-                <Label className="text-xs">Title</Label>
-                <Input
-                  value={editFormData.title || ''}
-                  onChange={(e) => setEditFormData((p) => ({ ...p, title: e.target.value }))}
-                  className="h-9"
-                />
-              </div>
-
-              {/* Slug */}
-              <div className="space-y-1.5">
-                <Label className="text-xs">Slug</Label>
-                <Input
-                  value={editFormData.slug || ''}
-                  onChange={(e) => setEditFormData((p) => ({ ...p, slug: e.target.value }))}
-                  className="h-9 font-mono text-xs"
-                />
-              </div>
-
-              {/* Excerpt */}
-              <div className="space-y-1.5">
-                <Label className="text-xs">Excerpt</Label>
-                <Textarea
-                  value={editFormData.excerpt || ''}
-                  onChange={(e) => setEditFormData((p) => ({ ...p, excerpt: e.target.value }))}
-                  rows={2}
-                  className="text-sm resize-none"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="space-y-1.5">
-                <Label className="text-xs">Content (Markdown)</Label>
-                <Textarea
-                  value={editFormData.content || ''}
-                  onChange={(e) => setEditFormData((p) => ({ ...p, content: e.target.value }))}
-                  rows={12}
-                  className="font-mono text-xs resize-none"
-                />
-              </div>
-
-              {/* Category + Status */}
-              <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-2">
+              {/* Left Column — Main Fields */}
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Title */}
                 <div className="space-y-1.5">
-                  <Label className="text-xs">Category</Label>
+                  <Label className="text-xs">{t('blog.title')}</Label>
+                  <Input
+                    value={editFormData.title || ''}
+                    onChange={(e) => setEditFormData((p) => ({ ...p, title: e.target.value }))}
+                    className="h-9"
+                    placeholder={t('blog.title.placeholder')}
+                  />
+                </div>
+
+                {/* Slug */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.slug')}</Label>
+                  <Input
+                    value={editFormData.slug || ''}
+                    onChange={(e) => setEditFormData((p) => ({ ...p, slug: e.target.value }))}
+                    className="h-9 font-mono text-xs"
+                  />
+                </div>
+
+                {/* Excerpt */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.excerpt')}</Label>
+                  <Textarea
+                    value={editFormData.excerpt || ''}
+                    onChange={(e) => setEditFormData((p) => ({ ...p, excerpt: e.target.value }))}
+                    rows={2}
+                    className="text-sm resize-none"
+                    placeholder={t('blog.excerpt.placeholder')}
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.content.markdown')}</Label>
+                  <Textarea
+                    value={editFormData.content || ''}
+                    onChange={(e) => setEditFormData((p) => ({ ...p, content: e.target.value }))}
+                    rows={8}
+                    className="font-mono text-xs resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* Right Column — Settings + Image */}
+              <div className="md:w-[260px] shrink-0 space-y-3">
+                {/* Cover Image Upload */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.coverImage')}</Label>
+                  {editImagePreview ? (
+                    <div className="relative">
+                      <img
+                        src={editImagePreview}
+                        alt="Cover"
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-1.5 right-1.5 h-6 w-6"
+                        onClick={removeEditImage}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed rounded-lg p-3 text-center">
+                      {uploadingEditImage ? (
+                        <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+                      ) : (
+                        <>
+                          <Upload className="mx-auto h-6 w-6 text-muted-foreground mb-1" />
+                          <Label
+                            htmlFor="edit-cover-image"
+                            className="cursor-pointer text-xs text-primary hover:underline"
+                          >
+                            {t('blog.coverImage.upload')}
+                          </Label>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">
+                            {t('blog.coverImage.specs')}
+                          </p>
+                        </>
+                      )}
+                      <Input
+                        id="edit-cover-image"
+                        ref={editImageRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleEditImageUpload}
+                        disabled={uploadingEditImage}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Category */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.category')}</Label>
                   <Select
                     value={editFormData.category_id || ''}
                     onValueChange={(v) => setEditFormData((p) => ({ ...p, category_id: v }))}
                   >
                     <SelectTrigger className="h-9 text-xs">
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('blog.category.select')} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((c) => (
@@ -1072,8 +1163,10 @@ export default function BlogCreate() {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {/* Status */}
                 <div className="space-y-1.5">
-                  <Label className="text-xs">Status</Label>
+                  <Label className="text-xs">{t('blog.status')}</Label>
                   <Select
                     value={editFormData.status || 'draft'}
                     onValueChange={(v) => setEditFormData((p) => ({ ...p, status: v as 'draft' | 'published', published_at: v === 'published' ? new Date().toISOString() : null }))}
@@ -1082,42 +1175,41 @@ export default function BlogCreate() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
+                      <SelectItem value="draft">{t('blog.status.draft')}</SelectItem>
+                      <SelectItem value="published">{t('blog.status.published')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
 
-              {/* Cover Image URL */}
-              <div className="space-y-1.5">
-                <Label className="text-xs">Cover Image URL</Label>
-                <Input
-                  value={editFormData.cover_image || ''}
-                  onChange={(e) => setEditFormData((p) => ({ ...p, cover_image: e.target.value || null }))}
-                  placeholder="https://..."
-                  className="h-9 text-xs"
-                />
-              </div>
+                {/* Author */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs">{t('blog.authorName')}</Label>
+                  <Input
+                    value={editFormData.author_name || ''}
+                    onChange={(e) => setEditFormData((p) => ({ ...p, author_name: e.target.value }))}
+                    className="h-9 text-xs"
+                  />
+                </div>
 
-              {/* Save Buttons */}
-              <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" size="sm" onClick={() => setEditPost(null)}>
-                  <span>Cancel</span>
-                </Button>
-                <Button size="sm" onClick={handleSaveEdit} disabled={saving}>
-                  {saving ? (
-                    <>
-                      <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-3.5 w-3.5 mr-1.5" />
-                      <span>Save Changes</span>
-                    </>
-                  )}
-                </Button>
+                {/* Save Buttons */}
+                <div className="flex gap-2 pt-3 border-t">
+                  <Button variant="outline" size="sm" className="flex-1" onClick={() => setEditPost(null)}>
+                    <span>{t('blog.cancel')}</span>
+                  </Button>
+                  <Button size="sm" className="flex-1" onClick={handleSaveEdit} disabled={saving}>
+                    {saving ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                        <span>{t('blog.saving')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-3.5 w-3.5 mr-1.5" />
+                        <span>{t('blog.saveChanges')}</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
@@ -1128,19 +1220,18 @@ export default function BlogCreate() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t('blog.delete.confirm')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the blog
-              post.
+              {t('blog.delete.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('blog.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive hover:bg-destructive/90"
             >
-              Delete
+              {t('blog.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
